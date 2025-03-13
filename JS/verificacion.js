@@ -150,7 +150,7 @@ function guardarVerificacion() {
 }
 
 function enviarDatos(vehiculoId, datos) {
-    fetch("../php/guardar_verificacion.php", {
+    fetch("http://localhost/xampp/VehiculosSQLSERVE/php/guardar_verificacion.php", {
         method: "POST",
         body: JSON.stringify({ vehiculo_id: vehiculoId, datos: datos }), // ✅ Agregamos vehiculo_id
         headers: {

@@ -1,5 +1,4 @@
 <?php
-session_start(); // Asegúrate de iniciar la sesión
 require_once "php/conexion.php";
 ?>
 
@@ -54,7 +53,6 @@ require_once "php/conexion.php";
                 backdrop: false,
                 text: '" . $_SESSION['error'] . "'
             });";
-            unset($_SESSION['error']); // Eliminar la sesión de error después de mostrarla
         }
         ?>
     </script>

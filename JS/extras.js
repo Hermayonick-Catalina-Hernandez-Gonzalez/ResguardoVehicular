@@ -114,19 +114,44 @@ function limpiarFirma() {
 
 function guardarFirma() {
     let canvas = document.getElementById("canvasFirma");
-    let imagenFirma = canvas.toDataURL("image/png"); // Convertir firma a base64
-
-    localStorage.setItem("firmaBase64", imagenFirma); // Guardar en localStorage
+    let imagenFirma = canvas.toDataURL("image/png"); // Convertir firma a imagen
 
     Swal.fire({
         icon: "success",
-        title: "Firma Guardada",
-        text: "La firma ha sido registrada correctamente.",
+        title: "Datos Guardados",
+        text: "Los datos han sido registrados correctamente.",
         backdrop: false
     });
 
     cerrarFirma();
-    verPDF(); // Regenerar PDF con la firma
+    descargarPDFConFirma(imagenFirma);
+}
+
+function finalizarFormulario() {
+    Swal.fire({
+        title: "Finalizar",
+        text: "¿Estás seguro de que deseas finalizar el proceso?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Sí, finalizar",
+        cancelButtonText: "Cancelar"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Limpiar localStorage
+            localStorage.removeItem("vehiculo_id");
+            localStorage.removeItem("firmaBase64");
+            localStorage.clear();
+            
+            Swal.fire({
+                icon: "success",
+                title: "Proceso Finalizado",
+                text: "Los datos han sido eliminados correctamente.",
+                backdrop: false
+            }).then(() => {
+                window.location.href = "../../index.php"; // Redirigir al inicio
+            });
+        }
+    });
 }
 
 

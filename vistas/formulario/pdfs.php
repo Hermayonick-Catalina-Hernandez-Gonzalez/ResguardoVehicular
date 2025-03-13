@@ -77,13 +77,13 @@ if (!isset($_SESSION['usuario_id'])) {
                 class="btn-foto">Limpiar</button>
             <button onclick="cerrarFirma()"
                 class="btn-close">Cerrar</button>
-            <button onclick="guardarFirma() ; finalizarFormulario(); " class="btn">Guardar
+            <button onclick="guardarFirma(); finalizarFormulario() " class="btn">Guardar
                 Firma</button>
         </div>
     </div>
 
     <script src="../../JS/PDF.js"></script>
-    <script src="../../JS/PDFsFirma.js"></script>
+
     <script src="../../JS/extras.js"></script>
     <script src="../../JS/resguardante.js"></script>
     <script src="../../JS/unidadVehicular.js"></script>
