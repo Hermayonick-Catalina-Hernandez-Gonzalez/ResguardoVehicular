@@ -1,0 +1,137 @@
+<link rel="stylesheet" href="../css/stylestabla.css">
+<table class="verification-table">
+    <thead>
+        <tr>
+            <th>Elemento</th>
+            <th>Bien</th>
+            <th>Regular</th>
+            <th>Mal</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Volante</td>
+            <td><input type="radio" name="interior_volante" value="bien"></td>
+            <td><input type="radio" name="interior_volante" value="regular"></td>
+            <td><input type="radio" name="interior_volante" value="mal"></td>
+        </tr>
+        <tr>
+            <td>Bocina</td>
+            <td><input type="radio" name="interior_bocina" value="bien"></td>
+            <td><input type="radio" name="interior_bocina" value="regular"></td>
+            <td><input type="radio" name="interior_bocina" value="mal"></td>
+        </tr>
+        <tr>
+            <td>Espejos</td>
+            <td><input type="radio" name="interior_espejosI" value="bien"></td>
+            <td><input type="radio" name="interior_espejosI" value="regular"></td>
+            <td><input type="radio" name="interior_espejosI" value="mal"></td>
+        </tr>
+        <tr>
+            <td>Tapetes</td>
+            <td><input type="radio" name="interior_tapetes" value="bien"></td>
+            <td><input type="radio" name="interior_tapetes" value="regular"></td>
+            <td><input type="radio" name="interior_tapetes" value="mal"></td>
+        </tr>
+        <tr>
+            <td>A/C</td>
+            <td><input type="radio" name="interior_A/C" value="bien"></td>
+            <td><input type="radio" name="interior_A/C" value="regular"></td>
+            <td><input type="radio" name="interior_A/C" value="mal"></td>
+        </tr>
+        <tr>
+            <td>Tablero</td>
+            <td><input type="radio" name="interior_tablero" value="bien"></td>
+            <td><input type="radio" name="interior_tablero" value="regular"></td>
+            <td><input type="radio" name="interior_tablero" value="mal"></td>
+        </tr>
+        <tr>
+            <td>Radio</td>
+            <td><input type="radio" name="interior_radio" value="bien"></td>
+            <td><input type="radio" name="interior_radio" value="regular"></td>
+            <td><input type="radio" name="interior_radio" value="mal"></td>
+        </tr>
+        <tr>
+            <td>Encendedor</td>
+            <td><input type="radio" name="interior_encendedor" value="bien"></td>
+            <td><input type="radio" name="interior_encendedor" value="regular"></td>
+            <td><input type="radio" name="interior_encendedor" value="mal"></td>
+        </tr>
+        <tr>
+            <td>Asientos</td>
+            <td><input type="radio" name="interior_asientos" value="bien"></td>
+            <td><input type="radio" name="interior_asientos" value="regular"></td>
+            <td><input type="radio" name="interior_asientos" value="mal"></td>
+        </tr>
+        <tr>
+            <td>Luces</td>
+            <td><input type="radio" name="interior_luces" value="bien"></td>
+            <td><input type="radio" name="interior_luces" value="regular"></td>
+            <td><input type="radio" name="interior_luces" value="mal"></td>
+        </tr>
+    </tbody>
+</table>
+<div>
+    <label for="observaciones_interior">Observaciones:</label>
+    <textarea id="observaciones_interior" name="observaciones_interior" rows="4" cols="50"></textarea>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Restaurar radios desde localStorage
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            let savedValue = localStorage.getItem(radio.name);
+            if (savedValue && radio.value === savedValue) {
+                radio.checked = true;
+            }
+            radio.addEventListener("change", function () {
+                localStorage.setItem(radio.name, radio.value);
+                window.parent.postMessage({
+                    type: "saveRadio",
+                    name: radio.name,
+                    value: radio.value
+                }, "*");
+            });
+        });
+
+        // Restaurar observaciones desde localStorage
+        let observaciones = document.getElementById("observaciones_interior");
+        if (localStorage.getItem("observaciones_interior")) {
+            observaciones.value = localStorage.getItem("observaciones_interior");
+        }
+        observaciones.addEventListener("input", function () {
+            localStorage.setItem("observaciones_interior", observaciones.value);
+        });
+
+        // Manejo de mensajes postMessage
+        window.addEventListener("message", function (event) {
+            if (event.data.type === "restoreRadios") {
+                Object.keys(event.data.values).forEach(name => {
+                    let value = event.data.values[name];
+                    let radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
+                    if (radio) {
+                        radio.checked = true;
+                    }
+                });
+            }
+            if (event.data.type === "getDatos") {
+                let datos = [];
+                document.querySelectorAll('input[type="radio"]:checked').forEach(input => {
+                    datos.push({
+                        categoria: "Interior",
+                        elemento: input.name.replace("interior_", ""),
+                        estado: input.value
+                    });
+                });
+                let observacionesTexto = document.getElementById("observaciones_interior").value;
+                if (observacionesTexto) {
+                    datos.push({
+                        categoria: "Interior",
+                        elemento: "Observaciones",
+                        estado: observacionesTexto
+                    });
+                }
+                event.source.postMessage({ type: "respuestaDatos", datos: datos }, "*");
+            }
+        });
+    });
+</script>

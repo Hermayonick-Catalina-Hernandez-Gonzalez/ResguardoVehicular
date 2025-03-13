@@ -1,0 +1,186 @@
+/* Estilo general */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+}
+
+/* Encabezado */
+.head {
+    width: 100%;
+    height: 150px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 5vw;
+    margin: 0;
+    padding: 0;
+}
+
+.titulo {
+    flex: 1;
+    text-align: center;
+    align-items: center;
+}
+
+.titulo h1 {
+    font-size: 42px;
+    color: #1A2341;
+    font-weight: bold;
+    margin: 0 auto;
+    word-wrap: break-word;
+}
+
+/* Imagen del logo */
+.logo img {
+    width: 200px;
+    width: 300px;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.esquina-container {
+    width: 200px;
+    height: 200px;
+}
+
+
+.esquina {   
+    width: 200px;
+    height: 200px;
+}
+
+.esquina img {
+    width: 300px;
+    object-fit: contain;
+    border: none; 
+}
+
+/* Boton de salir */
+.btn-salir {
+    position: absolute;
+    top: 10px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.btn-salir img {
+    width: 60px; 
+    height: 60px;
+}
+
+/* Barra de búsqueda */
+.barra-busqueda {
+    position: relative;
+    width: 90%;
+    max-width: 700px;
+    margin: 20px auto; /* Centrado */
+    display: flex;
+}
+
+.barra-busqueda input[type="text"] {
+    width: 100%;
+    padding: 10px 20px;
+    border: 2px solid #1A2341;
+    border-radius: 20px;
+    font-size: 16px;
+    background-color: #f7f7f7;
+}
+
+.barra-busqueda .icono-buscar {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+/* Tabla */
+table {
+    width: 90%;
+    max-width: 1000px;
+    margin: 20px auto; /* Centrado */
+    border-collapse: collapse;
+    background-color: #f7f7f7;
+    border: 1px solid #d6d4d4;
+}
+
+table th {
+    background-color: #1A2341;
+    color: white;
+    padding: 12px;
+    font-size: 16px;
+    text-align: center;
+    border: 1px solid #d6d4d4;
+}
+
+table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #d6d4d4;
+    color: #333333;
+}
+
+table button {
+    background-color: #1A2341;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+table button:hover {
+    background-color: #014782;
+}
+/* Estilos para pantallas medianas (tablets) */
+@media screen and (max-width: 1024px) {
+    .container {
+        width: 80%;
+    }
+
+    .profile-section {
+        padding: 25px;
+    }
+
+    .profile-picture {
+        width: 180px;
+        height: 180px; 
+    }
+
+    .titulo h1 {
+        font-size: 36px; 
+    }
+
+    .history-card {
+        padding: 20px;
+    }
+}
+
+/* Estilos para pantallas extra pequeñas (menos de 480px) */
+@media screen and (max-width: 480px) {
+    .titulo h1 {
+        font-size: 24px; 
+    }
+
+    .profile-info p {
+        font-size: 14px; 
+    }
+
+    .download-button {
+        padding: 10px; 
+    }
+}

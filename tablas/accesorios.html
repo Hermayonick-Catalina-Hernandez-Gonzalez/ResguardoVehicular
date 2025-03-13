@@ -1,0 +1,149 @@
+<link rel="stylesheet" href="../css/stylestabla.css">
+<script src="../JS/acciones.js"></script>
+<table class="verification-table">
+    <thead>
+        <tr>
+            <th>Asesorios</th>
+            <th>Si</th>
+            <th>No</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Radio Matra</td>
+            <td><input type="radio" name="accesorios_radioM" value="si"></td>
+            <td><input type="radio" name="accesorios_radioM" value="no"></td>
+        </tr>
+        <tr>
+            <td>Estrobos</td>
+            <td><input type="radio" name="accesorios_estrobos" value="si"></td>
+            <td><input type="radio" name="accesorios_estrobos" value="no"></td>
+        </tr>
+        <tr>
+            <td>Codigos</td>
+            <td><input type="radio" name="accesorios_codigos" value="si"></td>
+            <td><input type="radio" name="accesorios_codigos" value="no"></td>
+        </tr>
+        <tr>
+            <td>Sirenas</td>
+            <td><input type="radio" name="accesorios_sirenas" value="si"></td>
+            <td><input type="radio" name="accesorios_sirenas" value="no"></td>
+        </tr>
+        <tr>
+            <td>GPS</td>
+            <td><input type="radio" name="accesorios_GPS" value="si"></td>
+            <td><input type="radio" name="accesorios_GPS" value="no"></td>
+        </tr>
+        
+    </tbody>
+    <thead>
+        <tr>
+            <th>Herramientas</th>
+            <th>Si</th>
+            <th>No</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Gato</td>
+            <td><input type="radio" name="accesorios_gato" value="si"></td>
+            <td><input type="radio" name="accesorios_gato" value="no"></td>
+        </tr>
+        <tr>
+            <td>L/Cruceta</td>
+            <td><input type="radio" name="accesorios_L/Cruceta" value="si"></td>
+            <td><input type="radio" name="accesorios_L/Cruceta" value="no"></td>
+        </tr>
+        <tr>
+            <td>Reflejantes</td>
+            <td><input type="radio" name="accesorios_reflejantes" value="si"></td>
+            <td><input type="radio" name="accesorios_reflejantes" value="no"></td>
+        </tr>
+        <tr>
+            <td>Llanta Refraccion</td>
+            <td><input type="radio" name="accesorios_llantaR" value="si"></td>
+            <td><input type="radio" name="accesorios_llantaR" value="no"></td>
+        </tr>
+        <tr>
+            <td>Extintor</td>
+            <td><input type="radio" name="accesorios_extintor" value="si"></td>
+            <td><input type="radio" name="accesorios_extintor" value="no"></td>
+        </tr>
+
+    </tbody>
+</table>
+
+
+<div>
+
+    <label for="observaciones">Observaciones:</label>
+    <textarea id="observaciones" name="observaciones" rows="4" cols="50"></textarea>
+</div>
+<script src="../JS/verificacion.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        window.parent.postMessage({ type: "loadRadios" }, "*");
+    
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.addEventListener("change", function () {
+                window.parent.postMessage({
+                    type: "saveRadio",
+                    name: radio.name,
+                    value: radio.value
+                }, "*");
+            });
+        });
+    
+        window.addEventListener("message", function (event) {
+            if (event.data.type === "restoreRadios") {
+                const savedValue = event.data.values[event.data.name];
+                if (savedValue) {
+                    const radio = document.querySelector(`input[name="${event.data.name}"][value="${savedValue}"]`);
+                    if (radio) {
+                        radio.checked = true;
+                    }
+                }
+            }
+        });
+        let observaciones = document.getElementById("observaciones");
+
+        // Recuperar datos almacenados
+        if (localStorage.getItem("observaciones")) {
+            observaciones.value = localStorage.getItem("observaciones");
+        }
+
+        // Guardar cambios cuando el usuario escriba
+        observaciones.addEventListener("input", function () {
+            localStorage.setItem("observaciones", observaciones.value);
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        window.addEventListener("message", function (event) {
+            if (event.data.type === "getDatos") {
+                let datos = [];
+                
+                document.querySelectorAll('input[type="radio"]:checked').forEach(input => {
+                    datos.push({
+                        categoria: "Accesorios",
+                        elemento: input.name.replace("accesorios_", ""),
+                        estado: input.value
+                    });
+                });
+
+                let observaciones = document.getElementById("observaciones").value;
+                if (observaciones) {
+                    datos.push({
+                        categoria: "Accesorios",
+                        elemento: "Observaciones",
+                        estado: observaciones
+                    });
+                }
+
+                event.source.postMessage({ type: "respuestaDatos", datos: datos }, "*");
+            }
+        });
+    });
+</script>
