@@ -33,7 +33,6 @@ function obtenerDatosVehiculo(vehiculoId) {
 
 function generarPDF(vehiculo) {
     if (!vehiculo || !vehiculo.marca || !vehiculo.submarca || !vehiculo.serie) {
-        console.log("Datos faltantes en el vehículo: ", vehiculo);
         alert("Datos del vehículo no disponibles.");
         return;
     }

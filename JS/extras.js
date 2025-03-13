@@ -114,7 +114,7 @@ function limpiarFirma() {
 
 function guardarFirma() {
     let canvas = document.getElementById("canvasFirma");
-    let imagenFirma = canvas.toDataURL("image/png"); // Convertir firma a imagen
+    let imagenFirma = canvas.toDataURL("image/png");
 
     Swal.fire({
         icon: "success",
@@ -124,7 +124,7 @@ function guardarFirma() {
     });
 
     cerrarFirma();
-    descargarPDFConFirma(imagenFirma);
+    verPDF();
 }
 
 document.addEventListener("DOMContentLoaded", function() {
