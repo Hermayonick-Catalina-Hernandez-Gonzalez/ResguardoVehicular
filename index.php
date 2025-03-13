@@ -1,6 +1,6 @@
 <?php
 session_start(); // Asegúrate de iniciar la sesión
-require "php/conexion.php";
+require_once "php/conexion.php";
 ?>
 
 <!DOCTYPE html>

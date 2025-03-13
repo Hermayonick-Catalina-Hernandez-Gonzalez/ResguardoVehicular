@@ -1,5 +1,5 @@
 <?php
-include '../php/conexion.php';  
+require_once '../php/conexion.php';  
 
 // Datos del primer usuario (Verificador)
 $correo_verificador = "verificador@fgj.tam";
@@ -9,7 +9,7 @@ $rol_verificador = "verificador";
 // Datos del segundo usuario (Resguardante)
 $correo_resguardante = "resguardante@fgj.tam";
 $contraseña_resguardante = "resguardante";
-$rol_resguardante = "resguardante";  
+$rol_resguardante = "resguardante";
 
 // Encriptar las contraseñas con BCRYPT
 $contraseña_encriptada_verificador = password_hash($contraseña_verificador, PASSWORD_BCRYPT);
