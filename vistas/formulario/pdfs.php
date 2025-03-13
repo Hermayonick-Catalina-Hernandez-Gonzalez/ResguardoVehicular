@@ -4,6 +4,7 @@ if (!isset($_SESSION['usuario_id'])) {
     header("Location: ../../index.php"); 
     exit();
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -63,7 +64,7 @@ if (!isset($_SESSION['usuario_id'])) {
             </div>
 
         </form>
-        <button onclick="abrirFirma(); finalizarFormulario();" class="btn">Aceptar</button>
+        <button onclick="abrirFirma()" class="btn">Aceptar</button>
     </div>
 
     <!-- Modal de Firma Digital -->
@@ -76,7 +77,7 @@ if (!isset($_SESSION['usuario_id'])) {
                 class="btn-foto">Limpiar</button>
             <button onclick="cerrarFirma()"
                 class="btn-close">Cerrar</button>
-            <button onclick="guardarFirma()" class="btn">Guardar
+            <button onclick="guardarFirma() ; finalizarFormulario(); " class="btn">Guardar
                 Firma</button>
         </div>
     </div>

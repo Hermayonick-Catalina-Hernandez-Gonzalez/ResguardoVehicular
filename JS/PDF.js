@@ -8,7 +8,7 @@ function verPDF() {
 }
 
 function obtenerDatosVehiculo(vehiculoId) {
-    fetch('http://localhost/xampp/VehiculosSQLSERVE/php/obtenerHistorial.php', {
+    fetch('../php/obtenerHistorial.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -33,7 +33,6 @@ function obtenerDatosVehiculo(vehiculoId) {
 
 function generarPDF(vehiculo) {
     if (!vehiculo || !vehiculo.marca || !vehiculo.submarca || !vehiculo.serie) {
-        console.log("Datos faltantes en el vehículo: ", vehiculo);
         alert("Datos del vehículo no disponibles.");
         return;
     }
@@ -144,10 +143,27 @@ function generarPDF1(imgData, vehiculo) {
     y += 30;
     doc.setFont("helvetica", "bold");
     doc.text("Firma del Resguardante Interno", doc.internal.pageSize.getWidth() / 2, y, { align: 'center' });
-    y += 40;
+
+    // **Cargar firma desde localStorage**
+    let firmaBase64 = localStorage.getItem("firmaBase64");
+    if (firmaBase64) {
+        let firmaX = doc.internal.pageSize.getWidth() / 2 - 50; // Centrar firma
+        let firmaY = y + 5; // Ajustar posición de la firma
+        let firmaWidth = 100; // Tamaño de la firma
+        let firmaHeight = 40;
+
+        doc.addImage(firmaBase64, "PNG", firmaX, firmaY, firmaWidth, firmaHeight);
+        y += 40; // Mover el cursor hacia abajo
+    }
+
+    // **Dibujar la línea de firma**
     doc.line(doc.internal.pageSize.getWidth() / 2 - 80, y + 5, doc.internal.pageSize.getWidth() / 2 + 80, y + 5);
     y += 10;
-    doc.text("Nombre y Firma", doc.internal.pageSize.getWidth() / 2, y + 12, { align: 'center' });
+
+    // **Agregar el nombre del Resguardante Interno**
+    doc.text(vehiculo.resguardante_interno || "Nombre No Disponible", doc.internal.pageSize.getWidth() / 2, y + 12, { align: 'center' });
+
+    return doc.output("bloburl");
 
     return doc.output("bloburl");
 }
@@ -532,22 +548,22 @@ function generarPDF2(imgData, vehiculo) {
     doc.text(textoFormateado, 40, startYTexto);
 
     let alturaTexto = doc.getTextDimensions(textoFormateado).h;
-    startYTexto += alturaTexto + 10; 
+    startYTexto += alturaTexto + 10;
 
     // **Obtener las primeras 4 imágenes del vehículo**
     let imagenes = Array.isArray(vehiculo.fotos) ? vehiculo.fotos.slice(0, 4) : [];
 
     // **Tamaño y posición de las imágenes**
-    const imgWidth = 180;  
-    const imgHeight = 70;  
-    const espacioEntreImagenes = 20; 
+    const imgWidth = 180;
+    const imgHeight = 70;
+    const espacioEntreImagenes = 20;
     const margenIzquierdo = (doc.internal.pageSize.getWidth() - (imgWidth * 2 + espacioEntreImagenes)) / 2; // Centrado
 
     // **Función para cargar una imagen y convertirla a base64**
     function cargarImagen(foto) {
         return new Promise((resolve) => {
             let imgElement = new Image();
-            imgElement.src = `http://localhost/xampp/VehiculosSQLSERVE/vehiculos/${foto.nombre_archivo}`;
+            imgElement.src = `../vehiculos/${foto.nombre_archivo}`;
             imgElement.crossOrigin = "Anonymous";
 
             imgElement.onload = function () {
@@ -583,8 +599,12 @@ function generarPDF2(imgData, vehiculo) {
         document.getElementById("preview2").src = pdfURL;
     });
 
+    let firmaBase64 = localStorage.getItem("firmaBase64");
 
-    y = 1300; // Ajusta la posición vertical según necesites
+    // Dibujar los datos del vehículo...
+
+    y = 1300; // Posición de las firmas
+
     const firmas = [
         "Resguardante Oficial",
         "Resguardante Interno",
@@ -593,21 +613,51 @@ function generarPDF2(imgData, vehiculo) {
     ];
 
     const pageWidth = doc.internal.pageSize.getWidth();
-    const startXFirma = 40; // Margen izquierdo
-    const spacing = (pageWidth - startXFirma * 2) / firmas.length; // Espacio entre firmas
+    const startXFirma = 40;
+    const spacing = (pageWidth - startXFirma * 2) / firmas.length;
 
     firmas.forEach((texto, index) => {
         let x = startXFirma + index * spacing;
 
-        // Ajustar alineación
+        // Dibujar etiqueta de firma
         doc.text(texto, x + spacing / 2, y, { align: "center" });
 
-        // Dibujar línea para la firma
+        // Dibujar línea de firma
         let lineStartX = x + 10;
-        let lineEndX = x + spacing - 10; 
+        let lineEndX = x + spacing - 10;
         doc.line(lineStartX, y + 40, lineEndX, y + 40);
+
+        // Agregar la firma si existe
+        if (firmaBase64 && index === 1) { // Firma del Resguardante Interno
+            doc.addImage(firmaBase64, 'PNG', x + 10, y - 30, 80, 40);
+        }
     });
 
     return doc.output('bloburl');
+}
 
+function generarPDFsConFirma() {
+    fetch('../php/obtenerHistorial.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error || !data.marca || !data.modelo || !data.placa) {
+                alert("Datos del vehículo no disponibles.");
+            } else {
+                let firmaBase64 = localStorage.getItem("firmaBase64") || null;
+
+                let pdf1 = generarPDF(data, firmaBase64);
+                let pdf2 = generarPDFFirma(data, firmaBase64);
+
+                // Descargar automáticamente los PDFs
+                descargarPDF(pdf1, "Resguardo_Vehicular.pdf");
+                descargarPDF(pdf2, "Resguardo_Firmado.pdf");
+            }
+        })
+        .catch(error => {
+            console.error('Error al obtener datos:', error);
+            alert("Error al obtener los datos del vehículo.");
+        });
 }

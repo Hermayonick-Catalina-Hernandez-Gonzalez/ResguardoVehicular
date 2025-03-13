@@ -59,7 +59,7 @@ function buscarEmpleado(tipo) {
         return;
     }
 
-    let url = `http://localhost/xampp/VehiculosSQLSERVE/php/buscarEmpleado.php?numero_empleado=${encodeURIComponent(numeroEmpleado)}`;
+    let url = `../php/buscarEmpleado.php?numero_empleado=${encodeURIComponent(numeroEmpleado)}`;
 
     fetch(url)
         .then(response => response.text())
@@ -192,7 +192,7 @@ function guardarDatos() {
 
     var formData = new FormData(document.getElementById('formularioResguardante'));
 
-    fetch('http://localhost/xampp/VehiculosSQLSERVE/php/guardar_resguardante.php', {
+    fetch('../php/guardar_resguardante.php', {
         method: 'POST',
         body: formData
     })

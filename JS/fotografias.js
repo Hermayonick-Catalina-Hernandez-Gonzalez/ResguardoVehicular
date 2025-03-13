@@ -223,7 +223,7 @@ function guardar() {
 
     formData.append("vehiculo_id", vehiculoId);
 
-    fetch('http://localhost/xampp/VehiculosSQLSERVE/php/guardar_fotografias.php', {
+    fetch('../php/guardar_fotografias.php', {
         method: 'POST',
         body: formData
     })

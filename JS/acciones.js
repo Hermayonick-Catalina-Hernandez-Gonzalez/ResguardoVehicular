@@ -30,7 +30,7 @@ function iniciar() {
 }
 
 function editar() {
-    window.location.href = "http://localhost/xampp/VehiculosSQLSERVE/vistas/formulario/resguardante.php";
+    window.location.href = "../vistas/formulario/resguardante.php";
 }
 
 function validarFormulario() {
@@ -233,4 +233,9 @@ function siguiente() {
             backdrop: false
         });
     }
+}
+
+// Limpiar localStorage solo cuando el usuario presiona "Aceptar"
+function finalizarFormulario() {
+    localStorage.clear();
 }
