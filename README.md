@@ -1,2 +1,2 @@
-Version de Php
-8.2.12
+Versiónes
+PHP  8.2.12  
