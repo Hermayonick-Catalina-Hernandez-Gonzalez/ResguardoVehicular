@@ -114,18 +114,21 @@ function limpiarFirma() {
 
 function guardarFirma() {
     let canvas = document.getElementById("canvasFirma");
-    let imagenFirma = canvas.toDataURL("image/png");
+    let imagenFirma = canvas.toDataURL("image/png"); // Convertir firma a base64
+
+    localStorage.setItem("firmaBase64", imagenFirma); // Guardar en localStorage
 
     Swal.fire({
         icon: "success",
-        title: "Datos Guardados",
-        text: "Los datos han sido registrados correctamente.",
+        title: "Firma Guardada",
+        text: "La firma ha sido registrada correctamente.",
         backdrop: false
     });
 
     cerrarFirma();
-    verPDF();
+    verPDF(); // Regenerar PDF con la firma
 }
+
 
 document.addEventListener("DOMContentLoaded", function() {
     let vehiculoId = localStorage.getItem("vehiculo_id");

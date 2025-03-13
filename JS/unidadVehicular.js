@@ -11,7 +11,7 @@ function buscarVehiculo() {
         return;
     }
 
-    fetch(`http://localhost/xampp/VehiculosSQLSERVE/php/buscarVehiculo.php?numero_economico=${numeroEconomico}`)
+    fetch(`../php/buscarVehiculo.php?numero_economico=${numeroEconomico}`)
         .then(response => response.json()) // Convertimos la respuesta a JSON
         .then(data => {
             if (data.error) {
@@ -172,7 +172,7 @@ function guardarVehiculo() {
 
     formData.append("resguardante_id", resguardanteId);
 
-    fetch("http://localhost/xampp/VehiculosSQLSERVE/php/guardar_vehiculo.php", {
+    fetch("../php/guardar_vehiculo.php", {
         method: "POST",
         body: formData
     })
