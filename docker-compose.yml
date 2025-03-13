@@ -1,0 +1,28 @@
+services:
+  app:
+    build:
+      args:
+        user: dev
+        uid: 1000
+      context: .
+    volumes:
+      - .:/var/www/html
+    networks:
+      - app-v
+
+  webserver:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www/html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - app-v
+
+
+networks:
+  app-v:
+    driver: bridge
