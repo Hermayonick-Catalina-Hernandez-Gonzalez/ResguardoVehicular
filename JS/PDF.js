@@ -142,10 +142,6 @@ function generarPDF1(imgData, vehiculo) {
     y += 30;
     doc.setFont("helvetica", "bold");
     doc.text("Firma del Resguardante Interno", doc.internal.pageSize.getWidth() / 2, y, { align: 'center' });
-
-    y += 30;
-    doc.setFont("helvetica", "bold");
-    doc.text("Firma del Resguardante Interno", doc.internal.pageSize.getWidth() / 2, y, { align: 'center' });
     y += 40;
     doc.line(doc.internal.pageSize.getWidth() / 2 - 80, y + 5, doc.internal.pageSize.getWidth() / 2 + 80, y + 5);
     y += 10;
