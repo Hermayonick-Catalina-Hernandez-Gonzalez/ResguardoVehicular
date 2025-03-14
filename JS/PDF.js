@@ -1,7 +1,8 @@
 function verPDF() {
     const vehiculoId = localStorage.getItem("vehiculo_id");
+    
     if (vehiculoId) {
-        obtenerDatosVehiculo(vehiculoId, false); // false indica que solo queremos ver la vista previa
+        obtenerDatosVehiculo(vehiculoId, false);
     } else {
         alert("No se encontró el ID del vehículo.");
     }

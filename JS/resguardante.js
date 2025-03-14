@@ -59,7 +59,8 @@ function buscarEmpleado(tipo) {
         return;
     }
 
-    let url = `https://pruebas-vehiculos.fgjtam.gob.mx/php/buscarEmpleado.php?numero_empleado=${encodeURIComponent(numeroEmpleado)}`;
+    let url = `https://pruebas-vehiculos.fgjtam.gob.mx/
+php/buscarEmpleado.php?numero_empleado=${encodeURIComponent(numeroEmpleado)}`;
 
     fetch(url)
         .then(response => response.text())
