@@ -17,7 +17,7 @@ function descargarPDFs() {
 }
 
 function obtenerDatosVehiculo(vehiculoId, descargar) {
-    fetch('http://localhost/xampp/VehiculosSQLSERVE/php/obtenerHistorial.php', {
+    fetch('https://pruebas-vehiculos.fgjtam.gob.mx/php/obtenerHistorial.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: `vehiculo_id=${vehiculoId}`
@@ -162,31 +162,30 @@ function generarPDF1(imgData, vehiculo, descargar) {
                 maxWidth: 520
             });
         });
-        y += lines.length * 15 + 10; // ✅ Se mantiene `y` actualizado
+        y += lines.length * 15 + 10; 
     });
 
-    // ❌ NO reiniciar `y = 30;` aquí
-    y += 20; // Agregar espacio después del texto antes de la firma
+
+    y += 20; 
 
     doc.setFont("helvetica", "bold");
     doc.text("Firma del Resguardante Interno", doc.internal.pageSize.getWidth() / 2, y, { align: 'center' });
     y += 20;
 
-    // ✅ Agregar firma en la posición correcta
     let firmaBase64 = localStorage.getItem("firmaBase64");
     if (firmaBase64) {
         doc.addImage(firmaBase64, "PNG", doc.internal.pageSize.getWidth() / 2 - 50, y, 100, 50);
     }
 
-    y += 60; // Espacio después de la firma
+    y += 60; 
     doc.line(doc.internal.pageSize.getWidth() / 2 - 80, y, doc.internal.pageSize.getWidth() / 2 + 80, y);
     y += 10;
     doc.text("Nombre y Firma", doc.internal.pageSize.getWidth() / 2, y, { align: 'center' });
 
     if (descargar) {
-        return doc; // ⚡ Si descargar es `true`, devolvemos el PDF para guardarlo
+        return doc; 
     } else {
-        return doc.output("bloburl"); // 👀 Si es solo vista previa, devolver URL
+        return doc.output("bloburl"); 
     }
 
 }
@@ -584,7 +583,7 @@ function generarPDF2(imgData, vehiculo, descargar) {
     function cargarImagen(foto) {
         return new Promise((resolve) => {
             let imgElement = new Image();
-            imgElement.src = `http://localhost/xampp/VehiculosSQLSERVE/vehiculos/${foto.nombre_archivo}`;
+            imgElement.src = `https://pruebas-vehiculos.fgjtam.gob.mx/vehiculos/${foto.nombre_archivo}`;
             imgElement.crossOrigin = "Anonymous";
 
             imgElement.onload = function () {
@@ -602,7 +601,7 @@ function generarPDF2(imgData, vehiculo, descargar) {
             };
         });
     }
-    // **Cargar las imágenes antes de agregarlas al PDF**
+
     Promise.all(imagenes.map(foto => cargarImagen(foto))).then(cargas => {
         cargas.forEach((base64Image, index) => {
             if (base64Image) {
@@ -618,10 +617,6 @@ function generarPDF2(imgData, vehiculo, descargar) {
         let pdfURL = URL.createObjectURL(pdfBlob);
         document.getElementById("preview2").src = pdfURL;
     });
-
-    let firmaBase64 = localStorage.getItem("firmaBase64");
-
-    // Dibujar los datos del vehículo...
 
     y = 1300;
     const firmas = [
@@ -643,7 +638,7 @@ function generarPDF2(imgData, vehiculo, descargar) {
         let lineEndX = x + spacing - 10;
         doc.line(lineStartX, y + 40, lineEndX, y + 40);
 
-        // Solo agregar la firma en "Resguardante Interno" (segunda posición)
+    
         if (index === 1) {
             let firmaBase64 = localStorage.getItem("firmaBase64");
             if (firmaBase64) {
@@ -654,8 +649,8 @@ function generarPDF2(imgData, vehiculo, descargar) {
 
 
     if (descargar) {
-        return doc; // ⚡ Si descargar es `true`, devolvemos el PDF para guardarlo
+        return doc; 
     } else {
-        return doc.output("bloburl"); // 👀 Si es solo vista previa, devolver URL
+        return doc.output("bloburl"); 
     }
 }
