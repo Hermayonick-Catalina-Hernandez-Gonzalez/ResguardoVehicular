@@ -1,27 +1,37 @@
 function verPDF() {
     const vehiculoId = localStorage.getItem("vehiculo_id");
     if (vehiculoId) {
-        obtenerDatosVehiculo(vehiculoId);
+        obtenerDatosVehiculo(vehiculoId, false); // false indica que solo queremos ver la vista previa
     } else {
         alert("No se encontró el ID del vehículo.");
     }
 }
 
-function obtenerDatosVehiculo(vehiculoId) {
+function descargarPDFs() {
+    const vehiculoId = localStorage.getItem("vehiculo_id");
+    if (vehiculoId) {
+        obtenerDatosVehiculo(vehiculoId, true); // true = descargar PDF
+    } else {
+        alert("No se encontró el ID del vehículo.");
+    }
+}
+
+function obtenerDatosVehiculo(vehiculoId, descargar) {
     fetch('http://localhost/xampp/VehiculosSQLSERVE/php/obtenerHistorial.php', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: `vehiculo_id=${vehiculoId}`
     })
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             if (data.error || !data.marca || !data.modelo || !data.placa) {
                 alert("Datos del vehículo no disponibles.");
             } else {
-                generarPDF(data); // Llamamos a generarPDF pasándole los datos
+                if (descargar) {
+                    generarYDescargarPDFs(data);
+                } else {
+                    generarVistaPreviaPDFs(data);
+                }
             }
         })
         .catch(error => {
@@ -29,34 +39,50 @@ function obtenerDatosVehiculo(vehiculoId) {
         });
 }
 
-
-function generarPDF(vehiculo) {
-    if (!vehiculo || !vehiculo.marca || !vehiculo.submarca || !vehiculo.serie) {
-        alert("Datos del vehículo no disponibles.");
-        return;
-    }
-
+function generarVistaPreviaPDFs(vehiculo) {
     const { jsPDF } = window.jspdf;
     const img = new Image();
     img.src = '../../img/Logo.png';
+
     img.onload = function () {
         const canvas = document.createElement('canvas');
         canvas.width = img.width;
         canvas.height = img.height;
         const ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0);
-        const imgData = canvas.toDataURL('image/png'); // Convertir la imagen a base64
+        const imgData = canvas.toDataURL('image/png');
 
-        // Llamamos a generar el PDF con la información del vehículo
-        const pdf1 = generarPDF1(imgData, vehiculo);
-        const pdf2 = generarPDF2(imgData, vehiculo);
+        // Generar PDFs para vista previa
+        let pdf1 = generarPDF1(imgData, vehiculo, false); // false = solo vista previa
+        let pdf2 = generarPDF2(imgData, vehiculo, false);
 
         document.getElementById("preview1").src = pdf1;
         document.getElementById("preview2").src = pdf2;
     };
 }
 
-function generarPDF1(imgData, vehiculo) {
+function generarYDescargarPDFs(vehiculo) {
+    const { jsPDF } = window.jspdf;
+    const img = new Image();
+    img.src = '../../img/Logo.png';
+
+    img.onload = function () {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        const imgData = canvas.toDataURL('image/png');
+
+        let pdf1 = generarPDF1(imgData, vehiculo, true); // true = descargar
+        let pdf2 = generarPDF2(imgData, vehiculo, true);
+
+        pdf1.save("Reglas_Vehiculo.pdf");
+        pdf2.save("Resguardo_Vehiculo.pdf");
+    };
+}
+
+function generarPDF1(imgData, vehiculo, descargar) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({
         orientation: 'portrait',
@@ -136,22 +162,37 @@ function generarPDF1(imgData, vehiculo) {
                 maxWidth: 520
             });
         });
-        y += lines.length * 15 + 10;
+        y += lines.length * 15 + 10; // ✅ Se mantiene `y` actualizado
     });
 
-    y += 30;
+    // ❌ NO reiniciar `y = 30;` aquí
+    y += 20; // Agregar espacio después del texto antes de la firma
+
     doc.setFont("helvetica", "bold");
     doc.text("Firma del Resguardante Interno", doc.internal.pageSize.getWidth() / 2, y, { align: 'center' });
-    y += 40;
-    doc.line(doc.internal.pageSize.getWidth() / 2 - 80, y + 5, doc.internal.pageSize.getWidth() / 2 + 80, y + 5);
-    y += 10;
-    doc.text("Nombre y Firma", doc.internal.pageSize.getWidth() / 2, y + 12, { align: 'center' });
+    y += 20;
 
-    return doc.output("bloburl");
+    // ✅ Agregar firma en la posición correcta
+    let firmaBase64 = localStorage.getItem("firmaBase64");
+    if (firmaBase64) {
+        doc.addImage(firmaBase64, "PNG", doc.internal.pageSize.getWidth() / 2 - 50, y, 100, 50);
+    }
+
+    y += 60; // Espacio después de la firma
+    doc.line(doc.internal.pageSize.getWidth() / 2 - 80, y, doc.internal.pageSize.getWidth() / 2 + 80, y);
+    y += 10;
+    doc.text("Nombre y Firma", doc.internal.pageSize.getWidth() / 2, y, { align: 'center' });
+
+    if (descargar) {
+        return doc; // ⚡ Si descargar es `true`, devolvemos el PDF para guardarlo
+    } else {
+        return doc.output("bloburl"); // 👀 Si es solo vista previa, devolver URL
+    }
 
 }
 
-function generarPDF2(imgData, vehiculo) {
+
+function generarPDF2(imgData, vehiculo, descargar) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({
         orientation: 'portrait',
@@ -582,7 +623,7 @@ function generarPDF2(imgData, vehiculo) {
 
     // Dibujar los datos del vehículo...
 
-    y = 1300; // Ajusta la posición vertical según necesites
+    y = 1300;
     const firmas = [
         "Resguardante Oficial",
         "Resguardante Interno",
@@ -591,20 +632,30 @@ function generarPDF2(imgData, vehiculo) {
     ];
 
     const pageWidth = doc.internal.pageSize.getWidth();
-    const startXFirma = 40; // Margen izquierdo
-    const spacing = (pageWidth - startXFirma * 2) / firmas.length; // Espacio entre firmas
+    const startXFirma = 40;
+    const spacing = (pageWidth - startXFirma * 2) / firmas.length;
 
     firmas.forEach((texto, index) => {
         let x = startXFirma + index * spacing;
-
-        // Ajustar alineación
         doc.text(texto, x + spacing / 2, y, { align: "center" });
 
-        // Dibujar línea para la firma
-        let lineStartX = x + 10; // Ajustar inicio de línea
-        let lineEndX = x + spacing - 10; // Ajustar fin de línea
-        doc.line(lineStartX, y + 40, lineEndX, y + 40); // Línea de firma
+        let lineStartX = x + 10;
+        let lineEndX = x + spacing - 10;
+        doc.line(lineStartX, y + 40, lineEndX, y + 40);
+
+        // Solo agregar la firma en "Resguardante Interno" (segunda posición)
+        if (index === 1) {
+            let firmaBase64 = localStorage.getItem("firmaBase64");
+            if (firmaBase64) {
+                doc.addImage(firmaBase64, "PNG", x + spacing / 2 - 50, y - 20, 100, 50);
+            }
+        }
     });
 
-    return doc.output('bloburl');
+
+    if (descargar) {
+        return doc; // ⚡ Si descargar es `true`, devolvemos el PDF para guardarlo
+    } else {
+        return doc.output("bloburl"); // 👀 Si es solo vista previa, devolver URL
+    }
 }

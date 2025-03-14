@@ -131,11 +131,16 @@ function guardarFotoExtra(idImagen) {
 
 
 function restaurarFotosExtras() {
+    let contenedor = document.getElementById("extra-fotos-container");
+
+    if (!contenedor) {
+        console.warn("⚠️ El contenedor de fotos extra no se encontró en el DOM.");
+        return; // Detener la ejecución de la función
+    }
+
     let fotosExtras = JSON.parse(localStorage.getItem("fotosExtras")) || [];
 
     fotosExtras.forEach(idExtra => {
-        const contenedor = document.getElementById("extra-fotos-container");
-
         let filas = contenedor.getElementsByClassName("foto-apartado-container");
         let ultimaFila = filas[filas.length - 1];
 
@@ -163,7 +168,7 @@ function restaurarFotosExtras() {
             document.getElementById(idExtra).src = imagenGuardada;
         }
 
-        // Recuperar observación si existe en localStorage
+        // Restaurar observación si existe en localStorage
         const observacionGuardada = localStorage.getItem(`observacion-${idExtra}`);
         if (observacionGuardada) {
             document.getElementById(`observaciones-${idExtra}`).value = observacionGuardada;
@@ -172,6 +177,8 @@ function restaurarFotosExtras() {
 
     contadorExtra = fotosExtras.length > 0 ? parseInt(fotosExtras[fotosExtras.length - 1].split('-')[2]) + 1 : 1;
 }
+
+
 
 function guardar() {
     let formData = new FormData();

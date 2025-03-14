@@ -114,46 +114,22 @@ function limpiarFirma() {
 
 function guardarFirma() {
     let canvas = document.getElementById("canvasFirma");
-    let imagenFirma = canvas.toDataURL("image/png"); // Convertir firma a imagen
+    let imagenFirma = canvas.toDataURL("image/png");
+
+    localStorage.setItem("firmaBase64", imagenFirma); // Guardar la firma en localStorage
 
     Swal.fire({
-        icon: "success",
-        title: "Datos Guardados",
-        text: "Los datos han sido registrados correctamente.",
+        icon: 'success',
+        title: '¡Se ha Guardado Exitosamente!',
+        timer: 1500,
+        showConfirmButton: false,
         backdrop: false
+    }).then(() => {
+        limpiarFirma();
+        cerrarFirma();
     });
 
-    cerrarFirma();
-    descargarPDFConFirma(imagenFirma);
 }
-
-function finalizarFormulario() {
-    Swal.fire({
-        title: "Finalizar",
-        text: "¿Estás seguro de que deseas finalizar el proceso?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Sí, finalizar",
-        cancelButtonText: "Cancelar"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Limpiar localStorage
-            localStorage.removeItem("vehiculo_id");
-            localStorage.removeItem("firmaBase64");
-            localStorage.clear();
-            
-            Swal.fire({
-                icon: "success",
-                title: "Proceso Finalizado",
-                text: "Los datos han sido eliminados correctamente.",
-                backdrop: false
-            }).then(() => {
-                window.location.href = "../../index.php"; // Redirigir al inicio
-            });
-        }
-    });
-}
-
 
 document.addEventListener("DOMContentLoaded", function() {
     let vehiculoId = localStorage.getItem("vehiculo_id");
@@ -169,3 +145,7 @@ document.addEventListener("DOMContentLoaded", function() {
         alert("No se encontró el ID del vehículo en localStorage.");
     }
 });
+
+function finalizarFormulario() {
+    localStorage.clear();
+}
