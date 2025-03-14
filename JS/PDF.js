@@ -583,7 +583,7 @@ function generarPDF2(imgData, vehiculo, descargar) {
     function cargarImagen(foto) {
         return new Promise((resolve) => {
             let imgElement = new Image();
-            imgElement.src = `https://pruebas-vehiculos.fgjtam.gob.mx/vehiculos/${foto.nombre_archivo}`;
+            imgElement.src = `https://pruebas-vehiculos.fgjtam.gob.mx//vehiculos/${foto.nombre_archivo}`;
             imgElement.crossOrigin = "Anonymous";
 
             imgElement.onload = function () {

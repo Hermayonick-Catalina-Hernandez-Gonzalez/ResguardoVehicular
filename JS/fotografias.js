@@ -31,20 +31,8 @@ function tomarFoto() {
     const ctx = canvas.getContext("2d");
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     const imagenBase64 = canvas.toDataURL("image/png");
-
-    // Guardar en la imagen destino
     imagenDestino.src = imagenBase64;
-
-    // Guardar en localStorage
     localStorage.setItem(imagenDestino.id, imagenBase64);
-
-    // Si es una foto extra, asegurarse de agregarla a la lista de `fotosExtras`
-    let fotosExtras = JSON.parse(localStorage.getItem("fotosExtras")) || [];
-    if (!fotosExtras.includes(imagenDestino.id)) {
-        fotosExtras.push(imagenDestino.id);
-        localStorage.setItem("fotosExtras", JSON.stringify(fotosExtras));
-    }
-
     cerrarCamara();
 }
 
@@ -143,16 +131,11 @@ function guardarFotoExtra(idImagen) {
 
 
 function restaurarFotosExtras() {
-    let contenedor = document.getElementById("extra-fotos-container");
-
-    if (!contenedor) {
-        console.warn("⚠️ El contenedor de fotos extra no se encontró en el DOM.");
-        return;
-    }
-
     let fotosExtras = JSON.parse(localStorage.getItem("fotosExtras")) || [];
 
     fotosExtras.forEach(idExtra => {
+        const contenedor = document.getElementById("extra-fotos-container");
+
         let filas = contenedor.getElementsByClassName("foto-apartado-container");
         let ultimaFila = filas[filas.length - 1];
 
@@ -169,7 +152,7 @@ function restaurarFotosExtras() {
             <p>Extra ${idExtra.split('-')[2]}:</p>
             <button class="btn-remove" onclick="eliminarFotoExtra(this, '${idExtra}')"> ✖</button>
             <img src="../../img/agregar.png" alt="extra" class="foto-preview" id="${idExtra}" onclick="abrirCamara('${idExtra}')">
-            <textarea id="observaciones-${idExtra}" name="observaciones_extra" rows="2" cols="5" placeholder="Observaciones"></textarea>
+            <textarea id="observaciones-${idExtra}" name="observaciones" rows="2" cols="5" placeholder="Observaciones"></textarea>
         `;
 
         ultimaFila.appendChild(nuevoApartado);
@@ -180,7 +163,7 @@ function restaurarFotosExtras() {
             document.getElementById(idExtra).src = imagenGuardada;
         }
 
-        // Restaurar observación si existe en localStorage
+        // Recuperar observación si existe en localStorage
         const observacionGuardada = localStorage.getItem(`observacion-${idExtra}`);
         if (observacionGuardada) {
             document.getElementById(`observaciones-${idExtra}`).value = observacionGuardada;
@@ -189,8 +172,6 @@ function restaurarFotosExtras() {
 
     contadorExtra = fotosExtras.length > 0 ? parseInt(fotosExtras[fotosExtras.length - 1].split('-')[2]) + 1 : 1;
 }
-
-
 
 function guardar() {
     let formData = new FormData();
