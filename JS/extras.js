@@ -125,7 +125,7 @@ function guardarFirma() {
         showConfirmButton: false,
         backdrop: false
     }).then(() => {
-        limpiarFirma();
+        limpiarFirma()
         cerrarFirma();
     });
 

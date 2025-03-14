@@ -25,10 +25,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if (!empty($row['observaciones_fotos'])) {
                     echo '<p><strong>Observaciones de Fotos:</strong> ' . htmlspecialchars($row['observaciones_fotos']) . '</p>';
                 }
+                if (!empty($row['archivos_pdf'])) {
+                    $archivosPDF = explode(" | ", $row['archivos_pdf']);
+                    $listaPDFs = [];
 
-                echo '</div>
-                      <button class="download-button" onclick="imprimirHistorial(this)">🖨️ Imprimir</button>
-                      </div>'; // Cierra history-card
+                    foreach ($archivosPDF as $archivo) {
+                        list($nombre, $ruta) = explode(" (", rtrim($archivo, ")"));
+
+                        // ✅ Asegurar que la URL del PDF es correcta
+                        $rutaCompleta = trim($ruta);
+                        if (!filter_var($rutaCompleta, FILTER_VALIDATE_URL)) {
+                            $rutaCompleta = "https://pruebas-vehiculos.fgjtam.gob.mx/archivos/" . $nombre;
+                        }
+
+                        $listaPDFs[] = $rutaCompleta;
+                    }
+
+                    // Convertir la lista a JSON para enviarla al botón de descarga
+                    $pdfsJson = htmlspecialchars(json_encode($listaPDFs));
+                }
+
+                $botonDescarga = '<button class="download-button" onclick="descargarPDFs(this)" 
+                   data-pdfs=\'' . $pdfsJson . '\'>Descargar PDFs</button>';
+
+                echo '</div>' . $botonDescarga . '</div>';
             }
         } else {
             echo "<p>No se encontró historial para este vehículo.</p>";
@@ -37,4 +57,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Error en la consulta: " . $e->getMessage();
     }
 }
-?>

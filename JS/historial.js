@@ -80,3 +80,23 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     .catch(error => console.error("Error al cargar la imagen:", error));
 });
+
+function descargarPDFs(button) {
+    let archivosJSON = button.getAttribute("data-pdfs");
+
+    if (!archivosJSON) {
+        alert("No hay archivos PDF disponibles para descargar.");
+        return;
+    }
+
+    let archivos = JSON.parse(archivosJSON);
+
+    archivos.forEach(url => {
+        let a = document.createElement("a");
+        a.href = url;
+        a.download = url.split("/").pop(); // Extraer el nombre del archivo desde la URL
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    });
+}

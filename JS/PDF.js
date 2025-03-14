@@ -17,6 +17,7 @@ function descargarPDFs() {
     }
 }
 
+
 function obtenerDatosVehiculo(vehiculoId, descargar) {
     fetch('https://pruebas-vehiculos.fgjtam.gob.mx/php/obtenerHistorial.php', {
         method: 'POST',
@@ -31,6 +32,7 @@ function obtenerDatosVehiculo(vehiculoId, descargar) {
                 if (descargar) {
                     generarYDescargarPDFs(data);
                 } else {
+                    generarYGuardarPDFs(data, vehiculoId);
                     generarVistaPreviaPDFs(data);
                 }
             }
@@ -39,6 +41,51 @@ function obtenerDatosVehiculo(vehiculoId, descargar) {
             alert("Error al obtener los datos del vehículo.");
         });
 }
+
+function generarYGuardarPDFs(vehiculo, vehiculoId) {
+    const { jsPDF } = window.jspdf;
+    const img = new Image();
+    img.src = '../../img/Logo.png';
+
+    img.onload = function () {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        const imgData = canvas.toDataURL('image/png');
+
+        let pdf1 = generarPDF1(imgData, vehiculo, true);
+        let pdf2 = generarPDF2(imgData, vehiculo, true);
+
+        let pdfBlob1 = pdf1.output("blob");
+        let pdfBlob2 = pdf2.output("blob");
+
+        let file1 = new File([pdfBlob1], "Reglas_Vehiculo.pdf", { type: "application/pdf" });
+        let file2 = new File([pdfBlob2], "Resguardo_Vehiculo.pdf", { type: "application/pdf" });
+
+        // **Enviar PDFs al servidor**
+        subirPDF(file1, vehiculoId);
+        subirPDF(file2, vehiculoId);
+    };
+}
+
+function subirPDF(pdfFile, vehiculoId) {
+    let formData = new FormData();
+    formData.append("vehiculo_id", vehiculoId);
+    formData.append("archivo", pdfFile);
+
+    fetch('https://pruebas-vehiculos.fgjtam.gob.mx/php/guardarPDF.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text()) 
+    .then(data => {
+        
+    })
+    .catch(error => console.error("❌ Error en la solicitud:", error));
+}
+
 
 function generarVistaPreviaPDFs(vehiculo) {
     const { jsPDF } = window.jspdf;

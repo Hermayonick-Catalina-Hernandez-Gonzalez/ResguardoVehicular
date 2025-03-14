@@ -86,6 +86,8 @@ CREATE VIEW historial AS
 SELECT 
     v.id AS vehiculo_id, v.numero_economico, v.placa, v.serie, v.color, 
     v.clase, v.marca, v.submarca, v.modelo, v.estado, v.kilometraje, v.ocupacion,
+
+    -- Datos del resguardante
     r.id AS resguardante_id, r.fech AS fecha_resguardo, r.municipio, r.FGJRM,
     r.numero_empleado, r.resguardante, r.cargo, r.licencia, r.vigencia,
     r.fiscalia_general, r.fiscalia_especializada_en, r.vicefiscalia_en, 
@@ -103,18 +105,20 @@ SELECT
 
     -- Información de fotos (nombre + observaciones)
     (SELECT STRING_AGG(CONCAT(f.nombre_archivo, '.', f.extension, '||', f.observaciones), ' | ') 
-     FROM fotos f WHERE f.vehiculo_id = v.id) AS fotos
+     FROM fotos f WHERE f.vehiculo_id = v.id) AS fotos,
+
+    -- Información de archivos PDF (nombre + ruta)
+    (SELECT STRING_AGG(CONCAT(a.nombre_archivo, ' (', a.ruta_archivo, ')'), ' | ') 
+     FROM archivos a WHERE a.vehiculo_id = v.id) AS archivos_pdf
 
 FROM vehiculo v
 LEFT JOIN resguardante r ON v.resguardante_id = r.id;
-
 GO
 
 -- Crear la tabla de archivos para reglas, resguardos y fotos
 CREATE TABLE archivos (
     id INT IDENTITY(1,1) PRIMARY KEY, 
     vehiculo_id INT NOT NULL,
-    tipo VARCHAR(20) CHECK (tipo IN ('reglas', 'resguardo', 'fotos')), -- Tipo de documento
     nombre_archivo VARCHAR(255) NOT NULL,
     ruta_archivo VARCHAR(500) NOT NULL, 
     extension VARCHAR(10) NOT NULL,
