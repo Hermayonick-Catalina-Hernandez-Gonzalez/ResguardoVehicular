@@ -166,6 +166,26 @@ function cargarDatosFormulario() {
     });
 }
 
+function validarCelular() {
+    let celularInput = document.getElementById("celular");
+    let celular = celularInput.value.trim();
+
+    let regex = /^[0-9]{10}$/; // Expresión regular para validar 10 dígitos numéricos
+
+    if (!regex.test(celular)) {
+        Swal.fire({
+            title: "Número inválido",
+            text: "El número de celular debe contener exactamente 10 dígitos numéricos.",
+            icon: "warning"
+        });
+
+        celularInput.style.border = "2px solid red"; // Resaltar campo en rojo si es incorrecto
+        celularInput.value = ""; // Limpiar campo si es inválido
+    } else {
+        celularInput.style.border = "2px solid green"; // Resaltar campo en verde si es correcto
+    }
+}
+
 function guardarDatos() {
     var formElements = document.getElementById('formularioResguardante').elements;
     var allFieldsFilled = true;

@@ -196,14 +196,14 @@ function guardar() {
         return;
     }
 
-    // ✅ Lista de las 6 imágenes principales obligatorias
+
     let fotosObligatorias = [
         'foto-frontal',
         'foto-posterior',
         'foto-derecho',
         'foto-izquierdo',
         'foto-kilometraje',
-        'numero-serie'
+        'foto-numero-serie'
     ];
 
     let fotosFaltantes = [];

@@ -145,7 +145,7 @@ if (!isset($_SESSION['usuario_id'])) {
                 </div>
                 <div class="form-group">
                     <label for="celular">Celular:</label>
-                    <input type="text" id="celular" name="celular" required>
+                    <input type="text" id="celular" name="celular" required onblur="validarCelular()">
                 </div>
             </div>
 

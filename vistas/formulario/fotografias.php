@@ -73,7 +73,7 @@ if (!isset($_SESSION['usuario_id'])) {
             </div>
             <div class="foto-apartado">
                 <p>Numero de Serie:</p>
-                <img src="../../img/agregar.png" alt="Numero de serie" class="foto-preview" id="numero-serie" onclick="abrirCamara('numero-serie')">
+                <img src="../../img/agregar.png" alt="Numero de serie" class="foto-preview" id="foto-numero-serie" onclick="abrirCamara('foto-numero-serie')">
                 <textarea id="observaciones-foto-numero-serie" name="observaciones[]" rows="2" cols="5" placeholder="Observaciones"></textarea>
             </div>
         </div>
