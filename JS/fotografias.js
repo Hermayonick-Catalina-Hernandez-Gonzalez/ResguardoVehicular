@@ -196,32 +196,45 @@ function guardar() {
         return;
     }
 
-    let fotosPrincipales = ['foto-frontal', 'foto-posterior', 'foto-derecho', 'foto-izquierdo', 'foto-kilometraje'];
+    // ✅ Lista de las 6 imágenes principales obligatorias
+    let fotosObligatorias = [
+        'foto-frontal',
+        'foto-posterior',
+        'foto-derecho',
+        'foto-izquierdo',
+        'foto-kilometraje',
+        'numero-serie'
+    ];
 
-    fotosPrincipales.forEach(fotoId => {
+    let fotosFaltantes = [];
+
+    fotosObligatorias.forEach(fotoId => {
         const img = document.getElementById(fotoId);
-        if (img && img.src.startsWith("data:image")) {
-            const blob = dataURLtoBlob(img.src);
-            formData.append('imagenes[]', blob, `${fotoId}.png`);
-
-            const observacionElement = document.getElementById(`observaciones-${fotoId}`);
-            const observacion = observacionElement ? observacionElement.value : "";
-            formData.append('observaciones_normales[]', observacion);
+        if (!img || !img.src.startsWith("data:image")) {
+            fotosFaltantes.push(fotoId);
         }
     });
 
-    // Foto de número de serie separada
-    const imgNumeroSerie = document.getElementById("numero-serie");
-    if (imgNumeroSerie && imgNumeroSerie.src.startsWith("data:image")) {
-        const blob = dataURLtoBlob(imgNumeroSerie.src);
-        formData.append('imagenes[]', blob, "numero-serie.png");
-
-        const observacionNumeroSerie = document.getElementById("observaciones-foto-numero-serie");
-        const observacion = observacionNumeroSerie ? observacionNumeroSerie.value : "";
-        formData.append('observaciones_normales[]', observacion);
+    if (fotosFaltantes.length > 0) {
+        Swal.fire({
+            title: "Faltan fotografías",
+            text: "Debe capturar al menos las 6 imágenes obligatorias.",
+            icon: "warning",
+            backdrop: false
+        });
+        return;
     }
+    
+    fotosObligatorias.forEach(fotoId => {
+        const img = document.getElementById(fotoId);
+        const blob = dataURLtoBlob(img.src);
+        formData.append('imagenes[]', blob, `${fotoId}.png`);
 
-    // Guardar todas las fotos extras
+        const observacionElement = document.getElementById(`observaciones-${fotoId}`);
+        const observacion = observacionElement ? observacionElement.value : "";
+        formData.append('observaciones_normales[]', observacion);
+    });
+
     let fotosExtras = JSON.parse(localStorage.getItem("fotosExtras")) || [];
     fotosExtras.forEach(idExtra => {
         const img = document.getElementById(idExtra);
@@ -241,24 +254,23 @@ function guardar() {
         method: 'POST',
         body: formData
     })
-        .then(response => response.json())
-        .then(data => {
-            Swal.fire({
-                icon: 'success',
-                title: '¡Se ha Guardado Exitosamente!',
-                timer: 1500,
-                showConfirmButton: false,
-                backdrop: false
-            }).then(() => {
-                localStorage.setItem("vehiculo_id", data.vehiculo_id);
-                window.location.href = "../formulario/pdfs.php";
-            });
-            
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            Swal.fire("Error", "No se pudo guardar las imágenes.", "error");
+    .then(response => response.json())
+    .then(data => {
+        Swal.fire({
+            icon: 'success',
+            title: '¡Se ha Guardado Exitosamente!',
+            timer: 1500,
+            showConfirmButton: false,
+            backdrop: false
+        }).then(() => {
+            localStorage.setItem("vehiculo_id", data.vehiculo_id);
+            window.location.href = "../formulario/pdfs.php";
         });
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        Swal.fire("Error", "No se pudo guardar las imágenes.", "error");
+    });
 }
 
 

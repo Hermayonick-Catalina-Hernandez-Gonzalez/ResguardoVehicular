@@ -33,54 +33,6 @@ function editar() {
     window.location.href = "../vistas/formulario/resguardante.php";
 }
 
-function validarFormulario() {
-    let camposValidos = true;
-
-    // Verificar campos de texto
-    const inputsTexto = document.querySelectorAll("input[type='text'], input[type='number']");
-    inputsTexto.forEach(input => {
-        if (input.value.trim() === "") {
-            camposValidos = false;
-            input.style.borderColor = "red"; // Cambiar color del borde en caso de error
-        } else {
-            input.style.borderColor = ""; // Restablecer el borde si el campo es válido
-        }
-    });
-
-    // Verificar si algún campo de radio está seleccionado
-    const radios = document.querySelectorAll("input[type='radio']");
-    let radioSeleccionado = false;
-    radios.forEach(radio => {
-        if (radio.checked) {
-            radioSeleccionado = true;
-        }
-    });
-    if (!radioSeleccionado) {
-        camposValidos = false;
-        Swal.fire({
-            title: "Oops...",
-            text: "Debe seleccionar una opción en el tipo de condición.",
-            icon: "error",
-            backdrop: false
-        });
-    }
-
-    // Verificar si se ha seleccionado una opción en el select
-    const select = document.getElementById("tipo_ocupacion");
-    if (select.value === "") {
-        camposValidos = false;
-        Swal.fire({
-            title: "Oops...",
-            text: "Debe seleccionar una opción en el tipo de ocupación.",
-            icon: "error",
-            backdrop: false
-        });
-    }
-
-    return camposValidos;
-}
-
-
 
 document.addEventListener("DOMContentLoaded", function () {
     let links = document.querySelectorAll(".menu-link");
@@ -172,67 +124,6 @@ function final() {
         // Redirige a la página de PDFs después de generar el PDF
         window.location.href = '../../vistas/formulario/pdfs.php';  // Ajusta esta ruta según sea necesario
     });
-}
-
-
-function validarFormulario() {
-    let camposValidos = true;
-
-    // Verificar campos de texto
-    const inputsTexto = document.querySelectorAll("input[type='text'], input[type='number']");
-    inputsTexto.forEach(input => {
-        if (input.value.trim() === "") {
-            camposValidos = false;
-            input.style.borderColor = "red"; // Cambiar color del borde en caso de error
-        } else {
-            input.style.borderColor = ""; // Restablecer el borde si el campo es válido
-        }
-    });
-
-    // Verificar si algún campo de radio está seleccionado
-    const radios = document.querySelectorAll("input[type='radio']");
-    let radioSeleccionado = false;
-    radios.forEach(radio => {
-        if (radio.checked) {
-            radioSeleccionado = true;
-        }
-    });
-    if (!radioSeleccionado) {
-        camposValidos = false;
-        Swal.fire({
-            title: "Oops...",
-            text: "Debe seleccionar una opción en el tipo de condición.",
-            icon: "error",
-            backdrop: false
-        });
-    }
-
-    // Verificar si se ha seleccionado una opción en el select
-    const select = document.getElementById("tipo_ocupacion");
-    if (select.value === "") {
-        camposValidos = false;
-        Swal.fire({
-            title: "Oops...",
-            text: "Debe seleccionar una opción en el tipo de ocupación.",
-            icon: "error",
-            backdrop: false
-        });
-    }
-
-    return camposValidos;
-}
-
-function siguiente() {
-    if (validarFormulario()) {
-        window.location.href = "../../vistas/formulario/verificacion.php"; 
-    } else {
-        Swal.fire({
-            title: "Faltan campos por llenar",
-            text: "Por favor, complete todos los campos requeridos.",
-            icon: "warning",
-            backdrop: false
-        });
-    }
 }
 
 // Limpiar localStorage solo cuando el usuario presiona "Aceptar"

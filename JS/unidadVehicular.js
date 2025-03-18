@@ -154,21 +154,81 @@ function finalizarFormulario() {
     localStorage.clear();
 }
 
-function guardarVehiculo() {
-    let formData = new FormData(document.getElementById("formularioVehiculo"));
+function validarFormulario() {
+    let camposValidos = true;
 
-    // Obtener el ID del resguardante desde sessionStorage o localStorage
+
+    const inputsTexto = document.querySelectorAll("input[type='text'], input[type='number']");
+    inputsTexto.forEach(input => {
+        if (input.value.trim() === "") {
+            camposValidos = false;
+            input.style.border = "2px solid red"; 
+        } else {
+            input.style.border = "";
+        }
+    });
+
+
+    const radios = document.querySelectorAll("input[name='tipo_condicion']");
+    let radioSeleccionado = false;
+    radios.forEach(radio => {
+        if (radio.checked) {
+            radioSeleccionado = true;
+        }
+    });
+
+    if (!radioSeleccionado) {
+        camposValidos = false;
+        Swal.fire({
+            title: "Oops...",
+            text: "Debe seleccionar una opción en el tipo de condición.",
+            icon: "error",
+            backdrop: false
+        });
+    }
+
+    const selectOcupacion = document.getElementById("tipo_ocupacion");
+    if (selectOcupacion.value === "") {
+        camposValidos = false;
+
+        selectOcupacion.style.border = "2px solid red";
+
+        Swal.fire({
+            title: "Oops...",
+            text: "Debe seleccionar una opción en el Tipo de Ocupación.",
+            icon: "warning",
+            backdrop: false
+        });
+    } else {
+        selectOcupacion.style.border = "";
+    }
+
+    return camposValidos;
+}
+
+
+function guardarVehiculo() {
+    if (!validarFormulario()) {
+        Swal.fire({
+            title: "Faltan datos",
+            text: "Por favor, complete todos los campos antes de continuar.",
+            icon: "warning",
+            backdrop: false
+        });
+        return; 
+    }
+
+    let formData = new FormData(document.getElementById("formularioVehiculo"));
     let resguardanteId = localStorage.getItem("resguardante_id");
 
     if (!resguardanteId) {
         Swal.fire({
             title: "Error",
-            text: "No se encontró el ID del resguardante. Por favor, verifica la información.",
+            text: "No se encontró el ID del resguardante. Verifique la información.",
             icon: "error"
         });
         return;
     }
-
 
     formData.append("resguardante_id", resguardanteId);
 
@@ -176,18 +236,18 @@ function guardarVehiculo() {
         method: "POST",
         body: formData
     })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                localStorage.setItem("vehiculo_id", data.vehiculo_id);
-                window.location.href = "../formulario/verificacion.php";
-            }
-        })
-        .catch(error => {
-            Swal.fire({
-                title: "Oops...",
-                text: "Hubo un problema con la solicitud",
-                icon: "error"
-            });
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            localStorage.setItem("vehiculo_id", data.vehiculo_id);
+            window.location.href = "../formulario/verificacion.php";
+        }
+    })
+    .catch(error => {
+        Swal.fire({
+            title: "Oops...",
+            text: "Hubo un problema con la solicitud",
+            icon: "error"
         });
+    });
 }

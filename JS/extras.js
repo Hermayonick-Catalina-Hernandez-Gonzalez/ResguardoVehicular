@@ -120,16 +120,15 @@ function guardarFirma() {
 
     Swal.fire({
         icon: 'success',
-        title: '¡Se ha Guardado Exitosamente!',
+        title: '¡Firma Guardada!',
         timer: 1500,
         showConfirmButton: false,
         backdrop: false
     }).then(() => {
-        limpiarFirma()
         cerrarFirma();
     });
-
 }
+
 
 document.addEventListener("DOMContentLoaded", function() {
     let vehiculoId = localStorage.getItem("vehiculo_id");

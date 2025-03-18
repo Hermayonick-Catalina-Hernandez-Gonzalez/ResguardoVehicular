@@ -12,6 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+
         if (count($rows) > 0) {
             foreach ($rows as $row) {
                 echo '<div class="history-card">
@@ -25,14 +26,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if (!empty($row['observaciones_fotos'])) {
                     echo '<p><strong>Observaciones de Fotos:</strong> ' . htmlspecialchars($row['observaciones_fotos']) . '</p>';
                 }
+
+                // Inicializar JSON vacío para evitar warnings
+                $pdfsJson = "[]";
+
                 if (!empty($row['archivos_pdf'])) {
                     $archivosPDF = explode(" | ", $row['archivos_pdf']);
                     $listaPDFs = [];
 
                     foreach ($archivosPDF as $archivo) {
-                        list($nombre, $ruta) = explode(" (", rtrim($archivo, ")"));
+                        if (strpos($archivo, "(") !== false) {
+                            list($nombre, $ruta) = explode(" (", rtrim($archivo, ")"));
+                        } else {
+                            $nombre = $archivo;
+                            $ruta = "https://pruebas-vehiculos.fgjtam.gob.mx/archivos/" . $nombre;
+                        }
 
-                        // ✅ Asegurar que la URL del PDF es correcta
                         $rutaCompleta = trim($ruta);
                         if (!filter_var($rutaCompleta, FILTER_VALIDATE_URL)) {
                             $rutaCompleta = "https://pruebas-vehiculos.fgjtam.gob.mx/archivos/" . $nombre;
@@ -41,7 +50,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $listaPDFs[] = $rutaCompleta;
                     }
 
-                    // Convertir la lista a JSON para enviarla al botón de descarga
                     $pdfsJson = htmlspecialchars(json_encode($listaPDFs));
                 }
 
@@ -57,3 +65,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Error en la consulta: " . $e->getMessage();
     }
 }
+?>

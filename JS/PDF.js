@@ -11,7 +11,7 @@ function verPDF() {
 function descargarPDFs() {
     const vehiculoId = localStorage.getItem("vehiculo_id");
     if (vehiculoId) {
-        obtenerDatosVehiculo(vehiculoId, true); // true = descargar PDF
+        obtenerDatosVehiculo(vehiculoId, true); 
     } else {
         alert("No se encontró el ID del vehículo.");
     }
