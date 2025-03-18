@@ -16,17 +16,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (password_verify($contra, $usuario['contra'])) {
                 $_SESSION['usuario_id'] = $usuario['id'];
                 $_SESSION['correo'] = $usuario['correo'];
-                $_SESSION['rol'] = $usuario['rol'];  // Guardar el rol en la sesión
+                $_SESSION['rol'] = $usuario['rol'];
 
                 // Redirigir según el rol
-                if ($_SESSION['rol'] == 'verificador') {
-                    header("Location: ../vistas/formulario/resguardante.php");  // Página para verificadores
-                } elseif ($_SESSION['rol'] == 'resguardante') {
-                    header("Location: ../vistas/inicio.php");  // Página para resguardantes
-                }elseif ($_SESSION['rol'] == 'administrador') {
-                    header("Location: ../vistas/administrador.php");  // Página para resguardantes
+                if ($_SESSION['rol'] === 'verificador') {
+                    header("Location: ../vistas/formulario/resguardante.php");
+                } elseif ($_SESSION['rol'] === 'resguardante') {
+                    header("Location: ../vistas/inicio.php");
+                } elseif ($_SESSION['rol'] === 'administrador') {
+                    header("Location: ../vistas/administrador.php");
                 }
-                exit();
+                exit(); 
             } else {
                 $_SESSION['error'] = "Contraseña incorrecta";
             }
