@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-
 function cargarUsuarios() {
     fetch("../php/usuarios_crud.php?action=leer")
         .then(response => response.json())
@@ -18,22 +17,25 @@ function cargarUsuarios() {
             tbody.innerHTML = "";
 
             data.forEach(usuario => {
-                let fila = `
-                    <tr>
-                        <td>${usuario.Nombre}</td>
-                        <td>${usuario.rol}</td>
-                        <td>${usuario.correo}</td>
-                        <td>
-                            <button class="btn-editar" onclick="editarUsuario(${usuario.id}, '${usuario.Nombre}', '${usuario.correo}', '${usuario.rol}')">Editar</button>
-                            <button class="btn-eliminar" onclick="eliminarUsuario(${usuario.id})">Eliminar</button>
-                        </td>
-                    </tr>
-                `;
-                tbody.innerHTML += fila;
+                if (usuario.id != usuarioActualId) {  // Excluir el usuario actual
+                    let fila = `
+                        <tr>
+                            <td>${usuario.Nombre}</td>
+                            <td>${usuario.rol}</td>
+                            <td>${usuario.correo}</td>
+                            <td>
+                                <button class="btn-editar" onclick="editarUsuario(${usuario.id}, '${usuario.Nombre}', '${usuario.correo}', '${usuario.rol}')">Editar</button>
+                                <button class="btn-eliminar" onclick="eliminarUsuario(${usuario.id})">Eliminar</button>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += fila;
+                }
             });
         })
         .catch(error => console.error("Error al cargar usuarios:", error));
 }
+
 
 function abrirModal() {
     document.getElementById("titulo-modal").textContent = "Agregar Usuario";

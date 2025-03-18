@@ -107,6 +107,10 @@ if ($_SESSION['rol'] != 'administrador') {
 
     <script src="../JS/usuarios.js"></script>
     <script src="../JS/acciones.js"></script>
+    <script>
+        const usuarioActualId = <?php echo json_encode($_SESSION['usuario_id']); ?>;
+    </script>
+
 </body>
 
 </html>
