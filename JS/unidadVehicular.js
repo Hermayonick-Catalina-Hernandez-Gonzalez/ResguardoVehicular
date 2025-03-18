@@ -11,7 +11,7 @@ function buscarVehiculo() {
         return;
     }
 
-    fetch(`https://pruebas-vehiculos.fgjtam.gob.mx/php/buscarVehiculo.php?numero_economico=${numeroEconomico}`)
+    fetch(`http://localhost/xampp/VehiculosSQLSERVE/php/buscarVehiculo.php?numero_economico=${numeroEconomico}`)
         .then(response => response.json()) // Convertimos la respuesta a JSON
         .then(data => {
             if (data.error) {
@@ -232,7 +232,7 @@ function guardarVehiculo() {
 
     formData.append("resguardante_id", resguardanteId);
 
-    fetch("https://pruebas-vehiculos.fgjtam.gob.mx/php/guardar_vehiculo.php", {
+    fetch("http://localhost/xampp/VehiculosSQLSERVE/php/guardar_vehiculo.php", {
         method: "POST",
         body: formData
     })

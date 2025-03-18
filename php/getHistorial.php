@@ -39,12 +39,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             list($nombre, $ruta) = explode(" (", rtrim($archivo, ")"));
                         } else {
                             $nombre = $archivo;
-                            $ruta = "https://pruebas-vehiculos.fgjtam.gob.mx/archivos/" . $nombre;
+                            $ruta = "http://localhost/xampp/VehiculosSQLSERVE/archivos/" . $nombre;
                         }
 
                         $rutaCompleta = trim($ruta);
                         if (!filter_var($rutaCompleta, FILTER_VALIDATE_URL)) {
-                            $rutaCompleta = "https://pruebas-vehiculos.fgjtam.gob.mx/archivos/" . $nombre;
+                            $rutaCompleta = "http://localhost/xampp/VehiculosSQLSERVE/archivos/" . $nombre;
                         }
 
                         $listaPDFs[] = $rutaCompleta;

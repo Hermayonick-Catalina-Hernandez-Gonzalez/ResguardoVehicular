@@ -250,7 +250,7 @@ function guardar() {
 
     formData.append("vehiculo_id", vehiculoId);
 
-    fetch('https://pruebas-vehiculos.fgjtam.gob.mx/php/guardar_fotografias.php', {
+    fetch('http://localhost/xampp/VehiculosSQLSERVE/php/guardar_fotografias.php', {
         method: 'POST',
         body: formData
     })
