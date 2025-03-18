@@ -60,7 +60,7 @@ $vehiculos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <th>Clase</th>
                 <th>Marca</th>
                 <th>Modelo</th>
-                <th>Acciones</th>
+                <th>Historial</th>
             </tr>
         </thead>
         <tbody id="vehiculos">
@@ -74,7 +74,6 @@ $vehiculos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <td><?= htmlspecialchars($vehiculo['marca']) ?></td>
                         <td><?= htmlspecialchars($vehiculo['modelo']) ?></td>
                         <td>
-                            <button onclick="editar()"><i class="fa fa-pencil"></i> Editar</button>
                             <button onclick="verVehiculo('<?= $vehiculo['numero_economico'] ?>')"><i class="fa fa-eye"></i> Ver</button>
                         </td>
                     </tr>
