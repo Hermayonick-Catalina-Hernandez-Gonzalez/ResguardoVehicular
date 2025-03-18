@@ -108,6 +108,111 @@ body {
     cursor: pointer;
 }
 
+.btn-agregar{
+    background-color: #1A2341;
+    color: #ffffff;
+    margin-top: 20px; 
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 30%; 
+    text-align: center;
+    display: block;  
+    margin-left: auto;  
+    margin-right: auto; 
+}
+
+.btn-agregar:hover {
+    background-color: #01327c;
+}
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    max-width: 700px;
+    padding: 20px;
+    display: none;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #ffffff;
+    color: rgb(0, 0, 0);
+    padding: 20px;
+    border-radius: 10px;
+    width: 350px;
+    text-align: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+
+/* Hace que el modal sea visible cuando se activa */
+.modal.show {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* Botón de cerrar */
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Icono superior */
+.icono-usuario {
+    width: 60px;
+    margin-bottom: 10px;
+}
+
+/* Estilizar los inputs */
+.input-group {
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 5px;
+    margin: 10px 0;
+    padding: 8px;
+    border: 1px solid #ccc; 
+}
+
+.input-group input, .input-group select {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    padding: 5px;
+    background: transparent;
+}
+
+/* Botón */
+.btn-guardar {
+    background: #1A2341;
+    color: rgb(255, 255, 255);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    transition: 0.3s;
+}
+
+.btn-guardar:hover {
+    background: #007BFF;
+}
+
 /* Tabla */
 table {
     width: 90%;

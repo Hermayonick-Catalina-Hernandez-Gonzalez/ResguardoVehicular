@@ -283,18 +283,18 @@ video {
 .btn {
     background-color: #1A2341;
     color: #ffffff;
-    margin-top: 20px; /* Espaciado superior */
+    margin-top: 20px; 
     padding: 10px;
     font-size: 16px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    width: 30%; /* Ajusta el ancho del botón */
+    width: 30%; 
     text-align: center;
-    display: block;  /* Hace que el botón ocupe toda la línea */
-    margin-left: auto;  /* Centra horizontalmente */
-    margin-right: auto; /* Centra horizontalmente */
+    display: block;  
+    margin-left: auto;  
+    margin-right: auto; 
 }
 
 .btn:hover {

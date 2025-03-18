@@ -23,6 +23,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     header("Location: ../vistas/formulario/resguardante.php");  // Página para verificadores
                 } elseif ($_SESSION['rol'] == 'resguardante') {
                     header("Location: ../vistas/inicio.php");  // Página para resguardantes
+                }elseif ($_SESSION['rol'] == 'administrador') {
+                    header("Location: ../vistas/administrador.php");  // Página para resguardantes
                 }
                 exit();
             } else {
