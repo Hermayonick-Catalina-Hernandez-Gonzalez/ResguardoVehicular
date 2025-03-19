@@ -19,7 +19,7 @@ function descargarPDFs() {
 
 
 function obtenerDatosVehiculo(vehiculoId, descargar) {
-    fetch('http://localhost/xampp/VehiculosSQLSERVE/php/obtenerHistorial.php', {
+    fetch('https://pruebas-vehiculos.fgjtam.gob.mx/php/obtenerHistorial.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: `vehiculo_id=${vehiculoId}`
@@ -75,7 +75,7 @@ function subirPDF(pdfFile, vehiculoId) {
     formData.append("vehiculo_id", vehiculoId);
     formData.append("archivo", pdfFile);
 
-    fetch('http://localhost/xampp/VehiculosSQLSERVE/php/guardarPDF.php', {
+    fetch('https://pruebas-vehiculos.fgjtam.gob.mx/php/guardarPDF.php', {
         method: 'POST',
         body: formData
     })
@@ -631,7 +631,7 @@ function generarPDF2(imgData, vehiculo, descargar) {
     function cargarImagen(foto) {
         return new Promise((resolve) => {
             let imgElement = new Image();
-            imgElement.src = `http://localhost/xampp/VehiculosSQLSERVE//vehiculos/${foto.nombre_archivo}`;
+            imgElement.src = `https://pruebas-vehiculos.fgjtam.gob.mx//vehiculos/${foto.nombre_archivo}`;
             imgElement.crossOrigin = "Anonymous";
 
             imgElement.onload = function () {

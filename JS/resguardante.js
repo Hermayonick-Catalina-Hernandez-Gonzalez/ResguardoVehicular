@@ -59,7 +59,7 @@ function buscarEmpleado(tipo) {
         return;
     }
 
-    let url = `http://localhost/xampp/VehiculosSQLSERVE/
+    let url = `https://pruebas-vehiculos.fgjtam.gob.mx/
 php/buscarEmpleado.php?numero_empleado=${encodeURIComponent(numeroEmpleado)}`;
 
     fetch(url)
@@ -213,7 +213,7 @@ function guardarDatos() {
 
     var formData = new FormData(document.getElementById('formularioResguardante'));
 
-    fetch('http://localhost/xampp/VehiculosSQLSERVE/php/guardar_resguardante.php', {
+    fetch('https://pruebas-vehiculos.fgjtam.gob.mx/php/guardar_resguardante.php', {
         method: 'POST',
         body: formData
     })

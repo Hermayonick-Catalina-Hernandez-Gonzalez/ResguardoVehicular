@@ -114,19 +114,17 @@ function limpiarFirma() {
 
 function guardarFirma() {
     let canvas = document.getElementById("canvasFirma");
-    let imagenFirma = canvas.toDataURL("image/png");
-
-    localStorage.setItem("firmaBase64", imagenFirma); // Guardar la firma en localStorage
+    let imagenFirma = canvas.toDataURL("image/png"); 
 
     Swal.fire({
-        icon: 'success',
-        title: '¡Firma Guardada!',
-        timer: 1500,
-        showConfirmButton: false,
+        icon: "success",
+        title: "Datos Guardados",
+        text: "Los datos han sido registrados correctamente.",
         backdrop: false
-    }).then(() => {
-        cerrarFirma();
-    });
+    })
+
+    cerrarFirma();
+    generarYDescargarPDFs(imagenFirma);
 }
 
 
