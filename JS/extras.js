@@ -114,20 +114,26 @@ function limpiarFirma() {
 
 function guardarFirma() {
     let canvas = document.getElementById("canvasFirma");
-    let imagenFirma = canvas.toDataURL("image/png");
+    let imagenFirma = canvas.toDataURL("image/png"); 
 
-    localStorage.setItem("firmaBase64", imagenFirma); // Guardar la firma en localStorage
+    localStorage.setItem("firmaBase64", imagenFirma); // Guardar firma en localStorage
 
     Swal.fire({
-        icon: 'success',
-        title: '¡Firma Guardada!',
-        timer: 1500,
-        showConfirmButton: false,
+        icon: "success",
+        title: "Datos Guardados",
+        text: "La firma ha sido registrada correctamente.",
         backdrop: false
     }).then(() => {
-        cerrarFirma();
+        descargarPDFs(); // Genera y descarga el PDF
+
+        setTimeout(() => {
+            finalizarFormulario(); // Esperar antes de limpiar localStorage
+        }, 3000); // Espera 3 segundos para asegurar que el PDF se descargó
     });
+
+    cerrarFirma();
 }
+
 
 
 document.addEventListener("DOMContentLoaded", function() {

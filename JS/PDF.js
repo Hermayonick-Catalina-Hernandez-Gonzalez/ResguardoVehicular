@@ -32,7 +32,6 @@ function obtenerDatosVehiculo(vehiculoId, descargar) {
                 if (descargar) {
                     generarYDescargarPDFs(data);
                 } else {
-                    generarYGuardarPDFs(data, vehiculoId);
                     generarVistaPreviaPDFs(data);
                 }
             }
@@ -42,49 +41,28 @@ function obtenerDatosVehiculo(vehiculoId, descargar) {
         });
 }
 
-function generarYGuardarPDFs(vehiculo, vehiculoId) {
-    const { jsPDF } = window.jspdf;
-    const img = new Image();
-    img.src = '../../img/Logo.png';
+function subirPDF(pdfDoc, vehiculoId, nombreArchivo) {
+    let pdfBlob = pdfDoc.output("blob");
 
-    img.onload = function () {
-        const canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0);
-        const imgData = canvas.toDataURL('image/png');
-
-        let pdf1 = generarPDF1(imgData, vehiculo, true);
-        let pdf2 = generarPDF2(imgData, vehiculo, true);
-
-        let pdfBlob1 = pdf1.output("blob");
-        let pdfBlob2 = pdf2.output("blob");
-
-        let file1 = new File([pdfBlob1], "Reglas_Vehiculo.pdf", { type: "application/pdf" });
-        let file2 = new File([pdfBlob2], "Resguardo_Vehiculo.pdf", { type: "application/pdf" });
-
-        // **Enviar PDFs al servidor**
-        subirPDF(file1, vehiculoId);
-        subirPDF(file2, vehiculoId);
-    };
-}
-
-function subirPDF(pdfFile, vehiculoId) {
     let formData = new FormData();
     formData.append("vehiculo_id", vehiculoId);
-    formData.append("archivo", pdfFile);
+    formData.append("archivo", new File([pdfBlob], nombreArchivo, { type: "application/pdf" }));
 
     fetch('https://pruebas-vehiculos.fgjtam.gob.mx/php/guardarPDF.php', {
         method: 'POST',
         body: formData
     })
-    .then(response => response.text()) 
+    .then(response => response.json())
     .then(data => {
-        
+        if (data.error) {
+            console.error("❌ Error al guardar el PDF:", data.error);
+        } else {
+            console.log("✅ PDF guardado correctamente:", data.mensaje);
+        }
     })
     .catch(error => console.error("❌ Error en la solicitud:", error));
 }
+
 
 
 function generarVistaPreviaPDFs(vehiculo) {
@@ -122,13 +100,21 @@ function generarYDescargarPDFs(vehiculo) {
         ctx.drawImage(img, 0, 0);
         const imgData = canvas.toDataURL('image/png');
 
-        let pdf1 = generarPDF1(imgData, vehiculo, true); // true = descargar
-        let pdf2 = generarPDF2(imgData, vehiculo, true);
+        let pdf1 = generarPDF1(imgData, vehiculo, true); // Generar el primer PDF
 
-        pdf1.save("Reglas_Vehiculo.pdf");
-        pdf2.save("Resguardo_Vehiculo.pdf");
+        generarPDF2(imgData, vehiculo, true).then(pdf2 => { // ✅ Esperar a que PDF2 se genere correctamente
+
+            // 📤 Subir los PDFs a la base de datos
+            subirPDF(pdf1, vehiculo.id, "Reglas_Vehiculo.pdf");
+            subirPDF(pdf2, vehiculo.id, "Resguardo_Vehiculo.pdf");
+
+            // ⬇️ Descargar los PDFs localmente
+            pdf1.save("Reglas_Vehiculo.pdf");
+            pdf2.save("Resguardo_Vehiculo.pdf");
+        });
     };
 }
+
 
 function generarPDF1(imgData, vehiculo, descargar) {
     const { jsPDF } = window.jspdf;
@@ -631,7 +617,7 @@ function generarPDF2(imgData, vehiculo, descargar) {
     function cargarImagen(foto) {
         return new Promise((resolve) => {
             let imgElement = new Image();
-            imgElement.src = `https://pruebas-vehiculos.fgjtam.gob.mx//vehiculos/${foto.nombre_archivo}`;
+            imgElement.src = `https://pruebas-vehiculos.fgjtam.gob.mx/vehiculos/${foto.nombre_archivo}`;
             imgElement.crossOrigin = "Anonymous";
 
             imgElement.onload = function () {
@@ -645,7 +631,7 @@ function generarPDF2(imgData, vehiculo, descargar) {
             };
 
             imgElement.onerror = function () {
-                resolve(null);
+                resolve(null); // Si hay error, ignorar la imagen
             };
         });
     }
@@ -659,8 +645,6 @@ function generarPDF2(imgData, vehiculo, descargar) {
                 doc.addImage(base64Image, "PNG", imgX, imgY, imgWidth, imgHeight);
             }
         });
-
-        // **Generar PDF y mostrar vista previa**
         let pdfBlob = doc.output("blob");
         let pdfURL = URL.createObjectURL(pdfBlob);
         document.getElementById("preview2").src = pdfURL;

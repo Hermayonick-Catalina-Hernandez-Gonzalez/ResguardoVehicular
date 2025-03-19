@@ -21,7 +21,6 @@ try {
         PDO::SQLSRV_ATTR_ENCODING => PDO::SQLSRV_ENCODING_UTF8
     ]);
 
-    // 📌 Definir directorio donde se guardarán los PDFs
     $uploadDir = "../archivos/";
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0777, true);
