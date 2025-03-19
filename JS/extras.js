@@ -116,16 +116,24 @@ function guardarFirma() {
     let canvas = document.getElementById("canvasFirma");
     let imagenFirma = canvas.toDataURL("image/png"); 
 
+    localStorage.setItem("firmaBase64", imagenFirma); // Guardar firma en localStorage
+
     Swal.fire({
         icon: "success",
         title: "Datos Guardados",
-        text: "Los datos han sido registrados correctamente.",
+        text: "La firma ha sido registrada correctamente.",
         backdrop: false
-    })
+    }).then(() => {
+        descargarPDFs(); // Genera y descarga el PDF
+
+        setTimeout(() => {
+            finalizarFormulario(); // Esperar antes de limpiar localStorage
+        }, 3000); // Espera 3 segundos para asegurar que el PDF se descargó
+    });
 
     cerrarFirma();
-    generarYDescargarPDFs(imagenFirma);
 }
+
 
 
 document.addEventListener("DOMContentLoaded", function() {
