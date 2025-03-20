@@ -74,7 +74,6 @@ if (isset($_POST['numeroEconomico'])) {
         </div>
     </div>
     <script src="../JS/acciones.js"></script>
-    <script src="../JS/PDF.js"></script>
     <script src="../JS/historial.js"></script>
 
 </body>
