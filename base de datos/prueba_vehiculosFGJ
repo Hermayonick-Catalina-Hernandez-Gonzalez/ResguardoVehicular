@@ -1,10 +1,8 @@
-
-
--- Usar la base de datos creada
 USE FGJ_VERIFICACION_VEHICULAR;
 GO
 
--- Crear la tabla usuarios
+
+
 CREATE TABLE usuarios (
     id INT IDENTITY(1,1) PRIMARY KEY,
     Nombre VARCHAR(255) NOT NULL,
@@ -13,7 +11,6 @@ CREATE TABLE usuarios (
     rol VARCHAR(50) NOT NULL, 
     fecha_registro DATETIME DEFAULT GETDATE()
 );
-
 CREATE TABLE resguardante (
     id INT IDENTITY(1,1) PRIMARY KEY, 
     fech DATETIME DEFAULT GETDATE(),
@@ -82,7 +79,16 @@ CREATE TABLE fotos (
     FOREIGN KEY (vehiculo_id) REFERENCES vehiculo(id)
 );
 GO
-
+CREATE TABLE archivos (
+    id INT IDENTITY(1,1) PRIMARY KEY, 
+    vehiculo_id INT NOT NULL,
+    nombre_archivo VARCHAR(255) NOT NULL,
+    ruta_archivo VARCHAR(500) NOT NULL, 
+    extension VARCHAR(10) NOT NULL ,
+    tamaño INT NOT NULL, 
+    FOREIGN KEY (vehiculo_id) REFERENCES vehiculo(id)
+);
+GO
 CREATE VIEW historial AS
 SELECT 
     v.id AS vehiculo_id, v.numero_economico, v.placa, v.serie, v.color, 
@@ -108,22 +114,10 @@ SELECT
     (SELECT STRING_AGG(CONCAT(f.nombre_archivo, '.', f.extension, '||', f.observaciones), ' | ') 
      FROM fotos f WHERE f.vehiculo_id = v.id) AS fotos,
 
-    -- Información de archivos PDF (nombre + ruta)
+    -- Información de archivos PDF (nombre + URL pública)
     (SELECT STRING_AGG(CONCAT(a.nombre_archivo, ' (', a.ruta_archivo, ')'), ' | ') 
      FROM archivos a WHERE a.vehiculo_id = v.id) AS archivos_pdf
 
 FROM vehiculo v
 LEFT JOIN resguardante r ON v.resguardante_id = r.id;
-GO
-
--- Crear la tabla de archivos para reglas, resguardos y fotos
-CREATE TABLE archivos (
-    id INT IDENTITY(1,1) PRIMARY KEY, 
-    vehiculo_id INT NOT NULL,
-    nombre_archivo VARCHAR(255) NOT NULL,
-    ruta_archivo VARCHAR(500) NOT NULL, 
-    extension VARCHAR(10) NOT NULL,
-    tamaño INT NOT NULL, 
-    FOREIGN KEY (vehiculo_id) REFERENCES vehiculo(id)
-);
 GO
