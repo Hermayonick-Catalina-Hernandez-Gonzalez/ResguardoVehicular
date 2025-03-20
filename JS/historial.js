@@ -94,7 +94,7 @@ function descargarPDFs(button) {
     archivos.forEach(url => {
         let a = document.createElement("a");
         a.href = url;
-        a.download = url.split("/").pop(); // Extraer el nombre del archivo desde la URL
+        a.download = url.split("/").pop(); 
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);

@@ -7,6 +7,17 @@ document.addEventListener("DOMContentLoaded", function () {
             link.classList.add("active");
         }
     });
+    let fgjrmInput = document.getElementById("FGJRM");
+
+    if (localStorage.getItem("FGJRM")) {
+        fgjrmInput.value = localStorage.getItem("FGJRM"); 
+        fgjrmInput.setAttribute("readonly", "readonly");
+    } else {
+        fgjrmInput.addEventListener("input", function () {
+            localStorage.setItem("FGJRM", fgjrmInput.value);
+            fgjrmInput.setAttribute("readonly", "readonly"); 
+        });
+    }
 });
 
 // Función para formatear la fecha al formato YYYY-MM-DD
@@ -59,8 +70,7 @@ function buscarEmpleado(tipo) {
         return;
     }
 
-    let url = `https://pruebas-vehiculos.fgjtam.gob.mx/
-php/buscarEmpleado.php?numero_empleado=${encodeURIComponent(numeroEmpleado)}`;
+    let url = `https://pruebas-vehiculos.fgjtam.gob.mx/php/buscarEmpleado.php?numero_empleado=${encodeURIComponent(numeroEmpleado)}`;
 
     fetch(url)
         .then(response => response.text())
@@ -217,21 +227,42 @@ function guardarDatos() {
         method: 'POST',
         body: formData
     })
-    .then(response => response.json())
+    .then(response => response.text()) 
     .then(data => {
-        if (data.resguardante_id) {
-            localStorage.setItem("resguardante_id", data.resguardante_id);
-            window.location.href = "../formulario/unidadVehicular.php";
-        } else {
-            alert("Error al guardar los datos: " + (data.error || "Error desconocido"));
+        try {
+            var jsonData = JSON.parse(data);
+
+            if (jsonData.resguardante_id) {
+                localStorage.setItem("resguardante_id", jsonData.resguardante_id);
+                window.location.href = "../formulario/unidadVehicular.php";
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error al guardar los datos',
+                    text: jsonData.error || "Error desconocido"
+                });
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error en la respuesta del servidor',
+                text: 'La respuesta no es un JSON válido. Revisa la consola.'
+            });
+            console.error("Error al procesar JSON:", error);
         }
     })
     .catch(error => {
-        alert("Error en la solicitud: " + error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error en la solicitud',
+            text: error
+        });
     });
 }
+
 
 // Limpiar localStorage solo cuando el usuario presiona "Aceptar"
 function finalizarFormulario() {
     localStorage.clear();
+    location.reload();
 }

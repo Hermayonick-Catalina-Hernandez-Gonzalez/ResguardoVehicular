@@ -3,7 +3,6 @@ require '../php/conexion.php';
 
 header('Content-Type: application/json');  
 header("Access-Control-Allow-Origin: *");
-
 // Recibir los datos
 $municipio = $_POST['municipio'];
 $FGJRM = $_POST['FGJRM'];

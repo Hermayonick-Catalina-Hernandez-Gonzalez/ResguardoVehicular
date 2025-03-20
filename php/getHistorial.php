@@ -1,5 +1,6 @@
 <?php
 include '../php/conexion.php';
+session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $numeroEconomico = $_POST['numeroEconomico'] ?? '';
@@ -53,8 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $pdfsJson = htmlspecialchars(json_encode($listaPDFs));
                 }
 
-                $botonDescarga = '<button class="download-button" onclick="descargarPDFs(this)" 
-                   data-pdfs=\'' . $pdfsJson . '\'>Descargar PDFs</button>';
+                $botonDescarga = '<button class="download-button" onclick="descargarPDFs(this)" data-pdfs=\'' . $pdfsJson . '\'>Descargar PDFs</button>';
 
                 echo '</div>' . $botonDescarga . '</div>';
             }
