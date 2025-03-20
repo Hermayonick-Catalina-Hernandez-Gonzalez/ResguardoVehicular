@@ -124,11 +124,11 @@ function guardarFirma() {
         text: "La firma ha sido registrada correctamente.",
         backdrop: false
     }).then(() => {
-        descargarPDFs(); // Genera y descarga el PDF
+        descargarPDFs(); 
 
         setTimeout(() => {
-            finalizarFormulario(); // Esperar antes de limpiar localStorage
-        }, 3000); // Espera 3 segundos para asegurar que el PDF se descargó
+            finalizarFormulario(); 
+        }, 3000); 
     });
 
     cerrarFirma();

@@ -1,8 +1,25 @@
 <?php
+require_once '../../php/conexion.php';
 session_start();
 if (!isset($_SESSION['usuario_id'])) {
-    header("Location: ../../index.php"); 
+    header("Location: ../../index.php");
     exit();
+}
+
+try {
+    // Obtener el último ID registrado en la tabla "vehiculo"
+    $sql = "SELECT MAX(id) AS ultimo_id FROM vehiculo";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Calcular el nuevo ID
+    $nuevo_id = $row['ultimo_id'] ? $row['ultimo_id'] + 1 : 1;
+
+    // Formatear con ceros a la izquierda (0001, 0002, etc.)
+    $folio = str_pad($nuevo_id, 4, "0", STR_PAD_LEFT);
+} catch (PDOException $e) {
+    die("Error al obtener el folio: " . $e->getMessage());
 }
 ?>
 <!DOCTYPE html>
@@ -43,7 +60,7 @@ if (!isset($_SESSION['usuario_id'])) {
     <!-- Sección del formulario -->
     <div class="right-section">
         <h1>Resguardo Vehicular</h1>
-        <form id="formularioResguardante" action="../../php/guardar_resguardante.php" method="POST">
+        <form id="formularioResguardante">
             <div class="form-row">
                 <div class="form-group">
                     <label for="fecha">Fecha:</label>
@@ -55,7 +72,7 @@ if (!isset($_SESSION['usuario_id'])) {
                 </div>
                 <div class="form-group">
                     <label for="FGJRM">FGJRM:</label>
-                    <input type="text" id="FGJRM" name="FGJRM" required>
+                    <input type="text" id="FGJRM" name="FGJRM" value="<?= $folio ?>" required readonly>
                 </div>
             </div>
 

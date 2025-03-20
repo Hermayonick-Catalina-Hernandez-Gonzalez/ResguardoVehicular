@@ -125,7 +125,7 @@ function generarPDF1(imgData, vehiculo, descargar) {
     doc.setFontSize(12);
     doc.setTextColor(255, 0, 0);
     doc.setFont("helvetica", "bold");
-    doc.text("N° 0342", 500, 70);
+    doc.text("N°"+ vehiculo.FGJRM, 500, 70);
 
     // Restablecer color a negro para el resto del documento
     doc.setTextColor(0, 0, 0);
@@ -240,7 +240,7 @@ async function generarPDF2(imgData, vehiculo, descargar) {
     doc.setFontSize(12);
     doc.setTextColor(255, 0, 0);
 
-    doc.text("N° 0342", 500, 74);
+    doc.text("N°"+vehiculo.FGJRM, 500, 74);
     doc.setTextColor(0, 0, 0);
 
     let y = 100;
