@@ -9,10 +9,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-function salir() {
+function cerrar() {
     finalizarFormulario();
-    window.location.href = "../php/logout.php";  
+    window.location.href = "../../php/logout.php";
 }
+
 
 function ver(numeroEconomico) {
     localStorage.setItem('numeroEconomico', numeroEconomico);
@@ -63,7 +64,6 @@ function buscar() {
     });
 }
 
-// Función para normalizar texto (eliminar acentos y convertir a minúsculas)
 function normalizarTexto(texto) {
     return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 }
@@ -116,7 +116,7 @@ function final() {
         showConfirmButton: false,
         backdrop: false
     }).then(() => {
-        window.location.href = '../../vistas/formulario/pdfs.php';  // Ajusta esta ruta según sea necesario
+        window.location.href = '../../vistas/formulario/pdfs.php';  
     });
 }
 

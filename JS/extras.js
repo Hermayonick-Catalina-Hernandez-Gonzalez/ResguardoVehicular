@@ -127,8 +127,6 @@ function guardarFirma() {
     cerrarFirma();
 }
 
-
-
 document.addEventListener("DOMContentLoaded", function() {
     let vehiculoId = localStorage.getItem("vehiculo_id");
 

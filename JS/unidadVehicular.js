@@ -153,8 +153,6 @@ function finalizarFormulario() {
 
 function validarFormulario() {
     let camposValidos = true;
-
-
     const inputsTexto = document.querySelectorAll("input[type='text'], input[type='number']");
     inputsTexto.forEach(input => {
         if (input.value.trim() === "") {
@@ -164,8 +162,6 @@ function validarFormulario() {
             input.style.border = "";
         }
     });
-
-
     const radios = document.querySelectorAll("input[name='tipo_condicion']");
     let radioSeleccionado = false;
     radios.forEach(radio => {

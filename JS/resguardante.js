@@ -50,10 +50,9 @@ function asignarFecha() {
     }
 }
 
-
 function cerrar() {
-    window.location.href = "../../php/logout.php";
     finalizarFormulario();
+    window.location.href = "../../php/logout.php";
 }
 
 function buscarEmpleado(tipo) {
@@ -150,7 +149,6 @@ function buscarEmpleado(tipo) {
         });
 
 }
-
 
 document.addEventListener("DOMContentLoaded", function () {
     cargarDatosFormulario(); 
