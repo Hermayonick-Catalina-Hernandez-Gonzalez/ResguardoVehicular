@@ -591,7 +591,6 @@ async function generarPDF2(imgData, vehiculo, descargar) {
             };
 
             imgElement.onerror = function () {
-                console.error("❌ Error al cargar la imagen:", imageUrl);
                 resolve(null);
             };
         });

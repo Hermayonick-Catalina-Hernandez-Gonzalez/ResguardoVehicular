@@ -39,7 +39,7 @@ if ($_SESSION['rol'] != 'administrador') {
     </header>
 
     <div class="barra-busqueda">
-        <input type="text" id="search" placeholder="Buscar..." oninput="buscar()">
+        <input type="text" id="search" placeholder="Buscar..." oninput="buscador()">
         <img src="../img/Buscador.png" alt="Buscar" class="icono-buscar">
     </div>
 

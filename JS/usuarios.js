@@ -121,3 +121,13 @@ function eliminarUsuario(id) {
         }
     });
 }
+
+function buscador() {
+    let input = document.getElementById("search").value.toLowerCase();
+    let filas = document.querySelectorAll("#usuarios-lista tr");
+
+    filas.forEach(fila => {
+        let textoFila = fila.textContent.toLowerCase();
+        fila.style.display = textoFila.includes(input) ? "" : "none";
+    });
+}
