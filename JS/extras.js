@@ -13,16 +13,12 @@ document.addEventListener("DOMContentLoaded", function () {
     if (defaultTab && defaultButton) {
         defaultTab.style.display = "block";
         defaultButton.classList.add("active");
-    } else {
-        console.error("No se encontró la pestaña 'Reglas' o su botón.");
-    }
+    } 
 
     const iframe1 = document.getElementById("preview1");
     if (iframe1) {
         iframe1.style.display = "block"; 
-    } else {
-        console.error("No se encontró el iframe 'preview1'.");
-    }
+    } 
 
     let secciones = [
         "seccion_resguardante",

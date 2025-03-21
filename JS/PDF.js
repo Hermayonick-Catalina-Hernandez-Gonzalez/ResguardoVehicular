@@ -55,8 +55,6 @@ function subirPDF(pdfDoc, vehiculoId, nombreArchivo) {
     formData.append("vehiculo_id", vehiculoId);
     formData.append("archivo", new File([pdfBlob], nombreArchivo, { type: "application/pdf" }));
 
-    console.log("📤 Subiendo PDF con vehiculo_id:", vehiculoId); 
-
     fetch('https://pruebas-vehiculos.fgjtam.gob.mx/php/guardarPDF.php', {
         method: 'POST',
         body: formData
@@ -64,9 +62,13 @@ function subirPDF(pdfDoc, vehiculoId, nombreArchivo) {
     .then(response => response.json())
     .then(data => {
         if (data.error) {
-            console.error("❌ Error al guardar el PDF:", data.error);
-        } else {
-            console.log("✅ PDF guardado correctamente:", data.mensaje);
+            Swal.fire({
+                icon: "error",
+                title: "Error de conexión",
+                text: "No se Guardo el pdf correctamente",
+                confirmButtonText: "Aceptar",
+                backdrop: false
+            });
         }
     })
     .catch(error => console.error("❌ Error en la solicitud:", error));
@@ -567,13 +569,9 @@ async function generarPDF2(imgData, vehiculo, descargar) {
 
     const imagenes = Array.isArray(vehiculo.fotos) ? vehiculo.fotos.slice(0, 4) : [];
 
-    if (imagenes.length === 0) {
-        console.warn("⚠️ No hay imágenes disponibles para este vehículo.");
-    }
     async function cargarImagen(foto) {
         return new Promise((resolve) => {
             if (!foto || !foto.nombre_archivo) {
-                console.warn("⚠️ Imagen inválida:", foto);
                 return resolve(null);
             }
 

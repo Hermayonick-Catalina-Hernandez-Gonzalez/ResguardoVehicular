@@ -9,14 +9,18 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     let fgjrmInput = document.getElementById("FGJRM");
 
-    if (localStorage.getItem("FGJRM")) {
-        fgjrmInput.value = localStorage.getItem("FGJRM"); 
-        fgjrmInput.setAttribute("readonly", "readonly");
-    } else {
-        fgjrmInput.addEventListener("input", function () {
-            localStorage.setItem("FGJRM", fgjrmInput.value);
-            fgjrmInput.setAttribute("readonly", "readonly"); 
-        });
+    if (fgjrmInput) {
+        let savedValue = localStorage.getItem("FGJRM");
+
+        if (savedValue) {
+            fgjrmInput.value = savedValue;
+            fgjrmInput.setAttribute("readonly", "readonly");
+        } else {
+            fgjrmInput.addEventListener("input", function () {
+                localStorage.setItem("FGJRM", fgjrmInput.value);
+                fgjrmInput.setAttribute("readonly", "readonly"); 
+            });
+        }
     }
 });
 
@@ -240,7 +244,6 @@ function guardarDatos() {
                 title: 'Error en la respuesta del servidor',
                 text: 'La respuesta no es un JSON válido. Revisa la consola.'
             });
-            console.error("Error al procesar JSON:", error);
         }
     })
     .catch(error => {

@@ -88,7 +88,7 @@ function guardarVerificacion() {
     if (!vehiculoId) {
         Swal.fire({
             title: "Error",
-            text: "No se encontró el ID del vehículo. Por favor, verifica la información.",
+            text: "LLenar el Formulario de Unidad Vehicular antes de guardar la verificación",
             icon: "error"
         });
         return;
@@ -133,7 +133,6 @@ function guardarVerificacion() {
                     });
                     return;
                 }
-
                 enviarDatos(vehiculoId, datos);
             }
         }
@@ -159,7 +158,6 @@ function enviarDatos(vehiculoId, datos) {
         }
     })
     .catch(error => {
-        console.error("Error en fetch:", error);
         Swal.fire("Error", "No se pudo guardar la verificación", "error");
     });
 }

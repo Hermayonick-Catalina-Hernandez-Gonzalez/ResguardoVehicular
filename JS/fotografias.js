@@ -150,12 +150,6 @@ function guardarFotoExtra(idImagen) {
 
 function restaurarFotosExtras() {
     const contenedor = document.getElementById("extra-fotos-container");
-
-    if (!contenedor) {
-        console.warn("⚠️ No se encontró el contenedor de fotos extra en el DOM.");
-        return;
-    }
-
     let fotosExtras = JSON.parse(localStorage.getItem("fotosExtras")) || [];
 
     fotosExtras.forEach(idExtra => {
@@ -277,7 +271,6 @@ function guardar() {
         });
     })
     .catch(error => {
-        console.error("Error:", error);
         Swal.fire("Error", "No se pudo guardar las imágenes.", "error");
     });
 }

@@ -34,7 +34,7 @@
             <td><input type="radio" name="accesorios_GPS" value="si"></td>
             <td><input type="radio" name="accesorios_GPS" value="no"></td>
         </tr>
-        
+
     </tbody>
     <thead>
         <tr>
@@ -56,8 +56,10 @@
         </tr>
         <tr>
             <td>Reflejantes</td>
-            <td><input type="radio" name="accesorios_reflejantes" value="si"></td>
-            <td><input type="radio" name="accesorios_reflejantes" value="no"></td>
+            <td><input type="radio" name="accesorios_reflejantes"
+                    value="si"></td>
+            <td><input type="radio" name="accesorios_reflejantes"
+                    value="no"></td>
         </tr>
         <tr>
             <td>Llanta Refraccion</td>
@@ -72,56 +74,48 @@
 
     </tbody>
 </table>
-
-
 <div>
-
-    <label for="observaciones">Observaciones:</label>
-    <textarea id="observaciones" name="observaciones" rows="4" cols="50"></textarea>
+    <label for="observaciones_accesorios">Observaciones:</label>
+    <textarea id="observaciones_accesorios" name="observaciones" rows="4"
+        cols="50"></textarea>
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        window.parent.postMessage({ type: "loadRadios" }, "*");
-    
+   document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            let savedValue = localStorage.getItem(radio.name);
+            if (savedValue && radio.value === savedValue) {
+                radio.checked = true;
+            }
+
             radio.addEventListener("change", function () {
-                window.parent.postMessage({
-                    type: "saveRadio",
-                    name: radio.name,
-                    value: radio.value
-                }, "*");
+                localStorage.setItem(radio.name, radio.value);
             });
         });
-    
+
+        let observaciones = document.getElementById("observaciones_accesorios");
+        let savedObservaciones = localStorage.getItem("observaciones_accesorios");
+        
+        if (savedObservaciones) {
+            observaciones.value = savedObservaciones;
+        }
+        
+        observaciones.addEventListener("input", function () {
+            localStorage.setItem("observaciones_accesorios", observaciones.value);
+        });
+
         window.addEventListener("message", function (event) {
             if (event.data.type === "restoreRadios") {
-                const savedValue = event.data.values[event.data.name];
-                if (savedValue) {
-                    const radio = document.querySelector(`input[name="${event.data.name}"][value="${savedValue}"]`);
+                Object.keys(event.data.values).forEach(name => {
+                    let value = event.data.values[name];
+                    let radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
                     if (radio) {
                         radio.checked = true;
                     }
-                }
+                });
             }
-        });
-        let observaciones = document.getElementById("observaciones");
-
-        if (localStorage.getItem("observaciones")) {
-            observaciones.value = localStorage.getItem("observaciones");
-        }
-
-        observaciones.addEventListener("input", function () {
-            localStorage.setItem("observaciones", observaciones.value);
-        });
-    });
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        window.addEventListener("message", function (event) {
             if (event.data.type === "getDatos") {
                 let datos = [];
-                
                 document.querySelectorAll('input[type="radio"]:checked').forEach(input => {
                     datos.push({
                         categoria: "Accesorios",
@@ -129,16 +123,14 @@
                         estado: input.value
                     });
                 });
-
-                let observaciones = document.getElementById("observaciones").value;
-                if (observaciones) {
+                let observacionesTexto = document.getElementById("observaciones_accesorios").value;
+                if (observacionesTexto) {
                     datos.push({
                         categoria: "Accesorios",
                         elemento: "Observaciones",
-                        estado: observaciones
+                        estado: observacionesTexto
                     });
                 }
-
                 event.source.postMessage({ type: "respuestaDatos", datos: datos }, "*");
             }
         });

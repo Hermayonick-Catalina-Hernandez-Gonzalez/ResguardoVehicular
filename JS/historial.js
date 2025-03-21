@@ -74,9 +74,7 @@ $(document).ready(function () {
                 $("#history-section").html("<p>Error al cargar el historial.</p>");
             }
         });
-    } else {
-        console.error("Número Económico no encontrado en localStorage.");
-    }
+    } 
 });
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -92,11 +90,14 @@ document.addEventListener("DOMContentLoaded", function () {
     .then(data => {
         if (data.imagenFrontal) {
             imgVehiculo.src = data.imagenFrontal;
-        } else {
-            console.error("No se encontró imagen para el vehículo.");
-        }
+        } 
     })
-    .catch(error => console.error("Error al cargar la imagen:", error));
+    .catch(error =>  
+        Swal.fire({
+        icon: "error",
+        title: "Error de conexión",
+        backdrop: false
+    }));
 });
 
 function descargarPDFs(button) {
