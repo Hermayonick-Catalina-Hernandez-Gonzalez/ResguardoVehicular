@@ -60,12 +60,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
 
-        // Guardar imágenes normales
         if ($imagenesNormales) {
             guardarImagenes($conn, $vehiculo_id, $imagenesNormales, $observacionesNormales, $uploadDir);
         }
 
-        // Guardar imágenes extras
         if ($imagenesExtras) {
             guardarImagenes($conn, $vehiculo_id, $imagenesExtras, $observacionesExtras, $uploadDir);
         }

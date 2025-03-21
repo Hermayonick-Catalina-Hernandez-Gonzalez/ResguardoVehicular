@@ -10,12 +10,10 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function salir() {
+    finalizarFormulario();
     window.location.href = "../php/logout.php";  
 }
 
-function cerrar() {
-    window.location.href = "../../php/logout.php";  
-}
 function ver(numeroEconomico) {
     localStorage.setItem('numeroEconomico', numeroEconomico);
     window.location.href = "../vistas/historial.php";
@@ -32,7 +30,6 @@ function iniciar() {
 function editar() {
     window.location.href = "../vistas/formulario/resguardante.php";
 }
-
 
 document.addEventListener("DOMContentLoaded", function () {
     let links = document.querySelectorAll(".menu-link");
@@ -77,11 +74,11 @@ function togglePassword() {
 
     if (passwordField.type === 'password') {
         passwordField.type = 'text';
-        toggleIcon.src = 'img/cerrar-ojo.png'; // Cambia a la imagen de ojo cerrado
+        toggleIcon.src = 'img/cerrar-ojo.png'; 
         toggleIcon.alt = 'Ocultar contraseña';
     } else {
         passwordField.type = 'password';
-        toggleIcon.src = 'img/ojo.png'; // Cambia a la imagen de ojo abierto
+        toggleIcon.src = 'img/ojo.png'; 
         toggleIcon.alt = 'Mostrar contraseña';
     }
 }
@@ -97,7 +94,6 @@ function buscarHistorial() {
         const resguardanteInterno = normalizarTexto(card.querySelector('p:nth-child(4)').textContent.toLowerCase());
         const observaciones= normalizarTexto(card.querySelector('p:nth-child(5)').textContent.toLowerCase());
 
-        // Verifica si alguno de los campos normalizados coincide con el texto de búsqueda
         if (
             fecha.includes(searchText) ||
             municipio.includes(searchText) ||
@@ -105,15 +101,14 @@ function buscarHistorial() {
             resguardanteInterno.includes(searchText) ||
             observaciones.includes(searchText)
         ) {
-            card.style.display = '';  // Mostrar el div
+            card.style.display = '';  
         } else {
-            card.style.display = 'none';  // Ocultar el div
+            card.style.display = 'none';  
         }
     });
 }
 
 function final() {
-    // Mostrar el mensaje de éxito antes de redirigir
     Swal.fire({
         icon: 'success',
         title: '¡Se ha Guardado Exitosamente!',
@@ -121,12 +116,10 @@ function final() {
         showConfirmButton: false,
         backdrop: false
     }).then(() => {
-        // Redirige a la página de PDFs después de generar el PDF
         window.location.href = '../../vistas/formulario/pdfs.php';  // Ajusta esta ruta según sea necesario
     });
 }
 
-// Limpiar localStorage solo cuando el usuario presiona "Aceptar"
 function finalizarFormulario() {
     localStorage.clear();
 }

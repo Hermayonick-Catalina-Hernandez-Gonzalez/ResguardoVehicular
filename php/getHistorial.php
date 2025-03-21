@@ -28,7 +28,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     echo '<p><strong>Observaciones de Fotos:</strong> ' . htmlspecialchars($row['observaciones_fotos']) . '</p>';
                 }
 
-                // Inicializar JSON vacío para evitar warnings
                 $pdfsJson = "[]";
 
                 if (!empty($row['archivos_pdf'])) {

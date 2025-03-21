@@ -23,8 +23,6 @@ if (!isset($_SESSION['usuario_id'])) {
 </head>
 
 <body>
-
-    <!-- Menú lateral -->
     <div class="menu">
         <img src="../../img/Logo2.png" alt="Logo FGJ" class="logo">
 
@@ -42,7 +40,6 @@ if (!isset($_SESSION['usuario_id'])) {
         <img src="../../img/Vehiculo.png" alt="Vehículo" class="vehiculo">
     </div>
 
-    <!-- Sección principal -->
     <div class="right-section">
         <h1>Verificacion de Datos</h1>
         <button onclick="verPDF()" class="btn">Ver PDF</button>
@@ -54,7 +51,6 @@ if (!isset($_SESSION['usuario_id'])) {
                     onclick="openTab(event, 'Resguardo')">Resguardo</button>
             </div>
 
-            <!-- Contenido  -->
             <div id="Reglas" class="tabcontent">
                 <iframe id="preview1" width="100%" height="400px"></iframe>
             </div>
@@ -67,7 +63,6 @@ if (!isset($_SESSION['usuario_id'])) {
         <button onclick="abrirFirma()" class="btn">Aceptar</button>
     </div>
 
-    <!-- Modal de Firma Digital -->
     <div id="modalFirma" class="modal">
         <div class="modal-content">
             <h2>Firma Digital Resguardante Interno</h2>

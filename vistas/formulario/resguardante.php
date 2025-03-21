@@ -38,8 +38,6 @@ try {
 </head>
 
 <body>
-
-    <!-- Menú lateral -->
     <div class="menu">
         <img src="../../img/Logo2.png" alt="Logo FGJ" class="logo">
 
@@ -57,7 +55,6 @@ try {
         <img src="../../img/Vehiculo.png" alt="Vehículo" class="vehiculo">
     </div>
 
-    <!-- Sección del formulario -->
     <div class="right-section">
         <h1>Resguardo Vehicular</h1>
         <form id="formularioResguardante">
@@ -82,7 +79,6 @@ try {
                     <input type="number" id="numero_empleado" name="numero_empleado" onblur="buscarEmpleado('numero_empleado')" required>
                 </div>
 
-                <!-- Resguardante -->
                 <div class="form-group">
                     <label for="resguardante">Resguardante:</label>
                     <input type="text" id="resguardante" name="resguardante" required>

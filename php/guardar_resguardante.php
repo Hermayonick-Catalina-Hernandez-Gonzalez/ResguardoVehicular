@@ -3,7 +3,6 @@ require '../php/conexion.php';
 
 header('Content-Type: application/json');  
 header("Access-Control-Allow-Origin: *");
-// Recibir los datos
 $municipio = $_POST['municipio'];
 $FGJRM = $_POST['FGJRM'];
 $numeroEmpleado = $_POST['numero_empleado'];
@@ -24,7 +23,6 @@ $vigenciaInterna = $_POST['vigencia_interna'];
 $celular = $_POST['celular'];
 
 try {
-    // Preparar la consulta SQL
     $sql = "INSERT INTO resguardante (
         municipio, FGJRM, numero_empleado, resguardante, cargo, licencia, vigencia,
         fiscalia_general, fiscalia_especializada_en, vicefiscalia_en, direccion_general,
@@ -59,12 +57,11 @@ try {
         ':celular' => $celular
     ]);
 
-    // Obtener el ID del último resguardante insertado
     $resguardante_id = $conn->lastInsertId(); 
 
     echo json_encode([
         "success" => "Datos guardados correctamente",
-        "resguardante_id" => $resguardante_id  // Devuelve el ID insertado
+        "resguardante_id" => $resguardante_id 
     ]);
 } catch (Exception $e) {
     echo json_encode(["error" => "Error al guardar los datos: " . $e->getMessage()]);

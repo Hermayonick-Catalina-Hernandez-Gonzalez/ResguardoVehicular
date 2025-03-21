@@ -1,10 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Ocultar todas las pestañas
     document.querySelectorAll(".tabcontent").forEach(tab => {
         tab.style.display = "none";
     });
 
-    // Mostrar la pestaña "Exterior" por defecto
     const defaultTab = document.getElementById("Exterior");
     const defaultButton = document.getElementById("exterior");
 
@@ -13,7 +11,6 @@ document.addEventListener("DOMContentLoaded", function () {
         defaultButton.classList.add("active");
     }
 
-    // Comunicación con los iframes para cargar radios
     const iframes = document.querySelectorAll("iframe");
 
     iframes.forEach(iframe => {
@@ -67,22 +64,18 @@ function nextTab() {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-    // Restaurar selecciones desde localStorage
     document.querySelectorAll('input[type="radio"]').forEach(radio => {
         const storedValue = localStorage.getItem(radio.name);
         if (storedValue && radio.value === storedValue) {
             radio.checked = true;
         }
 
-        // Guardar selección en localStorage cuando cambie
         radio.addEventListener("change", function () {
             localStorage.setItem(radio.name, radio.value);
         });
     });
 });
 
-
-// Limpiar localStorage solo cuando el usuario presiona "Aceptar"
 function finalizarFormulario() {
     localStorage.clear();
 }
@@ -90,8 +83,6 @@ function finalizarFormulario() {
 function guardarVerificacion() {
     let datos = [];
     let allFieldsFilled = true;
-
-    // Obtener el ID del vehículo de localStorage
     let vehiculoId = localStorage.getItem("vehiculo_id");
 
     if (!vehiculoId) {
@@ -121,11 +112,11 @@ function guardarVerificacion() {
                 if (!dato.estado || dato.estado.trim() === "") {
                     allFieldsFilled = false;
                     radiosDelGrupo.forEach(radio => {
-                        radio.parentNode.style.border = "2px solid red"; // Resaltar radios vacíos
+                        radio.parentNode.style.border = "2px solid red"; 
                     });
                 } else {
                     radiosDelGrupo.forEach(radio => {
-                        radio.parentNode.style.border = ""; // Quitar borde si está lleno
+                        radio.parentNode.style.border = ""; 
                     });
                 }
             });
@@ -152,7 +143,7 @@ function guardarVerificacion() {
 function enviarDatos(vehiculoId, datos) {
     fetch("https://pruebas-vehiculos.fgjtam.gob.mx/php/guardar_verificacion.php", {
         method: "POST",
-        body: JSON.stringify({ vehiculo_id: vehiculoId, datos: datos }), // ✅ Agregamos vehiculo_id
+        body: JSON.stringify({ vehiculo_id: vehiculoId, datos: datos }), 
         headers: {
             "Content-Type": "application/json"
         }

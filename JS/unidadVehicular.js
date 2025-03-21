@@ -12,7 +12,7 @@ function buscarVehiculo() {
     }
 
     fetch(`https://pruebas-vehiculos.fgjtam.gob.mx/php/buscarVehiculo.php?numero_economico=${numeroEconomico}`)
-        .then(response => response.json()) // Convertimos la respuesta a JSON
+        .then(response => response.json())
         .then(data => {
             if (data.error) {
                 Swal.fire({
@@ -22,7 +22,6 @@ function buscarVehiculo() {
                     backdrop: false
                 });
             } else {
-                // Llenar los campos del formulario con los datos obtenidos
                 document.getElementById("placa").value = data.PLACAS || "";
                 document.getElementById("serie").value = data.SERIE || "";
                 document.getElementById("color").value = data.COLOR || "";
@@ -148,8 +147,6 @@ function recuperarSeleccion() {
     }
 }
 
-
-// Limpiar localStorage solo cuando el usuario presiona "Aceptar"
 function finalizarFormulario() {
     localStorage.clear();
 }

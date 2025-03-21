@@ -1,14 +1,12 @@
 document.getElementById('Pdf').addEventListener('submit', function(event) {
-    event.preventDefault(); // Previene que la página se recargue
+    event.preventDefault(); 
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-    // Ocultar todas las pestañas al inicio
     document.querySelectorAll(".tabcontent").forEach(tab => {
         tab.style.display = "none";
     });
 
-    // Seleccionar y mostrar la pestaña "Reglas" por defecto
     const defaultTab = document.getElementById("Reglas");
     const defaultButton = document.getElementById("reglas");
 
@@ -27,7 +25,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// Función para cambiar de pestañas manualmente
 function openTab(evt, tabName) {
     document.querySelectorAll(".tabcontent").forEach(tab => tab.style.display = "none");
     document.querySelectorAll(".tablink").forEach(btn => btn.classList.remove("active"));
@@ -42,7 +39,6 @@ function openTab(evt, tabName) {
     }
 }
 
-// Funciones para la firma
 function abrirFirma() {
     document.getElementById("modalFirma").style.display = "flex";
 }
@@ -51,19 +47,16 @@ function cerrarFirma() {
     document.getElementById("modalFirma").style.display = "none";
 }
 
-// Funciones para capturar la firma en canvas
 let esTactil = "ontouchstart" in window || navigator.maxTouchPoints > 0;
 
 let canvas = document.getElementById("canvasFirma");
 let ctx = canvas.getContext("2d");
 let pintando = false;
 
-// Eventos para mouse
 canvas.addEventListener("mousedown", iniciarDibujo);
 canvas.addEventListener("mouseup", detenerDibujo);
 canvas.addEventListener("mousemove", dibujar);
 
-// Eventos para dispositivos táctiles
 canvas.addEventListener("touchstart", iniciarDibujo);
 canvas.addEventListener("touchend", detenerDibujo);
 canvas.addEventListener("touchmove", dibujar);
@@ -116,7 +109,7 @@ function guardarFirma() {
     let canvas = document.getElementById("canvasFirma");
     let imagenFirma = canvas.toDataURL("image/png"); 
 
-    localStorage.setItem("firmaBase64", imagenFirma); // Guardar firma en localStorage
+    localStorage.setItem("firmaBase64", imagenFirma); 
 
     Swal.fire({
         icon: "success",
@@ -140,7 +133,6 @@ document.addEventListener("DOMContentLoaded", function() {
     let vehiculoId = localStorage.getItem("vehiculo_id");
 
     if (vehiculoId) {
-        // Agregar el ID a la URL si no está presente
         let url = new URL(window.location.href);
         if (!url.searchParams.has("vehiculo_id")) {
             url.searchParams.set("vehiculo_id", vehiculoId);

@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     let links = document.querySelectorAll(".menu-link");
-    let currentPath = window.location.pathname.split('/').pop(); // Obtiene el nombre del archivo actual
+    let currentPath = window.location.pathname.split('/').pop(); 
 
     links.forEach(link => {
         if (link.getAttribute("href").includes(currentPath)) {
@@ -20,7 +20,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// Función para formatear la fecha al formato YYYY-MM-DD
 function formatearFecha(fechaHora) {
     var fecha = new Date(fechaHora);
     var año = fecha.getFullYear();
@@ -46,7 +45,6 @@ function asignarFecha() {
     if (fechaInput) {
         fechaInput.removeAttribute("disabled");
         var today = new Date();
-        // Formatear la fecha antes de asignarla
         fechaInput.value = formatearFecha(today);
         fechaInput.setAttribute("disabled", "disabled");
     }
@@ -55,6 +53,7 @@ function asignarFecha() {
 
 function cerrar() {
     window.location.href = "../../php/logout.php";
+    finalizarFormulario();
 }
 
 function buscarEmpleado(tipo) {
@@ -86,9 +85,7 @@ function buscarEmpleado(tipo) {
                         backdrop: false
                     });
                 } else {
-                    // Llenar los campos del formulario con los datos recibidos solo si existen
                     if (tipo === "numero_empleado") {
-                        // Llenar los datos del resguardante
                         document.getElementById("resguardante").value = jsonData.nombre_completo || "";
                         document.getElementById("cargo").value = jsonData.NOMBRE_PUESTO_TABULAR || "";
                         document.getElementById("fiscalia_general").value = jsonData.FISCALIA_GENERAL || "";
@@ -109,7 +106,6 @@ function buscarEmpleado(tipo) {
                         localStorage.setItem("licencia", jsonData.FOLIO_LICENCIA_MANEJO || "");
                         localStorage.setItem("vigencia", formatearFecha(jsonData.FECHA_VENCIMIENTO_LICENCIA) || "");
                     } else if (tipo === "numero_empleado_interno") {
-                        // Llenar los datos del resguardante interno
                         document.getElementById("resguardante_interno").value = jsonData.nombre_completo || "";
                         document.getElementById("cargo_interno").value = jsonData.NOMBRE_PUESTO_TABULAR || "";
                         document.getElementById("numero_empleado_interno").value = jsonData.NUMERO_DE_EMPLEADO || "";
@@ -157,8 +153,7 @@ function buscarEmpleado(tipo) {
 
 
 document.addEventListener("DOMContentLoaded", function () {
-    cargarDatosFormulario(); // Carga los datos almacenados en localStorage
-    // Guardar cambios a medida que el usuario escribe
+    cargarDatosFormulario(); 
     document.querySelectorAll("#formularioResguardante input").forEach(input => {
         input.addEventListener("input", function () {
             localStorage.setItem(input.id, input.value);
@@ -166,7 +161,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// Cargar los datos desde localStorage
 function cargarDatosFormulario() {
     document.querySelectorAll("#formularioResguardante input").forEach(input => {
         let valorGuardado = localStorage.getItem(input.id);
@@ -180,7 +174,7 @@ function validarCelular() {
     let celularInput = document.getElementById("celular");
     let celular = celularInput.value.trim();
 
-    let regex = /^[0-9]{10}$/; // Expresión regular para validar 10 dígitos numéricos
+    let regex = /^[0-9]{10}$/;
 
     if (!regex.test(celular)) {
         Swal.fire({
@@ -189,10 +183,10 @@ function validarCelular() {
             icon: "warning"
         });
 
-        celularInput.style.border = "2px solid red"; // Resaltar campo en rojo si es incorrecto
-        celularInput.value = ""; // Limpiar campo si es inválido
+        celularInput.style.border = "2px solid red"; 
+        celularInput.value = ""; 
     } else {
-        celularInput.style.border = "2px solid green"; // Resaltar campo en verde si es correcto
+        celularInput.style.border = "2px solid green"; 
     }
 }
 
@@ -260,8 +254,6 @@ function guardarDatos() {
     });
 }
 
-
-// Limpiar localStorage solo cuando el usuario presiona "Aceptar"
 function finalizarFormulario() {
     localStorage.clear();
     location.reload();

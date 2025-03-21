@@ -107,12 +107,10 @@
         });
         let observaciones = document.getElementById("observaciones");
 
-        // Recuperar datos almacenados
         if (localStorage.getItem("observaciones")) {
             observaciones.value = localStorage.getItem("observaciones");
         }
 
-        // Guardar cambios cuando el usuario escriba
         observaciones.addEventListener("input", function () {
             localStorage.setItem("observaciones", observaciones.value);
         });

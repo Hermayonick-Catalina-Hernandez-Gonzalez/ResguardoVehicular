@@ -64,7 +64,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // Esperar a que el contenedor de fotos extra esté disponible antes de restaurarlas
     const esperarContenedor = setInterval(() => {
         if (document.getElementById("extra-fotos-container")) {
             clearInterval(esperarContenedor);
@@ -115,7 +114,6 @@ function eliminarFotoExtra(boton, idImagen) {
         fila.remove();
     }
 
-    // Si no quedan imágenes, reiniciar el contador a 1
     const contenedor = document.getElementById("extra-fotos-container");
     if (contenedor.getElementsByClassName("foto-apartado").length === 0) {
         contadorExtra = 1;
@@ -170,13 +168,11 @@ function restaurarFotosExtras() {
 
         ultimaFila.appendChild(nuevoApartado);
 
-        // Restaurar imagen si existe en localStorage
         const imagenGuardada = localStorage.getItem(idExtra);
         if (imagenGuardada) {
             document.getElementById(idExtra).src = imagenGuardada;
         }
 
-        // Restaurar observación si existe en localStorage
         const observacionGuardada = localStorage.getItem(`observacion-${idExtra}`);
         if (observacionGuardada) {
             document.getElementById(`observaciones-${idExtra}`).value = observacionGuardada;

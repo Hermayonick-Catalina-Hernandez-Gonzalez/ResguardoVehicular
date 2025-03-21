@@ -77,7 +77,6 @@
 </div>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // Restaurar radios desde localStorage
         document.querySelectorAll('input[type="radio"]').forEach(radio => {
             let savedValue = localStorage.getItem(radio.name);
             if (savedValue && radio.value === savedValue) {
@@ -93,7 +92,6 @@
             });
         });
 
-        // Restaurar observaciones desde localStorage
         let observaciones = document.getElementById("observaciones_interior");
         if (localStorage.getItem("observaciones_interior")) {
             observaciones.value = localStorage.getItem("observaciones_interior");
@@ -102,7 +100,6 @@
             localStorage.setItem("observaciones_interior", observaciones.value);
         });
 
-        // Manejo de mensajes postMessage
         window.addEventListener("message", function (event) {
             if (event.data.type === "restoreRadios") {
                 Object.keys(event.data.values).forEach(name => {

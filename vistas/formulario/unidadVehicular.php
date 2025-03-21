@@ -20,7 +20,6 @@ if (!isset($_SESSION['usuario_id'])) {
 </head>
 
 <body>
-    <!-- Menú lateral -->
     <div class="menu">
         <img src="../../img/Logo2.png" alt="Logo FGJ" class="logo">
 
@@ -38,9 +37,7 @@ if (!isset($_SESSION['usuario_id'])) {
         <img src="../../img/Vehiculo.png" alt="Vehículo" class="vehiculo">
     </div>
 
-    <!-- Sección derecha -->
     <div class="right-section">
-        <!-- Formulario-->
         <h1>Datos Vehiculares</h1>
         <form id="formularioVehiculo">
             <div class="form-row">
