@@ -17,7 +17,7 @@ function cargarUsuarios() {
             tbody.innerHTML = "";
 
             data.forEach(usuario => {
-                if (usuario.id != usuarioActualId) {  // Excluir el usuario actual
+                if (usuario.id != usuarioActualId) {  
                     let fila = `
                         <tr>
                             <td>${usuario.Nombre}</td>

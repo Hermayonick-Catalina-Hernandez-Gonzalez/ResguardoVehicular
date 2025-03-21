@@ -1,4 +1,3 @@
-/* Estilo general */
 * {
     margin: 0;
     padding: 0;
@@ -14,14 +13,12 @@ body {
     align-items: center;
 }
 
-/* Contenedor principal */
 .container {
     width: 60%;
     margin: 0 auto;
     max-width: 2000px; 
 }
 
-/* Encabezado */
 .head {
     width: 100%;
     height: 150px;
@@ -47,7 +44,6 @@ body {
     word-wrap: break-word;
 }
 
-/* Imagen del logo */
 .logo img {
     width: 200px;
     width: 300px;
@@ -61,7 +57,6 @@ body {
     height: 200px;
 }
 
-
 .esquina {
     width: 200px;
     height: 200px;
@@ -73,7 +68,6 @@ body {
     border: none;
 }
 
-/* Boton de regresar */
 .btn-regresar {
     position: absolute;
     top: 10px;
@@ -88,7 +82,6 @@ body {
     height: 60px;
 }
 
-/* Sección de perfil */
 .profile-section {
     display: flex;
     align-items: center;
@@ -116,7 +109,6 @@ body {
     color: #555; 
 }
 
-/* Sección de historial */
 .history-section {
     margin: 20px auto;
     width: 100%; 
@@ -140,7 +132,6 @@ body {
     box-shadow: rgba(0, 0, 0, 0.15) 0px 6px 15px; 
 }
 
-/* Contenedor de texto dentro de cada tarjeta */
 .history-card div {
     display: flex;
     flex-direction: column;
@@ -154,7 +145,6 @@ body {
     line-height: 1.5; 
 }
 
-/* Botón de descarga */
 .download-button {
     background-color: #1A2341; 
     color: white;
@@ -179,12 +169,11 @@ body {
     height: 20px;
 }
 
-/* Barra de búsqueda */
 .barra-busqueda {
     position: relative;
     width: 90%;
     max-width: 700px;
-    margin: 20px auto; /* Centrado */
+    margin: 20px auto;
     display: flex;
 }
 
@@ -206,7 +195,7 @@ body {
     height: 24px;
     cursor: pointer;
 }
-/* Estilos para pantallas medianas (tablets) */
+
 @media screen and (max-width: 1024px) {
     .container {
         width: 80%;
@@ -230,7 +219,6 @@ body {
     }
 }
 
-/* Estilos para pantallas extra pequeñas (menos de 480px) */
 @media screen and (max-width: 480px) {
     .titulo h1 {
         font-size: 24px; 

@@ -59,7 +59,6 @@ if ($_SESSION['rol'] != 'administrador') {
         </tbody>
     </table>
 
-    <!-- Modal para Agregar/Editar Usuario -->
     <div id="modalUsuario" class="modal">
         <div class="modal-content">
             <span class="close" onclick="cerrarModal()">

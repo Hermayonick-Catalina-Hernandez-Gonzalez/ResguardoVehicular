@@ -10,11 +10,8 @@ function descargarPDFs() {
     const vehiculoId = localStorage.getItem("vehiculo_id");
     if (vehiculoId) {
         obtenerDatosVehiculo(vehiculoId, true);
-    } else {
-        alert("No se encontró el ID del vehículo.");
-    }
+    } 
 }
-
 
 function obtenerDatosVehiculo(vehiculoId, descargar) {
     fetch('https://pruebas-vehiculos.fgjtam.gob.mx/php/obtenerHistorial.php', {
@@ -22,21 +19,33 @@ function obtenerDatosVehiculo(vehiculoId, descargar) {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: `vehiculo_id=${vehiculoId}`
     })
-        .then(response => response.json())
-        .then(data => {
-            if (data.error || !data.marca || !data.modelo || !data.placa) {
-                alert("Datos del vehículo no disponibles.");
+    .then(response => response.json())
+    .then(data => {
+        if (data.error || !data.marca || !data.modelo || !data.placa) {
+            Swal.fire({
+                icon: "warning",
+                title: "Datos no disponibles",
+                text: "No se encontraron datos del vehículo.",
+                confirmButtonText: "Aceptar",
+                backdrop: false
+            });
+        } else {
+            if (descargar) {
+                generarYDescargarPDFs(data);
             } else {
-                if (descargar) {
-                    generarYDescargarPDFs(data);
-                } else {
-                    generarVistaPreviaPDFs(data);
-                }
+                generarVistaPreviaPDFs(data);
             }
-        })
-        .catch(error => {
-            alert("Error al obtener los datos del vehículo.");
+        }
+    })
+    .catch(error => {
+        Swal.fire({
+            icon: "error",
+            title: "Error de conexión",
+            text: "Hubo un problema al obtener los datos del vehículo.",
+            confirmButtonText: "Aceptar",
+            backdrop: false
         });
+    });
 }
 
 function subirPDF(pdfDoc, vehiculoId, nombreArchivo) {
@@ -46,8 +55,6 @@ function subirPDF(pdfDoc, vehiculoId, nombreArchivo) {
     formData.append("vehiculo_id", vehiculoId);
     formData.append("archivo", new File([pdfBlob], nombreArchivo, { type: "application/pdf" }));
 
-    console.log("📤 Subiendo PDF con vehiculo_id:", vehiculoId); // 👀 Verifica si se está enviando
-
     fetch('https://pruebas-vehiculos.fgjtam.gob.mx/php/guardarPDF.php', {
         method: 'POST',
         body: formData
@@ -55,9 +62,13 @@ function subirPDF(pdfDoc, vehiculoId, nombreArchivo) {
     .then(response => response.json())
     .then(data => {
         if (data.error) {
-            console.error("❌ Error al guardar el PDF:", data.error);
-        } else {
-            console.log("✅ PDF guardado correctamente:", data.mensaje);
+            Swal.fire({
+                icon: "error",
+                title: "Error de conexión",
+                text: "No se Guardo el pdf correctamente",
+                confirmButtonText: "Aceptar",
+                backdrop: false
+            });
         }
     })
     .catch(error => console.error("❌ Error en la solicitud:", error));
@@ -69,7 +80,7 @@ async function generarVistaPreviaPDFs(vehiculo) {
     const img = new Image();
     img.src = '../../img/Logo.png';
 
-    img.onload = async function () { // ⬅️ Hacer la función async
+    img.onload = async function () { 
         const canvas = document.createElement('canvas');
         canvas.width = img.width;
         canvas.height = img.height;
@@ -78,10 +89,10 @@ async function generarVistaPreviaPDFs(vehiculo) {
         const imgData = canvas.toDataURL('image/png');
 
         let pdf1 = generarPDF1(imgData, vehiculo, false);
-        let pdf2 = await generarPDF2(imgData, vehiculo, false); // ✅ Esperar a que termine
+        let pdf2 = await generarPDF2(imgData, vehiculo, false); 
 
         document.getElementById("preview1").src = pdf1;
-        document.getElementById("preview2").src = pdf2; // ✅ Ahora es una URL válida
+        document.getElementById("preview2").src = pdf2; 
     };
 }
 
@@ -101,11 +112,9 @@ async function generarYDescargarPDFs(vehiculo) {
         let pdf1 = generarPDF1(imgData, vehiculo, true);
         let pdf2 = await generarPDF2(imgData, vehiculo, true);
 
-        // 📤 Subir los PDFs a la base de datos
         subirPDF(pdf1, vehiculo.id, "Reglas_Vehiculo.pdf");
         subirPDF(pdf2, vehiculo.id, "Resguardo_Vehiculo.pdf");
 
-        // ⬇️ Descargar los PDFs localmente
         pdf1.save("Reglas_Vehiculo.pdf");
         pdf2.save("Resguardo_Vehiculo.pdf");
     };
@@ -127,10 +136,8 @@ function generarPDF1(imgData, vehiculo, descargar) {
     doc.setFont("helvetica", "bold");
     doc.text("N°"+ vehiculo.FGJRM, 500, 70);
 
-    // Restablecer color a negro para el resto del documento
     doc.setTextColor(0, 0, 0);
 
-    // **Tabla de información del vehículo**
     doc.autoTable({
         startY: 80,
         head: [["MARCA", "SUBMARCA", "SERIE", "MODELO", "PLACA", "N° ECO"]],
@@ -158,7 +165,6 @@ function generarPDF1(imgData, vehiculo, descargar) {
 
     let y = doc.autoTable.previous.finalY + 20;
 
-    // **Lista de reglas**
     const reglas = [
         "1.- Las unidades deberán ser conducidas por servidores públicos que conozcan el Reglamento de Tránsito en vigor y cuenten con licencia para conducir vigente y credencial institucional de la FGJET.",
         "2.- El usuario es responsable de mantener la unidad en perfectas condiciones de uso, por lo que deberá cumplir con los programas de revisión y mantenimiento preventivo y/o correctivo, según se mencione en la póliza de garantía del vehículo.",
@@ -181,7 +187,6 @@ function generarPDF1(imgData, vehiculo, descargar) {
     doc.setFont("helvetica", "normal");
     doc.setFontSize(12);
 
-    // Justificar el texto 
     reglas.forEach((texto) => {
         const lines = doc.splitTextToSize(texto, 520);
         lines.forEach((line, index) => {
@@ -231,7 +236,6 @@ async function generarPDF2(imgData, vehiculo, descargar) {
 
     doc.addImage(imgData, 'PNG', 40, 30, 80, 40);
 
-    // Encabezado
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(10);
     doc.text("DIRECCIÓN GENERAL DE ADMINISTRACIÓN", 250, 50);
@@ -247,21 +251,19 @@ async function generarPDF2(imgData, vehiculo, descargar) {
 
     function drawCell(x, y, width, height, text, fillColor = [255, 255, 255]) {
         doc.setFillColor(fillColor[0], fillColor[1], fillColor[2]);
-        doc.rect(x, y, width, height, 'F'); // Relleno
-        doc.rect(x, y, width, height); // Borde
+        doc.rect(x, y, width, height, 'F');
+        doc.rect(x, y, width, height); 
         doc.setFontSize(9);
         doc.setTextColor(0, 0, 0);
         doc.text(text, x + 5, y + 13);
     }
 
-    // Convertir la fecha a formato legible (dd/mm/yyyy)
     function formatFecha(fecha) {
-        if (!fecha) return "Sin fecha"; // Si no hay fecha, mostrar texto alternativo
+        if (!fecha) return "Sin fecha"; 
         let date = new Date(fecha);
         return date.toLocaleDateString("es-MX", { day: "2-digit", month: "2-digit", year: "numeric" });
     }
 
-    // Datos generales 
     drawCell(40, y, 80, 20, "FECHA:", [220, 220, 220]);
     drawCell(110, y, 120, 20, formatFecha(vehiculo.fech));
     drawCell(220, y, 90, 20, "MUNICIPIO:", [220, 220, 220]);
@@ -270,8 +272,6 @@ async function generarPDF2(imgData, vehiculo, descargar) {
     drawCell(480, y, 90, 20, vehiculo.FGJRM);
     y += 30;
 
-
-    // Datos adicionales (resguardante, cargo, etc.)
     let fields = [
         { label: "RESGUARDANTE:", value: vehiculo.resguardante },
         { label: "CARGO:", value: vehiculo.cargo },
@@ -285,43 +285,39 @@ async function generarPDF2(imgData, vehiculo, descargar) {
     ];
 
     fields.forEach(field => {
-        drawCell(40, y, 160, 20, field.label, [220, 220, 220]); // Celda con fondo gris
-        drawCell(200, y, 370, 20, String(field.value || ""));  // Aseguramos que el valor sea un string
+        drawCell(40, y, 160, 20, field.label, [220, 220, 220]); 
+        drawCell(200, y, 370, 20, String(field.value || ""));  
         y += 20;
     });
     y += 10;
 
-    // Datos internos (resguardante interno, cargo, etc.)
     let internalFields = [
         { label: "RESGUARDANTE INTERNO:", value: vehiculo.resguardante_interno },
         { label: "CARGO:", value: vehiculo.cargo_interno },
         { label: "LICENCIA:", value: vehiculo.licencia_interna },
         { label: "VIGENCIA:", value: vehiculo.vigencia_interna },
-        { label: "NÚMERO EMPLEADO:", value: vehiculo.numero_empleado_interno }, // Corregido: numero_empleado_interno
+        { label: "NÚMERO EMPLEADO:", value: vehiculo.numero_empleado_interno }, 
         { label: "CELULAR:", value: vehiculo.celular }
     ];
 
     internalFields.forEach(field => {
-        drawCell(40, y, 160, 20, field.label, [220, 220, 220]); // Celda con fondo gris
-        drawCell(200, y, 370, 20, String(field.value || ""));  // Aseguramos que el valor sea un string
+        drawCell(40, y, 160, 20, field.label, [220, 220, 220]);
+        drawCell(200, y, 370, 20, String(field.value || "")); 
         y += 20;
     });
     y += 10;
 
-    // Datos de la unidad
     doc.setFont('helvetica', 'bold');
     doc.text("DATOS DE LA UNIDAD:", 250, 460);
     doc.setFont('helvetica', 'normal');
     y += 20;
 
-    //tabla de unidad
     let unidadHeaders = ["PLACA", "N° ECONÓMICO", "SERIE", "COLOR"];
     let unidadData = [[vehiculo.placa, vehiculo.numero_economico, vehiculo.serie, vehiculo.color]];
 
     let unidadH = ["CLASE", "MARCA", "SUBMARCA", "MODELO"];
     let unidadD = [[vehiculo.clase, vehiculo.marca, vehiculo.submarca, vehiculo.modelo]];
 
-    // Dibujar primera tabla (Unidad)
     doc.setFont('helvetica', 'bold');
     unidadHeaders.forEach((label, index) => {
         let cellX = 40 + (index * 130);
@@ -339,7 +335,6 @@ async function generarPDF2(imgData, vehiculo, descargar) {
     });
     y += 5;
 
-    // Dibujar segunda tabla (Clase, Marca, etc.)
     doc.setFont('helvetica', 'bold');
     unidadH.forEach((label, index) => {
         let cellX = 40 + (index * 130);
@@ -356,58 +351,49 @@ async function generarPDF2(imgData, vehiculo, descargar) {
         y += 20;
     });
 
-
-    // Dibujar los recuadros alrededor de los textos y los cuadros de selección
     y += 10;
-    // Definir los textos y sus posiciones
     let opciones = [
         { texto: "PROPIO:", x: 40, valor: "propio" },
         { texto: "ARRENDADO:", x: 180, valor: "arrendado" },
         { texto: "DECOMISADO:", x: 320, valor: "decomisado" }
     ];
 
-    // Dibujar los recuadros alrededor de los textos y los cuadros de selección
     opciones.forEach(opcion => {
         let textWidth = doc.getTextWidth(opcion.texto) + 13;
-        let rectHeight = 15; // Altura del rectángulo
-        let padding = 5; // Espacio interno
+        let rectHeight = 15; 
+        let padding = 5;
 
-        // Dibujar el rectángulo del texto
         doc.rect(opcion.x, y, textWidth, rectHeight);
         doc.text(opcion.texto, opcion.x + padding, y + 11);
 
-        // Dibujar el cuadro de selección al lado derecho del texto
-        let checkBoxSize = 12; // Tamaño del cuadro de selección
-        let checkBoxX = opcion.x + textWidth + 5; // Posición del cuadro de selección
+        let checkBoxSize = 12;
+        let checkBoxX = opcion.x + textWidth + 5; 
         doc.rect(checkBoxX, y, checkBoxSize, checkBoxSize);
 
-        // Si la opción coincide con el estado de la base de datos, marcar con "X"
+        
         if (vehiculo.estado === opcion.valor) {
             doc.text("X", checkBoxX + 3, y + 10);
         }
     });
 
 
-    // Dibujar el texto "KM." con el valor del kilometraje
     doc.text("KM. " + String(vehiculo.kilometraje || ""), 420, y + 10);
 
-    // Dibujar la línea debajo del bloque de opciones
     doc.line(40, y + 15, 560, y + 15);
     y += 35;
 
     function drawCell(x, y, width, height, text, fillColor = [255, 255, 255]) {
         if (!Array.isArray(fillColor) || fillColor.length !== 3 || fillColor.some(isNaN)) {
-            fillColor = [255, 255, 255]; // Color blanco por defecto
+            fillColor = [255, 255, 255];
         }
         doc.setFillColor(...fillColor);
-        doc.rect(x, y, width, height, 'F'); // Relleno
-        doc.rect(x, y, width, height); // Borde
+        doc.rect(x, y, width, height, 'F'); 
+        doc.rect(x, y, width, height); 
         doc.setFontSize(9);
         doc.setTextColor(0, 0, 0);
         doc.text(String(text || ""), x + 5, y + 13);
     }
 
-    //  **Verificaciones y Observaciones en Tablas**
     let verificaciones = Array.isArray(vehiculo.verificaciones) ? vehiculo.verificaciones : [];
     let observaciones = Array.isArray(vehiculo.observaciones) ? vehiculo.observaciones : [];
 
@@ -419,7 +405,6 @@ async function generarPDF2(imgData, vehiculo, descargar) {
 
     doc.setFont('helvetica', 'bold');
 
-    //  Dibujar encabezados de la tabla Exterior
     let tableHeadersExterior = ["Exterior", "B", "R", "M", "Exterior", "B", "R", "M", "Exterior", "B", "R", "M"];
     let xPos = startX;
 
@@ -429,27 +414,23 @@ async function generarPDF2(imgData, vehiculo, descargar) {
     });
     startY += cellHeight;
 
-    // **Configurar distribución de filas y columnas**
     const filasPorColumnaExterior = 9;
     let elementosExterior = verificaciones.filter(v => v.categoria === "Exterior");
 
-    //  **Determinar cuántas columnas se necesitan**
     let totalColumnas = Math.ceil(elementosExterior.length / filasPorColumnaExterior);
     let filasDibujadas = 0;
     let columnaActual = 0;
     let startYExterior = startY;
 
-    //  **Dibujar filas de Exterior**
     elementosExterior.forEach((ext, index) => {
         if (filasDibujadas === filasPorColumnaExterior) {
-            //  **Moverse a la siguiente columna**
             columnaActual++;
             filasDibujadas = 0;
-            startY = startYExterior; // Volver al inicio
-            xPos = startX + (columnaActual * (70 + (35 * 3))); // Avanzar a la siguiente columna
+            startY = startYExterior; 
+            xPos = startX + (columnaActual * (70 + (35 * 3))); 
         }
 
-        xPos = startX + (columnaActual * (70 + (35 * 3))); // Ajustar la posición en la columna
+        xPos = startX + (columnaActual * (70 + (35 * 3))); 
         drawCell(xPos, startY, 70, cellHeight, ext.elemento);
         xPos += 70;
 
@@ -463,21 +444,20 @@ async function generarPDF2(imgData, vehiculo, descargar) {
         filasDibujadas++;
     });
 
-    //  **Rellenar con celdas vacías para mantener la alineación**
     while (filasDibujadas < filasPorColumnaExterior) {
         xPos = startX + (columnaActual * (70 + (35 * 3)));
-        drawCell(xPos, startY, 70, cellHeight, ""); // Celda vacía
+        drawCell(xPos, startY, 70, cellHeight, ""); 
         xPos += 70;
 
         for (let j = 0; j < 3; j++) {
-            drawCell(xPos, startY, 35, cellHeight, ""); // Celda vacía
+            drawCell(xPos, startY, 35, cellHeight, ""); 
             xPos += 35;
         }
 
         startY += cellHeight;
         filasDibujadas++;
     }
-    // Dibujar encabezados de la tabla Interior
+ 
     let tableHeadersInterior = ["Interior", "B", "R", "M", "Interior", "B", "R", "M", "Observaciones"];
     xPos = startX;
     tableHeadersInterior.forEach((header, index) => {
@@ -486,27 +466,23 @@ async function generarPDF2(imgData, vehiculo, descargar) {
     });
     startY += cellHeight;
 
-    // Obtener elementos de Interior
     let elementosInterior = verificaciones.filter(v => v.categoria === "Interior");
 
-    //Variables para controlar el salto de columna
     const filasPorColumna = 5;
     let columnaActualIN = 0;
     let filasDibujadasIN = 0;
     let maxColumnas = Math.ceil(elementosInterior.length / filasPorColumna);
-    let startYInicial = startY; // Guardamos la posición inicial
+    let startYInicial = startY; 
 
-    //Dibujar filas de Interior
     elementosInterior.forEach((int, index) => {
         if (filasDibujadasIN === filasPorColumna) {
-            // Pasar a la siguiente columna
             columnaActualIN++;
             filasDibujadasIN = 0;
-            startY = startYInicial; // Volver arriba para la nueva columna
-            xPos += 70 + (35 * 3); // Mover a la siguiente columna
+            startY = startYInicial; 
+            xPos += 70 + (35 * 3); 
         }
 
-        xPos = startX + (columnaActualIN * (70 + (35 * 3))); // Ajustar posición
+        xPos = startX + (columnaActualIN * (70 + (35 * 3)));
         drawCell(xPos, startY, 70, cellHeight, int.elemento);
         xPos += 70;
 
@@ -528,14 +504,13 @@ async function generarPDF2(imgData, vehiculo, descargar) {
 
     startY = startYInicial + alturaObservaciones;
     let startYAccesorios = startY;
-    // **Tabla de Accesorios**
+    
     let tableHeadersAccesorios = ["Accesorio", "Sí", "No", "Accesorio", "Sí", "No", "Tipo de ocupación"];
     const colWidthsAccesorios = [80, 40, 40, 80, 40, 40, 215];
 
     doc.setFont('helvetica', 'bold');
     xPos = startX;
 
-    //  Dibujar encabezados Accesorios
     tableHeadersAccesorios.forEach((header, index) => {
         drawCell(xPos, startYAccesorios, colWidthsAccesorios[index], cellHeight, header, [220, 220, 220]);
         xPos += colWidthsAccesorios[index];
@@ -543,32 +518,27 @@ async function generarPDF2(imgData, vehiculo, descargar) {
 
     startYAccesorios += cellHeight;
 
-    // **Variables para el control de columnas**
     const filasPorColumnaAccesorios = 5;
     let columnaActualAcc = 0;
     let filasDibujadasAcc = 0;
-    let startYAccesoriosInicial = startYAccesorios; // Guardamos la posición inicial
+    let startYAccesoriosInicial = startYAccesorios;
 
-    //  **Filtrar accesorios**
     let accesorios = verificaciones.filter(v => v.categoria === "Accesorios");
 
-    //  **Dibujar filas Accesorios**
     for (let i = 0; i < filasPorColumnaAccesorios * 2; i++) {
         if (filasDibujadasAcc === filasPorColumnaAccesorios) {
-            // Pasar a la siguiente columna
             columnaActualAcc++;
             filasDibujadasAcc = 0;
-            startYAccesorios = startYAccesoriosInicial; // Reiniciar Y para nueva columna
-            xPos += 80 + (40 * 2); // Mover a la siguiente columna
+            startYAccesorios = startYAccesoriosInicial; 
+            xPos += 80 + (40 * 2); 
         }
 
-        xPos = startX + (columnaActualAcc * (80 + (40 * 2))); // Ajustar posición
+        xPos = startX + (columnaActualAcc * (80 + (40 * 2))); 
 
-        let verificacion = accesorios[i] || { elemento: "", estado: "" }; // Si no hay más elementos, dejar vacío
+        let verificacion = accesorios[i] || { elemento: "", estado: "" }; 
         drawCell(xPos, startYAccesorios, 80, cellHeight, verificacion.elemento);
         xPos += 80;
 
-        // Determinar qué columna marcar según estado (Sí/No)
         let estadoIndex = verificacion.estado.toLowerCase() === "si" ? 0 : 1;
         for (let j = 0; j < 2; j++) {
             drawCell(xPos, startYAccesorios, 40, cellHeight, estadoIndex === j ? "X" : "");
@@ -579,38 +549,29 @@ async function generarPDF2(imgData, vehiculo, descargar) {
         filasDibujadasAcc++;
     }
 
-    //  **Dibujar Tipo de Ocupación como un cuadro alineado**
     xPos += 0
-    drawCell(xPos, startYAccesoriosInicial, 215, cellHeight * filasPorColumnaAccesorios, vehiculo.ocupacion); // Cuadro grande
+    drawCell(xPos, startYAccesoriosInicial, 215, cellHeight * filasPorColumnaAccesorios, vehiculo.ocupacion); 
 
-    let startYTexto = Math.max(startY, startYAccesorios); // Elegimos la mayor posición Y de las tablas
-    startYTexto += 20; // Espacio extra antes del texto
+    let startYTexto = Math.max(startY, startYAccesorios); 
+    startYTexto += 20; 
 
-    // **Dibujar el texto informativo**
     doc.setFont('helvetica', 'normal');
     let textoAviso = "AL MOMENTO DE CAMBIO DE RESGUARDANTE DEL VEHÍCULO, DEBERÁ INFORMAR A LA " +
         "DIRECCIÓN GENERAL DE ADMINISTRACIÓN DE FORMA INMEDIATA, " +
         "al correo: actualizar.reguardovehicular@fgjtam.gob.mx " +
         "o a los tels. 834 318 51 00 ext. 70258 y 70234.";
 
-    // **Ajustar el texto para que no se salga del margen**
     let textoFormateado = doc.splitTextToSize(textoAviso, 550);
     doc.text(textoFormateado, 40, startYTexto);
 
-    // **Actualizar posición Y después del texto**
     let alturaTexto = doc.getTextDimensions(textoFormateado).h;
     startYTexto += alturaTexto + 10;
 
-    // **Cargar imágenes**
     const imagenes = Array.isArray(vehiculo.fotos) ? vehiculo.fotos.slice(0, 4) : [];
 
-    if (imagenes.length === 0) {
-        console.warn("⚠️ No hay imágenes disponibles para este vehículo.");
-    }
     async function cargarImagen(foto) {
         return new Promise((resolve) => {
             if (!foto || !foto.nombre_archivo) {
-                console.warn("⚠️ Imagen inválida:", foto);
                 return resolve(null);
             }
 
@@ -636,16 +597,13 @@ async function generarPDF2(imgData, vehiculo, descargar) {
         });
     }
 
-    // **Esperar a que todas las imágenes se carguen correctamente**
     let cargas = await Promise.all(imagenes.map(foto => cargarImagen(foto)));
 
-    // **Dibujar imágenes en el PDF después del texto y antes de las firmas**
     const imgWidth = 180;
     const imgHeight = 100;
     const espacioEntreImagenes = 20;
     const margenIzquierdo = (doc.internal.pageSize.getWidth() - (imgWidth * 2 + espacioEntreImagenes)) / 2;
 
-    // **Ajustar Y para que las imágenes se dibujen justo después del texto**
     let startYImagenes = startYTexto + 10;
 
     cargas.forEach((base64Image, index) => {
@@ -656,10 +614,8 @@ async function generarPDF2(imgData, vehiculo, descargar) {
         }
     });
 
-    // **Actualizar Y para colocar las firmas debajo de las imágenes**
     let startYFirmas = startYImagenes + Math.ceil(cargas.length / 2) * (imgHeight + espacioEntreImagenes) + 40;
 
-    // **Firmas**
     const firmas = ["Resguardante Oficial", "Resguardante Interno", "Verificador", "Autorización Depto. REC. MAT"];
     const pageWidth = doc.internal.pageSize.getWidth();
     const startXFirma = 20;
@@ -671,8 +627,6 @@ async function generarPDF2(imgData, vehiculo, descargar) {
         let lineStartX = x + 10;
         let lineEndX = x + spacing - 10;
         doc.line(lineStartX, startYFirmas + 40, lineEndX, startYFirmas + 40);
-
-        // **Si es la segunda firma, agregar la firma digital**
         if (index === 1) {
             let firmaBase64 = localStorage.getItem("firmaBase64");
             if (firmaBase64) {
@@ -681,7 +635,6 @@ async function generarPDF2(imgData, vehiculo, descargar) {
         }
     });
 
-    // **Descargar o mostrar el PDF**
     if (descargar) {
         return doc;
     } else {

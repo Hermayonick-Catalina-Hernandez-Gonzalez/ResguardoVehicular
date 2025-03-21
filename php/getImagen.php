@@ -5,7 +5,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $numeroEconomico = $_POST['numeroEconomico'] ?? '';
 
     try {
-        // Obtener el ID del vehículo
         $sqlVehiculo = "SELECT id FROM vehiculo WHERE numero_economico = :numeroEconomico";
         $stmtVehiculo = $conn->prepare($sqlVehiculo);
         $stmtVehiculo->bindParam(':numeroEconomico', $numeroEconomico, PDO::PARAM_STR);
@@ -18,8 +17,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         $vehiculo_id = $vehiculo['id'];
-
-        // Obtener la primera imagen registrada
         $sqlImagen = "SELECT TOP 1 nombre_archivo FROM fotos WHERE vehiculo_id = :vehiculo_id ORDER BY id ASC";
         $stmtImagen = $conn->prepare($sqlImagen);
         $stmtImagen->bindParam(':vehiculo_id', $vehiculo_id, PDO::PARAM_INT);
@@ -29,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($imagen) {
             $rutaImagen = "../vehiculos/" . $imagen['nombre_archivo'];
         } else {
-            $rutaImagen = "../img/Vehiculo.png"; // Imagen por defecto
+            $rutaImagen = "../img/Vehiculo.png";
         }
 
         echo json_encode(["imagenFrontal" => $rutaImagen]);

@@ -2,8 +2,6 @@
 require "../php/conexion.php";
 
 header("Content-Type: application/json");
-
-// Obtener los datos de la petición
 $data = json_decode(file_get_contents("php://input"), true);
 
 if (!$data || !isset($data["datos"]) || !isset($data["vehiculo_id"])) {

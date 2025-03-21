@@ -15,11 +15,11 @@ if (!isset($_SESSION['usuario_id'])) {
     <link rel="shortcut icon" href="../../img/Icono.png" />
     <link rel="stylesheet" href="../../css/stylesformulario.css">
     <link rel="stylesheet" href="../../css/stylestabla.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
-    <!-- Menú lateral -->
     <div class="menu">
         <img src="../../img/Logo2.png" alt="Logo FGJ" class="logo">
 
@@ -37,17 +37,14 @@ if (!isset($_SESSION['usuario_id'])) {
         <img src="../../img/Vehiculo.png" alt="Vehículo" class="vehiculo">
     </div>
 
-    <!-- Sección derecha (formulario) -->
     <div class="right-section">
         <h1>Verificacion Vehicular</h1>
-        <!-- Menú para las categorías -->
         <div class="tabs">
             <button class="tablink" id="exterior" onclick="openTab(event, 'Exterior')">Exterior</button>
             <button class="tablink" id="interior" onclick="openTab(event, 'Interior')">Interior</button>
             <button class="tablink" id="accesorios" onclick="openTab(event, 'Accesorios')">Accesorios y otros</button>
         </div>
 
-        <!-- Contenido para Exterior, Interior y Accesorios -->
         <div id="Exterior" class="tabcontent">
             <iframe src="../../tablas/exterior.html" width="100%" height="500px" title="Tabla Exterior"></iframe>
         </div>

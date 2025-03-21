@@ -17,7 +17,6 @@ try {
     $stmt->bindParam(':num', $numeroEconomico);
     $stmt->execute();
 
-    // Intentar obtener los resultados
     $vehiculo = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($vehiculo) {

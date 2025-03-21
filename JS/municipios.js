@@ -9,7 +9,6 @@ $(document).ready(function () {
         "Tampico", "Tula", "Valle Hermoso", "Victoria", "Villagrán", "Xicoténcatl"
     ];
 
-    // Autocompletar municipios
     $("#municipio").autocomplete({
         source: municipiosTamaulipas,
         select: function (event, ui) {
@@ -17,23 +16,26 @@ $(document).ready(function () {
         }
     });
 
-    // Restaurar el valor guardado en localStorage al recargar la página
     let savedMunicipio = localStorage.getItem("municipio");
     if (savedMunicipio) {
         $("#municipio").val(savedMunicipio);
     }
 
-    // Guardar en localStorage cuando el usuario escriba
     $("#municipio").on("input", function () {
         localStorage.setItem("municipio", $(this).val());
     });
 
-    // Antes de enviar el formulario, asegurarnos de que el valor de municipio esté presente
     $("#formularioResguardante").submit(function (e) {
         let municipioValue = $("#municipio").val();
         if (municipioValue.trim() === "") {
-            e.preventDefault(); // Evitar el envío si municipio está vacío
-            alert("El campo Municipio es obligatorio.");
+            e.preventDefault(); 
+            Swal.fire({
+                icon: "warning",
+                title: "Campo obligatorio",
+                text: "El campo Municipio es obligatorio.",
+                confirmButtonText: "Aceptar",
+                backdrop: false
+            });
         }
     });
 });

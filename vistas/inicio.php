@@ -6,13 +6,9 @@ if ($_SESSION['rol'] != 'resguardante') {
 }
 
 include "../php/conexion.php";
-
-// Consulta para obtener todos los vehículos únicos
 $query = "SELECT DISTINCT numero_economico, placa, serie, clase, marca, modelo FROM vehiculo";
 $stmt = $conn->prepare($query);
 $stmt->execute();
-
-// Obtener los datos de los vehículos
 $vehiculos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 

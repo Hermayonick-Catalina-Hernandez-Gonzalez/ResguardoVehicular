@@ -9,18 +9,30 @@ function abrirCamara(idImagen) {
     modal.style.display = "flex";
 
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        alert("Tu navegador no soporta acceso a la cámara.");
+        Swal.fire({
+            icon: "error",
+            title: "Error de Cámara",
+            text: "Tu navegador no soporta acceso a la cámara.",
+            confirmButtonText: "Aceptar",
+            backdrop: false
+        });
         return;
     }
-
+    
     navigator.mediaDevices.getUserMedia({ video: true })
-        .then(function (stream) {
-            videoStream = stream;
-            video.srcObject = stream;
-        })
-        .catch(function (error) {
-            alert("No se pudo acceder a la cámara.");
+    .then(function (stream) {
+        videoStream = stream;
+        video.srcObject = stream;
+    })
+    .catch(function (error) {
+        Swal.fire({
+            icon: "error",
+            title: "Acceso Denegado",
+            text: "No se pudo acceder a la cámara. Verifica los permisos o el dispositivo.",
+            confirmButtonText: "Aceptar",
+            backdrop: false
         });
+    });
 }
 
 function tomarFoto() {
@@ -64,7 +76,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // Esperar a que el contenedor de fotos extra esté disponible antes de restaurarlas
     const esperarContenedor = setInterval(() => {
         if (document.getElementById("extra-fotos-container")) {
             clearInterval(esperarContenedor);
@@ -115,7 +126,6 @@ function eliminarFotoExtra(boton, idImagen) {
         fila.remove();
     }
 
-    // Si no quedan imágenes, reiniciar el contador a 1
     const contenedor = document.getElementById("extra-fotos-container");
     if (contenedor.getElementsByClassName("foto-apartado").length === 0) {
         contadorExtra = 1;
@@ -140,12 +150,6 @@ function guardarFotoExtra(idImagen) {
 
 function restaurarFotosExtras() {
     const contenedor = document.getElementById("extra-fotos-container");
-
-    if (!contenedor) {
-        console.warn("⚠️ No se encontró el contenedor de fotos extra en el DOM.");
-        return;
-    }
-
     let fotosExtras = JSON.parse(localStorage.getItem("fotosExtras")) || [];
 
     fotosExtras.forEach(idExtra => {
@@ -170,13 +174,11 @@ function restaurarFotosExtras() {
 
         ultimaFila.appendChild(nuevoApartado);
 
-        // Restaurar imagen si existe en localStorage
         const imagenGuardada = localStorage.getItem(idExtra);
         if (imagenGuardada) {
             document.getElementById(idExtra).src = imagenGuardada;
         }
 
-        // Restaurar observación si existe en localStorage
         const observacionGuardada = localStorage.getItem(`observacion-${idExtra}`);
         if (observacionGuardada) {
             document.getElementById(`observaciones-${idExtra}`).value = observacionGuardada;
@@ -264,11 +266,11 @@ function guardar() {
             backdrop: false
         }).then(() => {
             localStorage.setItem("vehiculo_id", data.vehiculo_id);
+            localStorage.setItem("seccion_fotografias", "completado");
             window.location.href = "../formulario/pdfs.php";
         });
     })
     .catch(error => {
-        console.error("Error:", error);
         Swal.fire("Error", "No se pudo guardar las imágenes.", "error");
     });
 }

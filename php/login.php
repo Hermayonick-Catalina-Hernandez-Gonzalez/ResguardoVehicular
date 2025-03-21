@@ -18,7 +18,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['correo'] = $usuario['correo'];
                 $_SESSION['rol'] = $usuario['rol'];
 
-                // Redirigir según el rol
                 if ($_SESSION['rol'] === 'verificador') {
                     header("Location: ../vistas/formulario/resguardante.php");
                 } elseif ($_SESSION['rol'] === 'resguardante') {

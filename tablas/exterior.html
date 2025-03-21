@@ -196,7 +196,6 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // Cargar radios desde localStorage
         document.querySelectorAll('input[type="radio"]').forEach(radio => {
             let savedValue = localStorage.getItem(radio.name);
             if (savedValue && radio.value === savedValue) {
@@ -208,7 +207,6 @@
             });
         });
 
-        // Manejo de observaciones en localStorage
         let observacionesExterior = document.getElementById("observaciones_exterior");
         
         if (localStorage.getItem("observaciones_exterior")) {
@@ -219,13 +217,12 @@
             localStorage.setItem("observaciones_exterior", observacionesExterior.value);
         });
 
-        // Comunicación entre ventanas (iframe o popup)
         window.addEventListener("message", function (event) {
             if (event.data.type === "getDatos") {
                 let datos = [];
                 
                 document.querySelectorAll('input[type="radio"]:checked').forEach(input => {
-                    let categoria = input.name.includes("motor") ? "Motor" : "Exterior"; // Detecta la categoría automáticamente
+                    let categoria = input.name.includes("motor") ? "Motor" : "Exterior"; 
 
                     datos.push({
                         categoria: categoria,

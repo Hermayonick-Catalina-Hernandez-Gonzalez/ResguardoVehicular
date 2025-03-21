@@ -1,4 +1,3 @@
-/* Estilo general */
 *{
     margin: 0;
     padding: 0;
@@ -13,7 +12,6 @@ body {
     background-color: #ffffff;
 }
 
-/* Encabezado */
 .head {
     width: 100%;
     height: 150px;
@@ -39,7 +37,6 @@ body {
     word-wrap: break-word;
 }
 
-/* Imagen del logo */
 .logo img {
     width: 200px;
     width: 300px;
@@ -53,7 +50,6 @@ body {
     height: 200px;
 }
 
-
 .esquina {   
     width: 200px;
     height: 200px;
@@ -65,7 +61,6 @@ body {
     border: none; 
 }
 
-/* Boton de salir */
 .btn-salir {
     position: absolute;
     top: 10px;
@@ -80,12 +75,11 @@ body {
     height: 60px;
 }
 
-/* Barra de búsqueda */
 .barra-busqueda {
     position: relative;
     width: 90%;
     max-width: 700px;
-    margin: 20px auto; /* Centrado */
+    margin: 20px auto; 
     display: flex;
 }
 
@@ -152,16 +146,12 @@ body {
     position: relative;
 }
 
-
-/* Hace que el modal sea visible cuando se activa */
 .modal.show {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-
-/* Botón de cerrar */
 .close {
     position: absolute;
     top: 10px;
@@ -170,13 +160,11 @@ body {
     cursor: pointer;
 }
 
-/* Icono superior */
 .icono-usuario {
     width: 60px;
     margin-bottom: 10px;
 }
 
-/* Estilizar los inputs */
 .input-group {
     display: flex;
     align-items: center;
@@ -196,7 +184,6 @@ body {
     background: transparent;
 }
 
-/* Botón */
 .btn-guardar {
     background: #1A2341;
     color: rgb(255, 255, 255);
@@ -213,11 +200,10 @@ body {
     background: #007BFF;
 }
 
-/* Tabla */
 table {
     width: 90%;
     max-width: 1000px;
-    margin: 20px auto; /* Centrado */
+    margin: 20px auto;
     border-collapse: collapse;
     background-color: #f7f7f7;
     border: 1px solid #d6d4d4;
@@ -251,7 +237,7 @@ table button {
 table button:hover {
     background-color: #014782;
 }
-/* Estilos para pantallas medianas (tablets) */
+
 @media screen and (max-width: 1024px) {
     .container {
         width: 80%;
@@ -275,7 +261,6 @@ table button:hover {
     }
 }
 
-/* Estilos para pantallas extra pequeñas (menos de 480px) */
 @media screen and (max-width: 480px) {
     .titulo h1 {
         font-size: 24px; 

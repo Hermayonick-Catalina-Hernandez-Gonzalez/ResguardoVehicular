@@ -20,8 +20,6 @@ if (!isset($_SESSION['usuario_id'])) {
 </head>
 
 <body>
-
-    <!-- Barra lateral -->
     <div class="menu">
         <img src="../../img/Logo2.png" alt="Logo FGJ" class="logo">
         <nav>
@@ -38,7 +36,6 @@ if (!isset($_SESSION['usuario_id'])) {
         <img src="../../img/Vehiculo.png" alt="Vehículo" class="vehiculo">
     </div>
 
-    <!-- Sección principal -->
     <div class="right-section">
         <h1>Fotografías Vehicular</h1>
         <div class="foto-apartado-container">
@@ -82,8 +79,6 @@ if (!isset($_SESSION['usuario_id'])) {
         <button type="button" onclick="guardar()" class="btn">Guardar</button>
 
     </div>
-
-    <!-- Modal de Cámara -->
     <div id="modalCamara" class="modal">
         <div class="modal-content">
             <h2>Capturar Imagen</h2>

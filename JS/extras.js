@@ -1,33 +1,56 @@
 document.getElementById('Pdf').addEventListener('submit', function(event) {
-    event.preventDefault(); // Previene que la página se recargue
+    event.preventDefault(); 
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-    // Ocultar todas las pestañas al inicio
     document.querySelectorAll(".tabcontent").forEach(tab => {
         tab.style.display = "none";
     });
 
-    // Seleccionar y mostrar la pestaña "Reglas" por defecto
     const defaultTab = document.getElementById("Reglas");
     const defaultButton = document.getElementById("reglas");
 
     if (defaultTab && defaultButton) {
         defaultTab.style.display = "block";
         defaultButton.classList.add("active");
-    } else {
-        console.error("No se encontró la pestaña 'Reglas' o su botón.");
-    }
+    } 
 
     const iframe1 = document.getElementById("preview1");
     if (iframe1) {
         iframe1.style.display = "block"; 
-    } else {
-        console.error("No se encontró el iframe 'preview1'.");
+    } 
+
+    let secciones = [
+        "seccion_resguardante",
+        "seccion_unidadVehicular",
+        "seccion_verificacion",
+        "seccion_fotografias"
+    ];
+
+    let incompletas = secciones.filter(seccion => localStorage.getItem(seccion) !== "completado");
+
+    if (incompletas.length > 0) {
+        Swal.fire({
+            title: "No puedes acceder aún",
+            text: "Debes completar todas las secciones antes de generar el PDF.",
+            icon: "warning",
+            confirmButtonText: "Ir a la primera sección",
+            allowOutsideClick: false
+        }).then(() => {
+            // 🔹 Redirigir a la primera sección incompleta
+            if (!localStorage.getItem("seccion_resguardante")) {
+                window.location.href = "../formulario/resguardante.php";
+            } else if (!localStorage.getItem("seccion_unidadVehicular")) {
+                window.location.href = "../formulario/unidadVehicular.php";
+            } else if (!localStorage.getItem("seccion_verificacion")) {
+                window.location.href = "../formulario/verificacion.php";
+            } else if (!localStorage.getItem("seccion_fotografias")) {
+                window.location.href = "../formulario/fotografias.php";
+            }
+        });
     }
 });
 
-// Función para cambiar de pestañas manualmente
 function openTab(evt, tabName) {
     document.querySelectorAll(".tabcontent").forEach(tab => tab.style.display = "none");
     document.querySelectorAll(".tablink").forEach(btn => btn.classList.remove("active"));
@@ -42,7 +65,6 @@ function openTab(evt, tabName) {
     }
 }
 
-// Funciones para la firma
 function abrirFirma() {
     document.getElementById("modalFirma").style.display = "flex";
 }
@@ -51,19 +73,16 @@ function cerrarFirma() {
     document.getElementById("modalFirma").style.display = "none";
 }
 
-// Funciones para capturar la firma en canvas
 let esTactil = "ontouchstart" in window || navigator.maxTouchPoints > 0;
 
 let canvas = document.getElementById("canvasFirma");
 let ctx = canvas.getContext("2d");
 let pintando = false;
 
-// Eventos para mouse
 canvas.addEventListener("mousedown", iniciarDibujo);
 canvas.addEventListener("mouseup", detenerDibujo);
 canvas.addEventListener("mousemove", dibujar);
 
-// Eventos para dispositivos táctiles
 canvas.addEventListener("touchstart", iniciarDibujo);
 canvas.addEventListener("touchend", detenerDibujo);
 canvas.addEventListener("touchmove", dibujar);
@@ -116,7 +135,7 @@ function guardarFirma() {
     let canvas = document.getElementById("canvasFirma");
     let imagenFirma = canvas.toDataURL("image/png"); 
 
-    localStorage.setItem("firmaBase64", imagenFirma); // Guardar firma en localStorage
+    localStorage.setItem("firmaBase64", imagenFirma); 
 
     Swal.fire({
         icon: "success",
@@ -124,31 +143,27 @@ function guardarFirma() {
         text: "La firma ha sido registrada correctamente.",
         backdrop: false
     }).then(() => {
-        descargarPDFs(); 
+        descargarPDFs(); // Generar los PDFs
 
         setTimeout(() => {
             finalizarFormulario(); 
-        }, 3000); 
+            window.location.href = "../formulario/resguardante.php"; 
+        }, 2000); 
     });
 
     cerrarFirma();
 }
 
-
-
 document.addEventListener("DOMContentLoaded", function() {
     let vehiculoId = localStorage.getItem("vehiculo_id");
 
     if (vehiculoId) {
-        // Agregar el ID a la URL si no está presente
         let url = new URL(window.location.href);
         if (!url.searchParams.has("vehiculo_id")) {
             url.searchParams.set("vehiculo_id", vehiculoId);
             window.location.href = url.toString();
         }
-    } else {
-        alert("No se encontró el ID del vehículo en localStorage.");
-    }
+    } 
 });
 
 function finalizarFormulario() {

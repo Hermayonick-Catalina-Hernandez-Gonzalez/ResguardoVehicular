@@ -1,12 +1,11 @@
 <?php
 session_start();
-include '../php/conexion.php'; // Archivo con la conexión a SQL Server
+require_once '../php/conexion.php'; 
 
 header('Content-Type: application/json');
 header("Access-Control-Allow-Origin: *");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Recibir datos del formulario
     $numero_economico = trim($_POST['numero_economico']);
     $placa = trim($_POST['placa']);
     $serie = trim($_POST['serie']);
@@ -20,7 +19,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $tipo_ocupacion = trim($_POST['tipo_ocupacion']);
     $resguardante_id = $_POST['resguardante_id'];
 
-    // Lista de valores permitidos para el campo 'estado'
     $valores_permitidos = ['propio', 'arrendado', 'decomisado'];
 
     if (!in_array($tipo_condicion, $valores_permitidos)) {
@@ -29,12 +27,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     try {
-        // Consulta SQL para insertar datos
         $sql = "INSERT INTO vehiculo (resguardante_id, numero_economico, placa, serie, color, clase, marca, submarca, modelo, estado, kilometraje, ocupacion) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-
-        // Enlazar los parámetros
         $stmt->bindParam(1, $resguardante_id);
         $stmt->bindParam(2, $numero_economico);
         $stmt->bindParam(3, $placa);
@@ -47,11 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindParam(10, $tipo_condicion);
         $stmt->bindParam(11, $kilometraje);
         $stmt->bindParam(12, $tipo_ocupacion);
-
-        // Ejecutar la consulta
         $stmt->execute();
-
-        // Obtener el ID del vehículo insertado
         $vehiculo_id = $conn->lastInsertId();
 
         echo json_encode([
