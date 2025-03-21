@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     let links = document.querySelectorAll(".menu-link");
-    let currentPath = window.location.pathname.split('/').pop(); // Obtiene el nombre del archivo actual
+    let currentPath = window.location.pathname.split('/').pop(); 
 
     links.forEach(link => {
         if (link.getAttribute("href").includes(currentPath)) {
@@ -37,7 +37,7 @@ function editar() {
 
 document.addEventListener("DOMContentLoaded", function () {
     let links = document.querySelectorAll(".menu-link");
-    let currentPath = window.location.pathname.split('/').pop(); // Obtiene el nombre del archivo actual
+    let currentPath = window.location.pathname.split('/').pop(); 
 
     links.forEach(link => {
         if (link.getAttribute("href").includes(currentPath)) {
