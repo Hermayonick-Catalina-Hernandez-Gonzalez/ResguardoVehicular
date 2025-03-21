@@ -260,6 +260,7 @@ video {
     width: 100%;
     border-radius: 10px;
 }
+
 .btn {
     background-color: #1A2341;
     color: #ffffff;
@@ -280,7 +281,6 @@ video {
 .btn:hover {
     background-color: #01327c;
 }
-
 
 .btn-foto {
     margin-top: 10px;
@@ -323,19 +323,19 @@ video {
     background-color: darkred;
 }
 
-
 .btn-salir {
     display: inline-flex;          
     align-items: center;           
     position: relative;
-    top: 280px;                    
+    top: 30px;                    
     background-color: transparent;
     border: none;
     cursor: pointer;
     padding: 5px 10px;            
     color: white;                  
     font-size: 18px;
-    border-radius: 15px;             
+    border-radius: 15px; 
+    margin-top: auto;       
 }
 
 .btn-salir img {
@@ -382,5 +382,9 @@ video {
 
     .form-row {
         flex-direction: column;
+    }
+
+    .btn-salir {
+        margin-top: 0; 
     }
 }
