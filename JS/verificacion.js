@@ -152,6 +152,7 @@ function enviarDatos(vehiculoId, datos) {
     .then(data => {
         if (data.mensaje) {
             localStorage.setItem("vehiculo_id", data.vehiculo_id);
+            localStorage.setItem("seccion_verificacion", "completado");
             window.location.href = "../formulario/fotografias.php";
         } else {
             Swal.fire("Error", data.error || "No se pudo guardar la verificación", "error");

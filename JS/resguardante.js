@@ -223,9 +223,9 @@ function guardarDatos() {
     .then(data => {
         try {
             var jsonData = JSON.parse(data);
-
             if (jsonData.resguardante_id) {
                 localStorage.setItem("resguardante_id", jsonData.resguardante_id);
+                localStorage.setItem("seccion_resguardante", "completado");
                 window.location.href = "../formulario/unidadVehicular.php";
             } else {
                 Swal.fire({

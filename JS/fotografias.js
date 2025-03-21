@@ -9,18 +9,30 @@ function abrirCamara(idImagen) {
     modal.style.display = "flex";
 
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        alert("Tu navegador no soporta acceso a la cámara.");
+        Swal.fire({
+            icon: "error",
+            title: "Error de Cámara",
+            text: "Tu navegador no soporta acceso a la cámara.",
+            confirmButtonText: "Aceptar",
+            backdrop: false
+        });
         return;
     }
-
+    
     navigator.mediaDevices.getUserMedia({ video: true })
-        .then(function (stream) {
-            videoStream = stream;
-            video.srcObject = stream;
-        })
-        .catch(function (error) {
-            alert("No se pudo acceder a la cámara.");
+    .then(function (stream) {
+        videoStream = stream;
+        video.srcObject = stream;
+    })
+    .catch(function (error) {
+        Swal.fire({
+            icon: "error",
+            title: "Acceso Denegado",
+            text: "No se pudo acceder a la cámara. Verifica los permisos o el dispositivo.",
+            confirmButtonText: "Aceptar",
+            backdrop: false
         });
+    });
 }
 
 function tomarFoto() {
@@ -260,6 +272,7 @@ function guardar() {
             backdrop: false
         }).then(() => {
             localStorage.setItem("vehiculo_id", data.vehiculo_id);
+            localStorage.setItem("seccion_fotografias", "completado");
             window.location.href = "../formulario/pdfs.php";
         });
     })

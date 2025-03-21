@@ -23,6 +23,36 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
         console.error("No se encontró el iframe 'preview1'.");
     }
+
+    let secciones = [
+        "seccion_resguardante",
+        "seccion_unidadVehicular",
+        "seccion_verificacion",
+        "seccion_fotografias"
+    ];
+
+    let incompletas = secciones.filter(seccion => localStorage.getItem(seccion) !== "completado");
+
+    if (incompletas.length > 0) {
+        Swal.fire({
+            title: "No puedes acceder aún",
+            text: "Debes completar todas las secciones antes de generar el PDF.",
+            icon: "warning",
+            confirmButtonText: "Ir a la primera sección",
+            allowOutsideClick: false
+        }).then(() => {
+            // 🔹 Redirigir a la primera sección incompleta
+            if (!localStorage.getItem("seccion_resguardante")) {
+                window.location.href = "../formulario/resguardante.php";
+            } else if (!localStorage.getItem("seccion_unidadVehicular")) {
+                window.location.href = "../formulario/unidadVehicular.php";
+            } else if (!localStorage.getItem("seccion_verificacion")) {
+                window.location.href = "../formulario/verificacion.php";
+            } else if (!localStorage.getItem("seccion_fotografias")) {
+                window.location.href = "../formulario/fotografias.php";
+            }
+        });
+    }
 });
 
 function openTab(evt, tabName) {
@@ -117,11 +147,12 @@ function guardarFirma() {
         text: "La firma ha sido registrada correctamente.",
         backdrop: false
     }).then(() => {
-        descargarPDFs(); 
+        descargarPDFs(); // Generar los PDFs
 
         setTimeout(() => {
             finalizarFormulario(); 
-        }, 3000); 
+            window.location.href = "../formulario/resguardante.php"; 
+        }, 2000); 
     });
 
     cerrarFirma();
@@ -136,9 +167,7 @@ document.addEventListener("DOMContentLoaded", function() {
             url.searchParams.set("vehiculo_id", vehiculoId);
             window.location.href = url.toString();
         }
-    } else {
-        alert("No se encontró el ID del vehículo en localStorage.");
-    }
+    } 
 });
 
 function finalizarFormulario() {

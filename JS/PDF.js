@@ -10,11 +10,8 @@ function descargarPDFs() {
     const vehiculoId = localStorage.getItem("vehiculo_id");
     if (vehiculoId) {
         obtenerDatosVehiculo(vehiculoId, true);
-    } else {
-        alert("No se encontró el ID del vehículo.");
-    }
+    } 
 }
-
 
 function obtenerDatosVehiculo(vehiculoId, descargar) {
     fetch('https://pruebas-vehiculos.fgjtam.gob.mx/php/obtenerHistorial.php', {
@@ -22,21 +19,33 @@ function obtenerDatosVehiculo(vehiculoId, descargar) {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: `vehiculo_id=${vehiculoId}`
     })
-        .then(response => response.json())
-        .then(data => {
-            if (data.error || !data.marca || !data.modelo || !data.placa) {
-                alert("Datos del vehículo no disponibles.");
+    .then(response => response.json())
+    .then(data => {
+        if (data.error || !data.marca || !data.modelo || !data.placa) {
+            Swal.fire({
+                icon: "warning",
+                title: "Datos no disponibles",
+                text: "No se encontraron datos del vehículo.",
+                confirmButtonText: "Aceptar",
+                backdrop: false
+            });
+        } else {
+            if (descargar) {
+                generarYDescargarPDFs(data);
             } else {
-                if (descargar) {
-                    generarYDescargarPDFs(data);
-                } else {
-                    generarVistaPreviaPDFs(data);
-                }
+                generarVistaPreviaPDFs(data);
             }
-        })
-        .catch(error => {
-            alert("Error al obtener los datos del vehículo.");
+        }
+    })
+    .catch(error => {
+        Swal.fire({
+            icon: "error",
+            title: "Error de conexión",
+            text: "Hubo un problema al obtener los datos del vehículo.",
+            confirmButtonText: "Aceptar",
+            backdrop: false
         });
+    });
 }
 
 function subirPDF(pdfDoc, vehiculoId, nombreArchivo) {

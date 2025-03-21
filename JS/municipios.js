@@ -29,7 +29,13 @@ $(document).ready(function () {
         let municipioValue = $("#municipio").val();
         if (municipioValue.trim() === "") {
             e.preventDefault(); 
-            alert("El campo Municipio es obligatorio.");
+            Swal.fire({
+                icon: "warning",
+                title: "Campo obligatorio",
+                text: "El campo Municipio es obligatorio.",
+                confirmButtonText: "Aceptar",
+                backdrop: false
+            });
         }
     });
 });

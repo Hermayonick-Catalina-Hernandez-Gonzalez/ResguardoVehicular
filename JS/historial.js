@@ -2,8 +2,15 @@ document.addEventListener("DOMContentLoaded", function () {
     let numeroEconomico = localStorage.getItem("numeroEconomico");
 
     if (!numeroEconomico) {
-        alert("No se encontró información del vehículo.");
-        window.location.href = 'index.php';
+        Swal.fire({
+            icon: "error",
+            title: "Vehículo no encontrado",
+            text: "No se encontró información del vehículo.",
+            confirmButtonText: "Aceptar",
+            backdrop: false
+        }).then(() => {
+            window.location.href = 'index.php';
+        });
     } else {
         obtenerDatosVehiculo(numeroEconomico);
     }
@@ -26,15 +33,26 @@ function obtenerDatosVehiculo(numeroEconomico) {
                 document.getElementById("submarca").textContent = vehiculo.submarca;
                 document.getElementById("modelo").textContent = vehiculo.modelo;
             } else {
-                alert("No se encontró información del vehículo.");
+                Swal.fire({
+                    icon: "warning",
+                    title: "Datos no encontrados",
+                    text: "No se encontró información del vehículo en la base de datos.",
+                    confirmButtonText: "Aceptar",
+                    backdrop: false
+                });
             }
         },
         error: function() {
-            alert("Error al cargar los datos del vehículo.");
+            Swal.fire({
+                icon: "error",
+                title: "Error de conexión",
+                text: "Error al cargar los datos del vehículo. Inténtalo de nuevo.",
+                confirmButtonText: "Aceptar",
+                backdrop: false
+            });
         }
     });
 }
-
 
 function redirigirHistorial(numeroEconomico) {
     document.getElementById("numeroEconomicoInput").value = numeroEconomico;
@@ -85,9 +103,16 @@ function descargarPDFs(button) {
     let archivosJSON = button.getAttribute("data-pdfs");
 
     if (!archivosJSON) {
-        alert("No hay archivos PDF disponibles para descargar.");
+        Swal.fire({
+            icon: "warning",
+            title: "No hay archivos disponibles",
+            text: "No hay archivos PDF disponibles para descargar.",
+            confirmButtonText: "Aceptar",
+            backdrop: false
+        });
         return;
     }
+    
 
     let archivos = JSON.parse(archivosJSON);
 

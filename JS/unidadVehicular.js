@@ -233,6 +233,7 @@ function guardarVehiculo() {
     .then(data => {
         if (data.success) {
             localStorage.setItem("vehiculo_id", data.vehiculo_id);
+            localStorage.setItem("seccion_unidadVehicular", "completado");
             window.location.href = "../formulario/verificacion.php";
         }
     })
