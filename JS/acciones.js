@@ -14,6 +14,9 @@ function cerrar() {
     window.location.href = "../../php/logout.php";
 }
 
+function salir() {
+    window.location.href = "../php/logout.php";
+}
 
 function ver(numeroEconomico) {
     localStorage.setItem('numeroEconomico', numeroEconomico);
