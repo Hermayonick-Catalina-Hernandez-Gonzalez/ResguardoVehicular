@@ -68,10 +68,10 @@ function nextTab() {
         if (currentIframe) {
             currentIframe.contentWindow.postMessage({ type: "validarCampos" }, "*");
 
-            function handleValidation(event) {
+            window.addEventListener("message", function handleValidation(event) {
                 if (event.data.type === "validacionCampos") {
                     window.removeEventListener("message", handleValidation);
-
+                    
                     if (event.data.valido) {
                         avanzarTab(currentTabIndex, tabs);
                     } else {
@@ -83,14 +83,14 @@ function nextTab() {
                         });
                     }
                 }
-            }
+            }, { once: true });
 
-            window.addEventListener("message", handleValidation, { once: true });
-            return; // Espera la validación antes de avanzar
+            return; 
         }
+    } else {
+        guardarVerificacion();
     }
 }
-
 
 
 function avanzarTab(currentTabIndex, tabs) {
