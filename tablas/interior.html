@@ -82,13 +82,10 @@
             if (savedValue && radio.value === savedValue) {
                 radio.checked = true;
             }
+            
             radio.addEventListener("change", function () {
                 localStorage.setItem(radio.name, radio.value);
-                window.parent.postMessage({
-                    type: "saveRadio",
-                    name: radio.name,
-                    value: radio.value
-                }, "*");
+                this.closest('tr').style.backgroundColor = ''; 
             });
         });
 
@@ -128,6 +125,23 @@
                     });
                 }
                 event.source.postMessage({ type: "respuestaDatos", datos: datos }, "*");
+            }
+            if (event.data.type === "validarCampos") {
+                let allChecked = true;
+
+                document.querySelectorAll('tbody tr').forEach(row => {
+                    let radios = row.querySelectorAll('input[type="radio"]');
+                    let groupName = radios.length > 0 ? radios[0].name : null;
+
+                    if (groupName && !document.querySelector(`input[name="${groupName}"]:checked`)) {
+                        allChecked = false;
+                        row.style.backgroundColor = '#ff8686'; 
+                    } else {
+                        row.style.backgroundColor = '';  
+                    }
+                });
+
+                event.source.postMessage({ type: "validacionCampos", valido: allChecked }, "*");
             }
         });
     });

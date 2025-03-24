@@ -3,6 +3,17 @@ document.addEventListener("DOMContentLoaded", function () {
         tab.style.display = "none";
     });
 
+    document.querySelectorAll('input[type="radio"]').forEach(radio => {
+        const storedValue = localStorage.getItem(radio.name);
+        if (storedValue && radio.value === storedValue) {
+            radio.checked = true;
+        }
+
+        radio.addEventListener("change", function () {
+            localStorage.setItem(radio.name, radio.value);
+        });
+    });
+
     const defaultTab = document.getElementById("Exterior");
     const defaultButton = document.getElementById("exterior");
 
@@ -47,34 +58,48 @@ function openTab(evt, tabName) {
     }
 }
 
-
 function nextTab() {
     const tabs = ["Exterior", "Interior", "Accesorios"];
     let currentTabIndex = tabs.findIndex(tab => document.getElementById(tab).style.display === "block");
 
     if (currentTabIndex < tabs.length - 1) {
-        document.getElementById(tabs[currentTabIndex]).style.display = "none";
-        document.getElementById(tabs[currentTabIndex + 1]).style.display = "block";
+        const currentIframe = document.querySelector(`#${tabs[currentTabIndex]} iframe`);
 
-        document.querySelectorAll(".tablink").forEach(btn => btn.classList.remove("active"));
-        document.getElementById(tabs[currentTabIndex + 1].toLowerCase()).classList.add("active");
-    } else {
-        guardarVerificacion();
+        if (currentIframe) {
+            currentIframe.contentWindow.postMessage({ type: "validarCampos" }, "*");
+
+            function handleValidation(event) {
+                if (event.data.type === "validacionCampos") {
+                    window.removeEventListener("message", handleValidation);
+
+                    if (event.data.valido) {
+                        avanzarTab(currentTabIndex, tabs);
+                    } else {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Faltan campos por llenar',
+                            text: 'Por favor completa todos los campos antes de avanzar.',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                }
+            }
+
+            window.addEventListener("message", handleValidation, { once: true });
+            return; // Espera la validación antes de avanzar
+        }
     }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll('input[type="radio"]').forEach(radio => {
-        const storedValue = localStorage.getItem(radio.name);
-        if (storedValue && radio.value === storedValue) {
-            radio.checked = true;
-        }
 
-        radio.addEventListener("change", function () {
-            localStorage.setItem(radio.name, radio.value);
-        });
-    });
-});
+
+function avanzarTab(currentTabIndex, tabs) {
+    document.getElementById(tabs[currentTabIndex]).style.display = "none";
+    document.getElementById(tabs[currentTabIndex + 1]).style.display = "block";
+
+    document.querySelectorAll(".tablink").forEach(btn => btn.classList.remove("active"));
+    document.getElementById(tabs[currentTabIndex + 1].toLowerCase()).classList.add("active");
+}
 
 function finalizarFormulario() {
     localStorage.clear();
@@ -82,13 +107,12 @@ function finalizarFormulario() {
 
 function guardarVerificacion() {
     let datos = [];
-    let allFieldsFilled = true;
     let vehiculoId = localStorage.getItem("vehiculo_id");
 
     if (!vehiculoId) {
         Swal.fire({
             title: "Error",
-            text: "LLenar el Formulario de Unidad Vehicular antes de guardar la verificación",
+            text: "Llenar el Formulario de Unidad Vehicular antes de guardar la verificación",
             icon: "error"
         });
         return;
@@ -106,33 +130,8 @@ function guardarVerificacion() {
             datos.push(...event.data.datos);
             pendientes--;
 
-            event.data.datos.forEach(dato => {
-                let radiosDelGrupo = document.querySelectorAll(`input[name="${dato.elemento}"]`);
-
-                if (!dato.estado || dato.estado.trim() === "") {
-                    allFieldsFilled = false;
-                    radiosDelGrupo.forEach(radio => {
-                        radio.parentNode.style.border = "2px solid red"; 
-                    });
-                } else {
-                    radiosDelGrupo.forEach(radio => {
-                        radio.parentNode.style.border = ""; 
-                    });
-                }
-            });
-
             if (pendientes === 0) {
                 window.removeEventListener("message", recibirMensaje);
-
-                if (!allFieldsFilled) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Faltan campos por llenar',
-                        text: 'Por favor, selecciona todas las opciones antes de guardar.',
-                        backdrop: false
-                    });
-                    return;
-                }
                 enviarDatos(vehiculoId, datos);
             }
         }

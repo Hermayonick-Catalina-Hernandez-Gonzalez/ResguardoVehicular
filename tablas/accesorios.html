@@ -1,5 +1,4 @@
 <link rel="stylesheet" href="../css/stylestabla.css">
-<script src="../JS/acciones.js"></script>
 <table class="verification-table">
     <thead>
         <tr>
@@ -76,30 +75,27 @@
 </table>
 <div>
     <label for="observaciones_accesorios">Observaciones:</label>
-    <textarea id="observaciones_accesorios" name="observaciones" rows="4"
-        cols="50"></textarea>
+    <textarea id="observaciones_accesorios" name="observaciones" rows="4" cols="50"></textarea>
 </div>
 
 <script>
-   document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll('input[type="radio"]').forEach(radio => {
             let savedValue = localStorage.getItem(radio.name);
             if (savedValue && radio.value === savedValue) {
                 radio.checked = true;
             }
-
+            
             radio.addEventListener("change", function () {
                 localStorage.setItem(radio.name, radio.value);
+                this.closest('tr').style.backgroundColor = ''; 
             });
         });
 
         let observaciones = document.getElementById("observaciones_accesorios");
-        let savedObservaciones = localStorage.getItem("observaciones_accesorios");
-        
-        if (savedObservaciones) {
-            observaciones.value = savedObservaciones;
+        if (localStorage.getItem("observaciones_accesorios")) {
+            observaciones.value = localStorage.getItem("observaciones_accesorios");
         }
-        
         observaciones.addEventListener("input", function () {
             localStorage.setItem("observaciones_accesorios", observaciones.value);
         });
@@ -119,7 +115,7 @@
                 document.querySelectorAll('input[type="radio"]:checked').forEach(input => {
                     datos.push({
                         categoria: "Accesorios",
-                        elemento: input.name.replace("accesorios_", ""),
+                        elemento: input.name.replace("accesorio_", ""),
                         estado: input.value
                     });
                 });
@@ -133,6 +129,26 @@
                 }
                 event.source.postMessage({ type: "respuestaDatos", datos: datos }, "*");
             }
+            if (event.data.type === "validarCampos") {
+                let allChecked = true;
+
+                document.querySelectorAll('tbody tr').forEach(row => {
+                    let radios = row.querySelectorAll('input[type="radio"]');
+                    let groupName = radios.length > 0 ? radios[0].name : null;
+
+                    // Si hay radios en la fila y ninguno está seleccionado, marcar en rojo
+                    if (groupName && document.querySelectorAll(`input[name="${groupName}"]:checked`).length === 0) {
+                        allChecked = false;
+                        row.style.backgroundColor = '#ff8686'; // Resaltar en rojo
+                    } else {
+                        row.style.backgroundColor = ''; // Quitar el color si está bien
+                    }
+                });
+
+                event.source.postMessage({ type: "validacionCampos", valido: allChecked }, "*");
+            }
+
+
         });
     });
 </script>
