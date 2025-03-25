@@ -223,11 +223,15 @@
                 let datos = [];
                 
                 document.querySelectorAll('input[type="radio"]:checked').forEach(input => {
+                    // Obtener el nombre del accesorio desde el <td> correspondiente
+                    let row = input.closest('tr');
+                    let elemento = row.querySelector('td').textContent.trim();
+
                     let categoria = input.name.includes("motor") ? "Motor" : "Exterior"; 
 
                     datos.push({
                         categoria: categoria,
-                        elemento: input.name.replace("exterior_", "").replace("motor_", ""),
+                        elemento: elemento,  // Usamos el texto del <td> como nombre del elemento
                         estado: input.value
                     });
                 });
@@ -261,9 +265,5 @@
                 event.source.postMessage({ type: "validacionCampos", valido: allChecked }, "*");
             }
         });
-
-        
     });
-
-
 </script>

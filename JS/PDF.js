@@ -397,8 +397,8 @@ async function generarPDF2(imgData, vehiculo, descargar) {
     let verificaciones = Array.isArray(vehiculo.verificaciones) ? vehiculo.verificaciones : [];
     let observaciones = Array.isArray(vehiculo.observaciones) ? vehiculo.observaciones : [];
 
-    const colWidthsExterior = [70, 35, 35, 35, 70, 35, 35, 35, 70, 35, 35, 35];
-    const colWidthsInterior = [70, 35, 35, 35, 70, 35, 35, 35, 185];
+    const colWidthsExterior = [95, 28, 28, 28, 95, 28, 28, 28, 95, 28, 28, 28];
+    const colWidthsInterior = [95, 28, 28, 28, 95, 28, 28, 28, 179];
     const cellHeight = 20;
     const startX = 40;
     let startY = y;
@@ -427,17 +427,17 @@ async function generarPDF2(imgData, vehiculo, descargar) {
             columnaActual++;
             filasDibujadas = 0;
             startY = startYExterior; 
-            xPos = startX + (columnaActual * (70 + (35 * 3))); 
+            xPos = startX + (columnaActual * (95 + (28 * 3))); 
         }
 
-        xPos = startX + (columnaActual * (70 + (35 * 3))); 
-        drawCell(xPos, startY, 70, cellHeight, ext.elemento);
-        xPos += 70;
+        xPos = startX + (columnaActual * (95 + (28 * 3))); 
+        drawCell(xPos, startY, 95, cellHeight, ext.elemento);
+        xPos += 95;
 
         let estadoIndex = { bien: 0, regular: 1, mal: 2 }[ext.estado?.toLowerCase()] ?? -1;
         for (let i = 0; i < 3; i++) {
-            drawCell(xPos, startY, 35, cellHeight, estadoIndex === i ? "X" : "");
-            xPos += 35;
+            drawCell(xPos, startY, 28, cellHeight, estadoIndex === i ? "X" : "");
+            xPos += 28;
         }
 
         startY += cellHeight;
@@ -445,13 +445,13 @@ async function generarPDF2(imgData, vehiculo, descargar) {
     });
 
     while (filasDibujadas < filasPorColumnaExterior) {
-        xPos = startX + (columnaActual * (70 + (35 * 3)));
-        drawCell(xPos, startY, 70, cellHeight, ""); 
-        xPos += 70;
+        xPos = startX + (columnaActual * (95 + (28 * 3)));
+        drawCell(xPos, startY, 95, cellHeight, ""); 
+        xPos += 95;
 
         for (let j = 0; j < 3; j++) {
-            drawCell(xPos, startY, 35, cellHeight, ""); 
-            xPos += 35;
+            drawCell(xPos, startY, 28, cellHeight, ""); 
+            xPos += 28;
         }
 
         startY += cellHeight;
@@ -479,34 +479,34 @@ async function generarPDF2(imgData, vehiculo, descargar) {
             columnaActualIN++;
             filasDibujadasIN = 0;
             startY = startYInicial; 
-            xPos += 70 + (35 * 3); 
+            xPos += 95 + (28 * 3); 
         }
 
-        xPos = startX + (columnaActualIN * (70 + (35 * 3)));
-        drawCell(xPos, startY, 70, cellHeight, int.elemento);
-        xPos += 70;
+        xPos = startX + (columnaActualIN * (95 + (28 * 3)));
+        drawCell(xPos, startY, 95, cellHeight, int.elemento);
+        xPos += 95;
 
         let estadoIndex = { bien: 0, regular: 1, mal: 2 }[int.estado?.toLowerCase()] ?? -1;
         for (let i = 0; i < 3; i++) {
-            drawCell(xPos, startY, 35, cellHeight, estadoIndex === i ? "X" : "");
-            xPos += 35;
+            drawCell(xPos, startY, 28, cellHeight, estadoIndex === i ? "X" : "");
+            xPos += 28;
         }
 
         startY += cellHeight;
         filasDibujadasIN++;
     });
 
-    xPos = startX + (maxColumnas * (70 + (35 * 3)));
+    xPos = startX + (maxColumnas * (95 + (28 * 3)));
     let alturaObservaciones = cellHeight * filasPorColumna;
 
     let observacionTexto = observaciones.map(obs => obs.observaciones).join("\n");
-    drawCell(xPos, startYInicial, 185, alturaObservaciones, observacionTexto);
+    drawCell(xPos, startYInicial, 179, alturaObservaciones, observacionTexto);
 
     startY = startYInicial + alturaObservaciones;
     let startYAccesorios = startY;
     
     let tableHeadersAccesorios = ["Accesorio", "Sí", "No", "Accesorio", "Sí", "No", "Tipo de ocupación"];
-    const colWidthsAccesorios = [80, 40, 40, 80, 40, 40, 215];
+    const colWidthsAccesorios = [90, 40, 40, 90, 40, 40, 198];
 
     doc.setFont('helvetica', 'bold');
     xPos = startX;
@@ -530,14 +530,14 @@ async function generarPDF2(imgData, vehiculo, descargar) {
             columnaActualAcc++;
             filasDibujadasAcc = 0;
             startYAccesorios = startYAccesoriosInicial; 
-            xPos += 80 + (40 * 2); 
+            xPos += 90 + (40 * 2); 
         }
 
-        xPos = startX + (columnaActualAcc * (80 + (40 * 2))); 
+        xPos = startX + (columnaActualAcc * (90 + (40 * 2))); 
 
         let verificacion = accesorios[i] || { elemento: "", estado: "" }; 
-        drawCell(xPos, startYAccesorios, 80, cellHeight, verificacion.elemento);
-        xPos += 80;
+        drawCell(xPos, startYAccesorios, 90, cellHeight, verificacion.elemento);
+        xPos += 90;
 
         let estadoIndex = verificacion.estado.toLowerCase() === "si" ? 0 : 1;
         for (let j = 0; j < 2; j++) {
@@ -550,7 +550,7 @@ async function generarPDF2(imgData, vehiculo, descargar) {
     }
 
     xPos += 0
-    drawCell(xPos, startYAccesoriosInicial, 215, cellHeight * filasPorColumnaAccesorios, vehiculo.ocupacion); 
+    drawCell(xPos, startYAccesoriosInicial, 198, cellHeight * filasPorColumnaAccesorios, vehiculo.ocupacion); 
 
     let startYTexto = Math.max(startY, startYAccesorios); 
     startYTexto += 20; 

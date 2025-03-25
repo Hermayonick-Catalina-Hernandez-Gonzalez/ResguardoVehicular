@@ -82,7 +82,7 @@
             if (savedValue && radio.value === savedValue) {
                 radio.checked = true;
             }
-            
+
             radio.addEventListener("change", function () {
                 localStorage.setItem(radio.name, radio.value);
                 this.closest('tr').style.backgroundColor = ''; 
@@ -98,25 +98,19 @@
         });
 
         window.addEventListener("message", function (event) {
-            if (event.data.type === "restoreRadios") {
-                Object.keys(event.data.values).forEach(name => {
-                    let value = event.data.values[name];
-                    let radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
-                    if (radio) {
-                        radio.checked = true;
-                    }
-                });
-            }
             if (event.data.type === "getDatos") {
                 let datos = [];
+
                 document.querySelectorAll('input[type="radio"]:checked').forEach(input => {
+                    let elemento = input.closest('tr').querySelector('td').innerText; // Getting the element name from <td>
                     datos.push({
                         categoria: "Interior",
-                        elemento: input.name.replace("interior_", ""),
+                        elemento: elemento,
                         estado: input.value
                     });
                 });
-                let observacionesTexto = document.getElementById("observaciones_interior").value;
+
+                let observacionesTexto = observaciones.value;
                 if (observacionesTexto) {
                     datos.push({
                         categoria: "Interior",
@@ -124,6 +118,7 @@
                         estado: observacionesTexto
                     });
                 }
+
                 event.source.postMessage({ type: "respuestaDatos", datos: datos }, "*");
             }
             if (event.data.type === "validarCampos") {

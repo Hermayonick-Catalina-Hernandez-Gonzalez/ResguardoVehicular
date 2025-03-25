@@ -85,7 +85,7 @@
             if (savedValue && radio.value === savedValue) {
                 radio.checked = true;
             }
-            
+
             radio.addEventListener("change", function () {
                 localStorage.setItem(radio.name, radio.value);
                 this.closest('tr').style.backgroundColor = ''; 
@@ -110,15 +110,18 @@
                     }
                 });
             }
+
             if (event.data.type === "getDatos") {
                 let datos = [];
                 document.querySelectorAll('input[type="radio"]:checked').forEach(input => {
+                    let elemento = input.closest('tr').querySelector('td').innerText;  // Get element name from <td>
                     datos.push({
                         categoria: "Accesorios",
-                        elemento: input.name.replace("accesorio_", ""),
+                        elemento: elemento,
                         estado: input.value
                     });
                 });
+
                 let observacionesTexto = document.getElementById("observaciones_accesorios").value;
                 if (observacionesTexto) {
                     datos.push({
@@ -127,8 +130,10 @@
                         estado: observacionesTexto
                     });
                 }
+
                 event.source.postMessage({ type: "respuestaDatos", datos: datos }, "*");
             }
+
             if (event.data.type === "validarCampos") {
                 let allChecked = true;
 
@@ -136,19 +141,16 @@
                     let radios = row.querySelectorAll('input[type="radio"]');
                     let groupName = radios.length > 0 ? radios[0].name : null;
 
-                    // Si hay radios en la fila y ninguno está seleccionado, marcar en rojo
                     if (groupName && document.querySelectorAll(`input[name="${groupName}"]:checked`).length === 0) {
                         allChecked = false;
-                        row.style.backgroundColor = '#ff8686'; // Resaltar en rojo
+                        row.style.backgroundColor = '#ff8686'; // Highlight in red if not checked
                     } else {
-                        row.style.backgroundColor = ''; // Quitar el color si está bien
+                        row.style.backgroundColor = ''; // Remove red highlight if checked
                     }
                 });
 
                 event.source.postMessage({ type: "validacionCampos", valido: allChecked }, "*");
             }
-
-
         });
     });
 </script>

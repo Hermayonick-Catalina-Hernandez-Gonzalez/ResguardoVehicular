@@ -37,7 +37,6 @@ document.addEventListener("DOMContentLoaded", function () {
             confirmButtonText: "Ir a la primera sección",
             allowOutsideClick: false
         }).then(() => {
-            // 🔹 Redirigir a la primera sección incompleta
             if (!localStorage.getItem("seccion_resguardante")) {
                 window.location.href = "../formulario/resguardante.php";
             } else if (!localStorage.getItem("seccion_unidadVehicular")) {
