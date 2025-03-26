@@ -6,9 +6,10 @@ header('Content-Type: application/json');
 header("Access-Control-Allow-Origin: *");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Obtener datos del formulario
     $numero_economico = trim($_POST['numero_economico']);
-    $placa = trim($_POST['placa']);
-    $serie = trim($_POST['serie']);
+    $placa_nueva = trim($_POST['placa']);
+    $serie = trim($_POST['numero_serie']); // Asegúrate de que el name en el formulario sea "serie"
     $color = trim($_POST['color']);
     $clase_vehiculo = trim($_POST['clase_vehiculo']);
     $marca_vehiculo = trim($_POST['marca_vehiculo']);
@@ -20,31 +21,54 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $resguardante_id = $_POST['resguardante_id'];
 
     $valores_permitidos = ['propio', 'arrendado', 'decomisado'];
-
     if (!in_array($tipo_condicion, $valores_permitidos)) {
         echo json_encode(["error" => "Error: El estado del vehículo no es válido."]);
         exit;
     }
 
     try {
-        $sql = "INSERT INTO vehiculo (resguardante_id, numero_economico, placa, serie, color, clase, marca, submarca, modelo, estado, kilometraje, ocupacion) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(1, $resguardante_id);
-        $stmt->bindParam(2, $numero_economico);
-        $stmt->bindParam(3, $placa);
-        $stmt->bindParam(4, $serie);
-        $stmt->bindParam(5, $color);
-        $stmt->bindParam(6, $clase_vehiculo);
-        $stmt->bindParam(7, $marca_vehiculo);
-        $stmt->bindParam(8, $submarca);
-        $stmt->bindParam(9, $modelo_vehiculo);
-        $stmt->bindParam(10, $tipo_condicion);
-        $stmt->bindParam(11, $kilometraje);
-        $stmt->bindParam(12, $tipo_ocupacion);
-        $stmt->execute();
+        // 1. Consultar el vehículo actual para obtener la placa registrada.
+        $sql_consulta = "EXEC dbo.CONSULTA_DATOS_VEHICULO_EMPLEADO @NUM_ECONOMICO = :num, @NUM_SERIE = :num_serie";
+        $stmt_consulta = $conn->prepare($sql_consulta);
+        $stmt_consulta->bindParam(':num', $numero_economico);
+        $stmt_consulta->bindParam(':num_serie', $serie);
+        $stmt_consulta->execute();
+        
+        // Avanzar en los conjuntos de resultados vacíos (si fuera necesario)
+        while ($stmt_consulta->columnCount() === 0 && $stmt_consulta->nextRowset()) { }
+        $vehiculo_actual = $stmt_consulta->fetch(PDO::FETCH_ASSOC);
+        
+        // Si se obtuvo el registro, se extrae la placa actual.
+        $placa_actual = $vehiculo_actual ? $vehiculo_actual['PLACAS'] : "";
+        
+        // 2. Insertar (o guardar) los datos del vehículo en la tabla principal.
+        $sql_insert = "INSERT INTO vehiculo (resguardante_id, numero_economico, placa, serie, color, clase, marca, submarca, modelo, estado, kilometraje, ocupacion) 
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt_insert = $conn->prepare($sql_insert);
+        $stmt_insert->bindParam(1, $resguardante_id);
+        $stmt_insert->bindParam(2, $numero_economico);
+        $stmt_insert->bindParam(3, $placa_nueva);
+        $stmt_insert->bindParam(4, $serie);
+        $stmt_insert->bindParam(5, $color);
+        $stmt_insert->bindParam(6, $clase_vehiculo);
+        $stmt_insert->bindParam(7, $marca_vehiculo);
+        $stmt_insert->bindParam(8, $submarca);
+        $stmt_insert->bindParam(9, $modelo_vehiculo);
+        $stmt_insert->bindParam(10, $tipo_condicion);
+        $stmt_insert->bindParam(11, $kilometraje);
+        $stmt_insert->bindParam(12, $tipo_ocupacion);
+        $stmt_insert->execute();
         $vehiculo_id = $conn->lastInsertId();
-
+        
+        // 3. Si la placa nueva es diferente de la registrada, se actualiza mediante el SP.
+        if ($placa_nueva !== $placa_actual) {
+            $sql_update = "EXEC dbo.ACTUALIZAR_DATOS_VEHICULO @NUM_ECONOMICO = :num, @PLACA_A_ACTUALIZAR = :placa_actual";
+            $stmt_update = $conn->prepare($sql_update);
+            $stmt_update->bindParam(':num', $numero_economico);
+            $stmt_update->bindParam(':placa_actual', $placa_nueva);
+            $stmt_update->execute();
+        }
+        
         echo json_encode([
             "success" => "Datos guardados correctamente",
             "vehiculo_id" => $vehiculo_id

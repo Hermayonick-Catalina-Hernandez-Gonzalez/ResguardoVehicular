@@ -147,7 +147,7 @@ function guardarFirma() {
         setTimeout(() => {
             finalizarFormulario(); 
             window.location.href = "../formulario/resguardante.php"; 
-        }, 2000); 
+        }, 1000); 
     });
 
     cerrarFirma();
