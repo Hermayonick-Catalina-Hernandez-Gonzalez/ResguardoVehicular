@@ -1,17 +1,19 @@
 function buscarVehiculo() {
-    let numeroEconomico = document.getElementById("numero_economico").value.trim();
+    var numeroEconomico = $('#numero_economico').val();
+    var numeroSerie = $('#numero_serie').val();
 
-    if (numeroEconomico === "") {
+    if(numeroEconomico === '' && numeroSerie === '') {
         Swal.fire({
             title: "Oops...",
-            text: "Por favor, ingrese un número económico.",
+            text: "Por favor, ingrese un número económico o una serie.",
             icon: "error",
             backdrop: false
         });
         return;
     }
 
-    fetch(`https://pruebas-vehiculos.fgjtam.gob.mx/php/buscarVehiculo.php?numero_economico=${numeroEconomico}`)
+    var url = `https://pruebas-vehiculos.fgjtam.gob.mx/php/buscarVehiculo.php?numero_economico=${encodeURIComponent(numeroEconomico)}&numero_serie=${encodeURIComponent(numeroSerie)}`;
+    fetch(url)
         .then(response => response.json())
         .then(data => {
             if (data.error) {
@@ -22,16 +24,19 @@ function buscarVehiculo() {
                     backdrop: false
                 });
             } else {
+                // Actualiza los campos del formulario con los datos recibidos
+                document.getElementById("numero_economico").value = data.NUMERO_ECONOMICO || "";
                 document.getElementById("placa").value = data.PLACAS || "";
-                document.getElementById("serie").value = data.SERIE || "";
+                document.getElementById("numero_serie").value = data.SERIE || "";
                 document.getElementById("color").value = data.COLOR || "";
                 document.getElementById("clase_vehiculo").value = data.CLASEVEHICULO || "";
                 document.getElementById("marca_vehiculo").value = data.MARCA || "";
                 document.getElementById("submarca").value = data.SUBMARCA || "";
                 document.getElementById("modelo_vehiculo").value = data.MODELO || "";
 
+                localStorage.setItem("numero_economico", data.NUMERO_ECONOMICO || "");
                 localStorage.setItem("placa", data.PLACAS || "");
-                localStorage.setItem("serie", data.SERIE || "");
+                localStorage.setItem("numero_serie", data.SERIE || "");
                 localStorage.setItem("color", data.COLOR || "");
                 localStorage.setItem("clase_vehiculo", data.CLASEVEHICULO || "");
                 localStorage.setItem("marca_vehiculo", data.MARCA || "");

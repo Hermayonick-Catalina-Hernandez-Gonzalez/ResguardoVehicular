@@ -43,7 +43,7 @@ if (!isset($_SESSION['usuario_id'])) {
             <div class="form-row">
                 <div class="form-group">
                     <label for="numero_economico">Número Económico:</label>
-                    <input type="text" id="numero_economico" name="numero_economico" required onchange="buscarVehiculo()" required>
+                    <input type="text" id="numero_economico" name="numero_economico" required  onchange="buscarVehiculo()">
                 </div>
 
                 <div class="form-group">
@@ -53,8 +53,8 @@ if (!isset($_SESSION['usuario_id'])) {
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="serie">Serie:</label>
-                    <input type="text" id="serie" name="serie" required>
+                    <label for="numero_serie">Serie:</label>
+                    <input type="text" id="numero_serie" name="numero_serie" required onchange="buscarVehiculo()">
                 </div>
                 <div class="form-group">
                     <label for="color">Color:</label>
