@@ -6,18 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $numeroEconomico = $_POST['numeroEconomico'] ?? '';
 
     try {
-        $sql = "SELECT 
-                    FORMAT(fecha_resguardo, 'dd/MM/yyyy HH:mm:ss') AS fecha_resguardo, 
-                    municipio, 
-                    resguardante, 
-                    cargo, 
-                    resguardante_interno, 
-                    cargo_interno, 
-                    observaciones, 
-                    observaciones_fotos,
-                    archivos_pdf 
-                FROM historial 
-                WHERE numero_economico = :numeroEconomico";
+        $sql = "SELECT * FROM historial  WHERE numero_economico = :numeroEconomico";
 
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':numeroEconomico', $numeroEconomico, PDO::PARAM_STR);
@@ -27,9 +16,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (count($rows) > 0) {
             foreach ($rows as $row) {
+                $fechaFormateada = date('d/m/Y H:i:s', strtotime($row['fecha_resguardo']));
+
                 echo '<div class="history-card">
                         <div class="history-content">
-                            <p><strong>Fecha:</strong> ' . htmlspecialchars($row['fecha_resguardo']) . '</p>
+                            <p><strong>Fecha:</strong> ' . htmlspecialchars($fechaFormateada) . '</p>
                             <p><strong>Municipio:</strong> ' . htmlspecialchars($row['municipio']) . '</p>
                             <p><strong>Resguardante Externo:</strong> ' . htmlspecialchars($row['resguardante'])  . '</p>
                             <p><strong>Resguardante Interno:</strong> ' . htmlspecialchars($row['resguardante_interno'])  . '</p> '; 
