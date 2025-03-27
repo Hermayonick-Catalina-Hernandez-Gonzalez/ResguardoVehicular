@@ -21,9 +21,10 @@ function obtenerDatosVehiculo(numeroEconomico) {
         url: '../php/obtenerVehiculo.php',
         type: 'GET',
         data: { numeroEconomico: numeroEconomico },
+        dataType: 'json', 
         success: function(response) {
-            const vehiculo = JSON.parse(response);
-            if (vehiculo) {
+            const vehiculo = response;
+            if (vehiculo && !vehiculo.error) {
                 document.getElementById("numeroEconomico").textContent = vehiculo.numero_economico;
                 document.getElementById("placa").textContent = vehiculo.placa;
                 document.getElementById("serie").textContent = vehiculo.serie;
@@ -53,6 +54,7 @@ function obtenerDatosVehiculo(numeroEconomico) {
         }
     });
 }
+
 
 function redirigirHistorial(numeroEconomico) {
     document.getElementById("numeroEconomicoInput").value = numeroEconomico;
@@ -90,15 +92,24 @@ document.addEventListener("DOMContentLoaded", function () {
     .then(data => {
         if (data.imagenFrontal) {
             imgVehiculo.src = data.imagenFrontal;
-        } 
+        } else if (data.error) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: data.error,
+                backdrop: false
+            });
+        }
     })
     .catch(error =>  
         Swal.fire({
-        icon: "error",
-        title: "Error de conexión",
-        backdrop: false
-    }));
+            icon: "error",
+            title: "Error de conexión",
+            backdrop: false
+        })
+    );
 });
+
 
 function descargarPDFs(button) {
     let archivosJSON = button.getAttribute("data-pdfs");

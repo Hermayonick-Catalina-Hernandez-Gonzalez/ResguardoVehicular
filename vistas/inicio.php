@@ -6,7 +6,15 @@ if ($_SESSION['rol'] != 'resguardante') {
 }
 
 include "../php/conexion.php";
-$query = "SELECT DISTINCT numero_economico, placa, serie, clase, marca, modelo FROM vehiculo";
+
+$query = "SELECT v.numero_economico, v.placa, v.serie, v.clase, v.marca, v.modelo
+          FROM vehiculo v
+          INNER JOIN (
+              SELECT numero_economico, MAX(id) AS max_id 
+              FROM vehiculo 
+              GROUP BY numero_economico
+          ) AS ult ON v.numero_economico = ult.numero_economico AND v.id = ult.max_id";
+
 $stmt = $conn->prepare($query);
 $stmt->execute();
 $vehiculos = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -14,7 +22,6 @@ $vehiculos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,7 +30,6 @@ $vehiculos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../css/stylesInicio.css">
 </head>
-
 <body>
     <header class="head">
         <div class="esquina-container">
@@ -70,7 +76,9 @@ $vehiculos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <td><?= htmlspecialchars($vehiculo['marca']) ?></td>
                         <td><?= htmlspecialchars($vehiculo['modelo']) ?></td>
                         <td>
-                            <button onclick="verVehiculo('<?= $vehiculo['numero_economico'] ?>')"><i class="fa fa-eye"></i> Ver</button>
+                            <button onclick="verVehiculo('<?= $vehiculo['numero_economico'] ?>')">
+                                <i class="fa fa-eye"></i> Ver
+                            </button>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -84,5 +92,4 @@ $vehiculos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <script src="../JS/acciones.js"></script>
 </body>
-
 </html>

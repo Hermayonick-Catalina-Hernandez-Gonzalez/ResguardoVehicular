@@ -5,7 +5,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $numeroEconomico = $_POST['numeroEconomico'] ?? '';
 
     try {
-        $sqlVehiculo = "SELECT id FROM vehiculo WHERE numero_economico = :numeroEconomico";
+        $sqlVehiculo =  "SELECT TOP 1 id FROM vehiculo WHERE numero_economico = :numeroEconomico ORDER BY id DESC";
         $stmtVehiculo = $conn->prepare($sqlVehiculo);
         $stmtVehiculo->bindParam(':numeroEconomico', $numeroEconomico, PDO::PARAM_STR);
         $stmtVehiculo->execute();
@@ -17,6 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         $vehiculo_id = $vehiculo['id'];
+
         $sqlImagen = "SELECT TOP 1 nombre_archivo FROM fotos WHERE vehiculo_id = :vehiculo_id ORDER BY id ASC";
         $stmtImagen = $conn->prepare($sqlImagen);
         $stmtImagen->bindParam(':vehiculo_id', $vehiculo_id, PDO::PARAM_INT);

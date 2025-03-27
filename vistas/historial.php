@@ -47,7 +47,7 @@ if (isset($_POST['numeroEconomico'])) {
 
     <div class="container">
         <div class="profile-section">
-            <img src="../img/Vehiculo.png" alt="Foto de vehículo" class="profile-picture">
+            <img  alt="Foto de vehículo" class="profile-picture">
             <div class="profile-info">
                 <p><strong>Número Económico:</strong> <span id="numeroEconomico"></span></p>
                 <p><strong>Placa:</strong> <span id="placa"></span></p>
@@ -57,7 +57,6 @@ if (isset($_POST['numeroEconomico'])) {
                 <p><strong>Marca:</strong> <span id="marca"></span></p>
                 <p><strong>Submarca:</strong> <span id="submarca"></span></p>
                 <p><strong>Modelo:</strong> <span id="modelo"></span></p>
-
             </div>
 
         </div>
