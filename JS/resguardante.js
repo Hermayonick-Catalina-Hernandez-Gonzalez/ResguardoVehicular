@@ -59,6 +59,15 @@ function cerrar() {
     window.location.href = "../../php/logout.php";
 }
 
+document.addEventListener('contextmenu', function(event) {
+    event.preventDefault();
+});
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'F12' || (event.ctrlKey && event.shiftKey && event.key === 'I')) {
+        event.preventDefault();
+    }
+});
+
 function buscarEmpleado(tipo) {
     let numeroEmpleadoElement = document.getElementById(tipo);
 

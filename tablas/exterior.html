@@ -223,7 +223,6 @@
                 let datos = [];
                 
                 document.querySelectorAll('input[type="radio"]:checked').forEach(input => {
-                    // Obtener el nombre del accesorio desde el <td> correspondiente
                     let row = input.closest('tr');
                     let elemento = row.querySelector('td').textContent.trim();
 
@@ -231,7 +230,7 @@
 
                     datos.push({
                         categoria: categoria,
-                        elemento: elemento,  // Usamos el texto del <td> como nombre del elemento
+                        elemento: elemento,
                         estado: input.value
                     });
                 });
@@ -265,5 +264,13 @@
                 event.source.postMessage({ type: "validacionCampos", valido: allChecked }, "*");
             }
         });
+    });
+    document.addEventListener('contextmenu', function(event) {
+        event.preventDefault();
+    });
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'F12' || (event.ctrlKey && event.shiftKey && event.key === 'I')) {
+            event.preventDefault();
+        }
     });
 </script>

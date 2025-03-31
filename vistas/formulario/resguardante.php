@@ -7,16 +7,11 @@ if (!isset($_SESSION['usuario_id'])) {
 }
 
 try {
-    // Obtener el último ID registrado en la tabla "vehiculo"
     $sql = "SELECT MAX(id) AS ultimo_id FROM vehiculo";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    // Calcular el nuevo ID
     $nuevo_id = $row['ultimo_id'] ? $row['ultimo_id'] + 1 : 1;
-
-    // Formatear con ceros a la izquierda (0001, 0002, etc.)
     $folio = str_pad($nuevo_id, 4, "0", STR_PAD_LEFT);
 } catch (PDOException $e) {
     die("Error al obtener el folio: " . $e->getMessage());

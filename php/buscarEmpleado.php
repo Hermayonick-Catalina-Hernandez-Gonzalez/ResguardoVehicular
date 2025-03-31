@@ -19,7 +19,7 @@ try {
     $empleado = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($empleado) {
-        $empleado['nombre_completo'] = $empleado['NOMBRE'] . ' ' . $empleado['APELLIDO'];  // Concatenamos el nombre y apellido
+        $empleado['nombre_completo'] = $empleado['NOMBRE'] . ' ' . $empleado['APELLIDO'];  
         echo json_encode($empleado); 
     } else {
         echo json_encode(["error" => "Empleado no encontrado"]);

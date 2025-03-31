@@ -57,7 +57,14 @@ function openTab(evt, tabName) {
         evt.currentTarget.classList.add("active");
     }
 }
-
+document.addEventListener('contextmenu', function(event) {
+    event.preventDefault();
+});
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'F12' || (event.ctrlKey && event.shiftKey && event.key === 'I')) {
+        event.preventDefault();
+    }
+});
 function nextTab() {
     const tabs = ["Exterior", "Interior", "Accesorios"];
     let currentTabIndex = tabs.findIndex(tab => document.getElementById(tab).style.display === "block");

@@ -114,7 +114,7 @@
             if (event.data.type === "getDatos") {
                 let datos = [];
                 document.querySelectorAll('input[type="radio"]:checked').forEach(input => {
-                    let elemento = input.closest('tr').querySelector('td').innerText;  // Get element name from <td>
+                    let elemento = input.closest('tr').querySelector('td').innerText;  
                     datos.push({
                         categoria: "Accesorios",
                         elemento: elemento,
@@ -143,14 +143,22 @@
 
                     if (groupName && document.querySelectorAll(`input[name="${groupName}"]:checked`).length === 0) {
                         allChecked = false;
-                        row.style.backgroundColor = '#ff8686'; // Highlight in red if not checked
+                        row.style.backgroundColor = '#ff8686'; 
                     } else {
-                        row.style.backgroundColor = ''; // Remove red highlight if checked
+                        row.style.backgroundColor = '';
                     }
                 });
 
                 event.source.postMessage({ type: "validacionCampos", valido: allChecked }, "*");
             }
         });
+    });
+    document.addEventListener('contextmenu', function(event) {
+        event.preventDefault();
+    });
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'F12' || (event.ctrlKey && event.shiftKey && event.key === 'I')) {
+            event.preventDefault();
+        }
     });
 </script>

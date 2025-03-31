@@ -142,7 +142,7 @@ function guardarFirma() {
         text: "La firma ha sido registrada correctamente.",
         backdrop: false
     }).then(() => {
-        descargarPDFs(); // Generar los PDFs
+        descargarPDFs(); 
 
         setTimeout(() => {
             finalizarFormulario(); 
@@ -168,3 +168,11 @@ document.addEventListener("DOMContentLoaded", function() {
 function finalizarFormulario() {
     localStorage.clear();
 }
+document.addEventListener('contextmenu', function(event) {
+    event.preventDefault();
+});
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'F12' || (event.ctrlKey && event.shiftKey && event.key === 'I')) {
+        event.preventDefault();
+    }
+});

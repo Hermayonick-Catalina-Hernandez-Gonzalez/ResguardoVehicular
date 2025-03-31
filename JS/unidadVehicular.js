@@ -24,7 +24,6 @@ function buscarVehiculo() {
                     backdrop: false
                 });
             } else {
-                // Actualiza los campos del formulario con los datos recibidos
                 document.getElementById("numero_economico").value = data.NUMERO_ECONOMICO || "";
                 document.getElementById("placa").value = data.PLACAS || "";
                 document.getElementById("numero_serie").value = data.SERIE || "";
@@ -204,6 +203,14 @@ function validarFormulario() {
     return camposValidos;
 }
 
+document.addEventListener('contextmenu', function(event) {
+    event.preventDefault();
+});
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'F12' || (event.ctrlKey && event.shiftKey && event.key === 'I')) {
+        event.preventDefault();
+    }
+});
 
 function guardarVehiculo() {
     if (!validarFormulario()) {
