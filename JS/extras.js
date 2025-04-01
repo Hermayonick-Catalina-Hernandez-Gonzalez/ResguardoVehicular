@@ -50,10 +50,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+
 function openTab(evt, tabName) {
     document.querySelectorAll(".tabcontent").forEach(tab => tab.style.display = "none");
+    
     document.querySelectorAll(".tablink").forEach(btn => btn.classList.remove("active"));
 
+   
     const selectedTab = document.getElementById(tabName);
     if (selectedTab) {
         selectedTab.style.display = "block";
@@ -62,6 +65,11 @@ function openTab(evt, tabName) {
     if (evt && evt.currentTarget) {
         evt.currentTarget.classList.add("active");
     }
+}
+
+function mostrarContenido() {
+    document.getElementById("contenidoOculto").style.display = "block";
+    verPDF();
 }
 
 function abrirFirma() {

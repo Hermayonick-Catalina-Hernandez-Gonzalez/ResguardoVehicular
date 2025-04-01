@@ -88,7 +88,7 @@ function nextTab() {
             return; 
         }
     } else {
-        //guardarVerificacion();
+        guardarVerificacion();
     }
 }
 

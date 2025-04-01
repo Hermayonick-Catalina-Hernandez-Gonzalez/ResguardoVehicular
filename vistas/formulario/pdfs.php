@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['usuario_id'])) {
-    header("Location: ../../index.php"); 
+    header("Location: ../../index.php");
     exit();
 }
 
@@ -41,27 +41,29 @@ if (!isset($_SESSION['usuario_id'])) {
     </div>
 
     <div class="right-section">
-        <h1>Verificacion de Datos</h1>
-        <button onclick="verPDF()" class="btn">Generar Formatos</button>
-        <form id="Pdf">
-            <div class="tabs">
-                <button class="tablink" id="reglas"
-                    onclick="openTab(event, 'Reglas')">Formato de Reglas</button>
-                <button class="tablink" id="resguardo"
-                    onclick="openTab(event, 'Resguardo')">Formato de Resguardo</button>
-            </div>
+        <h1>Verificación de Datos</h1>
+        <button onclick="mostrarContenido()" class="btn">Generar Formatos</button>
 
-            <div id="Reglas" class="tabcontent">
-                <iframe id="preview1" width="100%" height="400px"></iframe>
-            </div>
+        <div id="contenidoOculto" style="display: none;">
+            <form id="Pdf">
+                <div class="tabs">
+                    <button class="tablink" id="reglas" onclick="openTab(event, 'Reglas')">Formato de Reglas</button>
+                    <button class="tablink" id="resguardo" onclick="openTab(event, 'Resguardo')">Formato de Resguardo</button>
+                </div>
 
-            <div id="Resguardo" class="tabcontent">
-                <iframe id="preview2" width="100%" height="400px"></iframe>
-            </div>
+                <div id="Reglas" class="tabcontent">
+                    <iframe id="preview1" width="100%" height="400px"></iframe>
+                </div>
 
-        </form>
-        <button onclick="abrirFirma()" class="btn">Firmar</button>
+                <div id="Resguardo" class="tabcontent">
+                    <iframe id="preview2" width="100%" height="400px"></iframe>
+                </div>
+            </form>
+
+            <button onclick="abrirFirma()" class="btn">Firmar</button>
+        </div>
     </div>
+
 
     <div id="modalFirma" class="modal">
         <div class="modal-content">
@@ -84,4 +86,5 @@ if (!isset($_SESSION['usuario_id'])) {
     <script src="../../JS/verificacion.js"></script>
     <script src="../../JS/acciones.js"></script>
 </body>
+
 </html>
