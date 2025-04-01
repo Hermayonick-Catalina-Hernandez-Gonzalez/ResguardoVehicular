@@ -42,13 +42,13 @@ if (!isset($_SESSION['usuario_id'])) {
 
     <div class="right-section">
         <h1>Verificacion de Datos</h1>
-        <button onclick="verPDF()" class="btn">Ver PDF</button>
+        <button onclick="verPDF()" class="btn">Generar Formatos</button>
         <form id="Pdf">
             <div class="tabs">
                 <button class="tablink" id="reglas"
-                    onclick="openTab(event, 'Reglas')">Reglas</button>
+                    onclick="openTab(event, 'Reglas')">Formato de Reglas</button>
                 <button class="tablink" id="resguardo"
-                    onclick="openTab(event, 'Resguardo')">Resguardo</button>
+                    onclick="openTab(event, 'Resguardo')">Formato de Resguardo</button>
             </div>
 
             <div id="Reglas" class="tabcontent">
@@ -60,7 +60,7 @@ if (!isset($_SESSION['usuario_id'])) {
             </div>
 
         </form>
-        <button onclick="abrirFirma()" class="btn">Aceptar</button>
+        <button onclick="abrirFirma()" class="btn">Firmar</button>
     </div>
 
     <div id="modalFirma" class="modal">

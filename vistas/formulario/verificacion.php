@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['usuario_id'])) {
-    header("Location: ../../index.php"); 
+    header("Location: ../../index.php");
     exit();
 }
 ?>
@@ -40,10 +40,11 @@ if (!isset($_SESSION['usuario_id'])) {
     <div class="right-section">
         <h1>Verificacion Vehicular</h1>
         <div class="tabs">
-            <button class="tablink" id="exterior" onclick="openTab(event, 'Exterior')">Exterior</button>
-            <button class="tablink" id="interior" onclick="openTab(event, 'Interior')">Interior</button>
-            <button class="tablink" id="accesorios" onclick="openTab(event, 'Accesorios')">Accesorios y otros</button>
+            <button class="tablink active" id="exterior" disabled>Exterior</button>
+            <button class="tablink disabled" id="interior" disabled>Interior</button>
+            <button class="tablink disabled" id="accesorios" disabled>Accesorios y otros</button>
         </div>
+
 
         <div id="Exterior" class="tabcontent">
             <iframe src="../../tablas/exterior.html" width="100%" height="500px" title="Tabla Exterior"></iframe>

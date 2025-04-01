@@ -63,11 +63,12 @@ try {
                     <input type="text" id="municipio" name="municipio" required>
                 </div>
                 <div class="form-group">
-                    <label for="FGJRM">FGJRM:</label>
-                    <input type="text" id="FGJRM" name="FGJRM" value="<?= $folio ?>" required readonly>
-                </div>
+                <label for="FGJRM">Folio:</label>
+                <input class="folio-input" type="text" id="FGJRM" name="FGJRM" value="<?= $folio ?>" required readonly >
+            </div>
             </div>
 
+            <p>Resguardante Oficial</p>
             <div class="form-row">
                 <div class="form-group">
                     <label for="numero_empleado">Número de Empleado:</label>
@@ -124,9 +125,10 @@ try {
                 </div>
             </div>
 
+            <p>Resguardante Interno</p>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="numero_empleado_interno">Número de Empleado Interno:</label>
+                    <label for="numero_empleado_interno">Número de Empleado:</label>
                     <input type="number" id="numero_empleado_interno" name="numero_empleado_interno" onblur="buscarEmpleado('numero_empleado_interno')" required>
                 </div>
                 <div class="form-group">

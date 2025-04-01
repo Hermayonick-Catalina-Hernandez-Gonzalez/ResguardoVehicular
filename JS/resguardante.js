@@ -59,14 +59,7 @@ function cerrar() {
     window.location.href = "../../php/logout.php";
 }
 
-document.addEventListener('contextmenu', function(event) {
-    event.preventDefault();
-});
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'F12' || (event.ctrlKey && event.shiftKey && event.key === 'I')) {
-        event.preventDefault();
-    }
-});
+
 
 function buscarEmpleado(tipo) {
     let numeroEmpleadoElement = document.getElementById(tipo);
@@ -91,7 +84,7 @@ function buscarEmpleado(tipo) {
                 const jsonData = JSON.parse(jsonResponse);
                 if (jsonData.error) {
                     Swal.fire({
-                        title: "Oops...",
+                        title: "Error...",
                         text: jsonData.error,
                         icon: "error",
                         backdrop: false
@@ -134,18 +127,17 @@ function buscarEmpleado(tipo) {
                     }
 
                     Swal.fire({
-                        title: "¡Éxito!",
-                        text: "Empleado encontrado.",
+                        title: "Empleado encontrado",
                         icon: "success",
                         showConfirmButton: false,
-                        timer: 1500,
+                        timer: 2000,
                         backdrop: false
                     });
                 }
             } catch (error) {
 
                 Swal.fire({
-                    title: "Oops...",
+                    title: "Error...",
                     text: "La respuesta del servidor no es un JSON válido.",
                     icon: "error",
                     backdrop: false
@@ -154,7 +146,7 @@ function buscarEmpleado(tipo) {
         })
         .catch(error => {
             Swal.fire({
-                title: "Oops...",
+                title: "Error...",
                 text: "Error en la solicitud.",
                 icon: "error",
                 backdrop: false

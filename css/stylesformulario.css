@@ -96,6 +96,11 @@ body {
     margin-bottom: 15px;
 }
 
+.folio-input {
+    font-weight: bold;
+    font-size: 2em; 
+}
+
 .form-group {
     flex: 1;
     display: flex;
@@ -129,6 +134,15 @@ input, select {
     border-radius: 5px;
     width: 100%;
     box-sizing: border-box;
+}
+p {
+    text-align: center; 
+    font-weight: bold; 
+    font-size: 1.3em;
+    margin-top:  0.8em; 
+    padding-bottom: 6px; 
+    border-bottom: 2px solid black;
+    margin-bottom: 7px;
 }
 
 .tabs {

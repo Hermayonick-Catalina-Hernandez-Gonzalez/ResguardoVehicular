@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", function () {
         Swal.fire({
             icon: "error",
             title: "Vehículo no encontrado",
-            text: "No se encontró información del vehículo.",
             confirmButtonText: "Aceptar",
             backdrop: false
         }).then(() => {
@@ -138,11 +137,3 @@ function descargarPDFs(button) {
     });
 }
 
-document.addEventListener('contextmenu', function(event) {
-    event.preventDefault();
-});
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'F12' || (event.ctrlKey && event.shiftKey && event.key === 'I')) {
-        event.preventDefault();
-    }
-});

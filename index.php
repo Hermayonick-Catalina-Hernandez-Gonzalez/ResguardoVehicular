@@ -45,7 +45,7 @@ require_once "php/conexion.php";
             if (isset($_SESSION['error'])) {
                 echo "Swal.fire({
                     icon: 'error',
-                    title: 'Oops...',
+                    title: 'Error...',
                     text: '" . $_SESSION['error'] . "',
                     backdrop: false
                 });";

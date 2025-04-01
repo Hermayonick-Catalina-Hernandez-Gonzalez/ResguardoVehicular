@@ -4,7 +4,7 @@ function buscarVehiculo() {
 
     if(numeroEconomico === '' && numeroSerie === '') {
         Swal.fire({
-            title: "Oops...",
+            title: "Error",
             text: "Por favor, ingrese un número económico o una serie.",
             icon: "error",
             backdrop: false
@@ -18,7 +18,7 @@ function buscarVehiculo() {
         .then(data => {
             if (data.error) {
                 Swal.fire({
-                    title: "Oops...",
+                    title: "Error",
                     text: data.error,
                     icon: "error",
                     backdrop: false
@@ -53,7 +53,7 @@ function buscarVehiculo() {
         })
         .catch(error => {
             Swal.fire({
-                title: "Oops...",
+                title: "Error...",
                 text: "Error en la solicitud.",
                 icon: "error",
                 backdrop: false
@@ -177,7 +177,7 @@ function validarFormulario() {
     if (!radioSeleccionado) {
         camposValidos = false;
         Swal.fire({
-            title: "Oops...",
+            title: "Error...",
             text: "Debe seleccionar una opción en el tipo de condición.",
             icon: "error",
             backdrop: false
@@ -191,7 +191,7 @@ function validarFormulario() {
         selectOcupacion.style.border = "2px solid red";
 
         Swal.fire({
-            title: "Oops...",
+            title: "Error...",
             text: "Debe seleccionar una opción en el Tipo de Ocupación.",
             icon: "warning",
             backdrop: false
@@ -203,14 +203,7 @@ function validarFormulario() {
     return camposValidos;
 }
 
-document.addEventListener('contextmenu', function(event) {
-    event.preventDefault();
-});
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'F12' || (event.ctrlKey && event.shiftKey && event.key === 'I')) {
-        event.preventDefault();
-    }
-});
+
 
 function guardarVehiculo() {
     if (!validarFormulario()) {
@@ -251,7 +244,7 @@ function guardarVehiculo() {
     })
     .catch(error => {
         Swal.fire({
-            title: "Oops...",
+            title: "Error...",
             text: "Hubo un problema con la solicitud",
             icon: "error"
         });
