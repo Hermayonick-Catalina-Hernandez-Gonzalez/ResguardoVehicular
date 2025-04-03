@@ -61,34 +61,32 @@ function openTab(evt, tabName) {
 function nextTab() {
     const tabs = ["Exterior", "Interior", "Accesorios"];
     let currentTabIndex = tabs.findIndex(tab => document.getElementById(tab).style.display === "block");
+    const currentTabName = tabs[currentTabIndex];
+    const currentIframe = document.querySelector(`#${currentTabName} iframe`);
 
-    if (currentTabIndex < tabs.length - 1) {
-        const currentIframe = document.querySelector(`#${tabs[currentTabIndex]} iframe`);
+    if (currentIframe) {
+        currentIframe.contentWindow.postMessage({ type: "validarCampos" }, "*");
 
-        if (currentIframe) {
-            currentIframe.contentWindow.postMessage({ type: "validarCampos" }, "*");
-
-            window.addEventListener("message", function handleValidation(event) {
-                if (event.data.type === "validacionCampos") {
-                    window.removeEventListener("message", handleValidation);
-                    
-                    if (event.data.valido) {
+        window.addEventListener("message", function handleValidation(event) {
+            if (event.data.type === "validacionCampos") {
+                window.removeEventListener("message", handleValidation);
+                
+                if (event.data.valido) {
+                    if (currentTabIndex < tabs.length - 1) {
                         avanzarTab(currentTabIndex, tabs);
                     } else {
-                        Swal.fire({
-                            icon: 'warning',
-                            title: 'Faltan campos por llenar',
-                            text: 'Por favor completa todos los campos antes de avanzar.',
-                            confirmButtonText: 'OK'
-                        });
+                        guardarVerificacion();
                     }
+                } else {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Faltan campos por llenar',
+                        text: 'Por favor completa todos los campos antes de avanzar.',
+                        confirmButtonText: 'OK'
+                    });
                 }
-            }, { once: true });
-
-            return; 
-        }
-    } else {
-        guardarVerificacion();
+            }
+        }, { once: true });
     }
 }
 

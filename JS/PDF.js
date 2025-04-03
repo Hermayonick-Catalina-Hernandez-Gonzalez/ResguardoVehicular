@@ -3,14 +3,14 @@ function verPDF() {
 
     if (vehiculoId) {
         obtenerDatosVehiculo(vehiculoId, false);
-    } 
+    }
 }
 
 function descargarPDFs() {
     const vehiculoId = localStorage.getItem("vehiculo_id");
     if (vehiculoId) {
         obtenerDatosVehiculo(vehiculoId, true);
-    } 
+    }
 }
 
 function obtenerDatosVehiculo(vehiculoId, descargar) {
@@ -19,33 +19,33 @@ function obtenerDatosVehiculo(vehiculoId, descargar) {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: `vehiculo_id=${vehiculoId}`
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.error || !data.marca || !data.modelo || !data.placa) {
+        .then(response => response.json())
+        .then(data => {
+            if (data.error || !data.marca || !data.modelo || !data.placa) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Datos no disponibles",
+                    text: "No se encontraron datos del vehículo.",
+                    confirmButtonText: "Aceptar",
+                    backdrop: false
+                });
+            } else {
+                if (descargar) {
+                    generarYDescargarPDFs(data);
+                } else {
+                    generarVistaPreviaPDFs(data);
+                }
+            }
+        })
+        .catch(error => {
             Swal.fire({
-                icon: "warning",
-                title: "Datos no disponibles",
-                text: "No se encontraron datos del vehículo.",
+                icon: "error",
+                title: "Error de conexión",
+                text: "Hubo un problema al obtener los datos del vehículo.",
                 confirmButtonText: "Aceptar",
                 backdrop: false
             });
-        } else {
-            if (descargar) {
-                generarYDescargarPDFs(data);
-            } else {
-                generarVistaPreviaPDFs(data);
-            }
-        }
-    })
-    .catch(error => {
-        Swal.fire({
-            icon: "error",
-            title: "Error de conexión",
-            text: "Hubo un problema al obtener los datos del vehículo.",
-            confirmButtonText: "Aceptar",
-            backdrop: false
         });
-    });
 }
 
 function subirPDF(pdfDoc, vehiculoId, nombreArchivo) {
@@ -59,19 +59,19 @@ function subirPDF(pdfDoc, vehiculoId, nombreArchivo) {
         method: 'POST',
         body: formData
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.error) {
-            Swal.fire({
-                icon: "error",
-                title: "Error de conexión",
-                text: "No se Guardo el pdf correctamente",
-                confirmButtonText: "Aceptar",
-                backdrop: false
-            });
-        }
-    })
-    .catch(error => console.error("❌ Error en la solicitud:", error));
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error de conexión",
+                    text: "No se Guardo el pdf correctamente",
+                    confirmButtonText: "Aceptar",
+                    backdrop: false
+                });
+            }
+        })
+        .catch(error => console.error("❌ Error en la solicitud:", error));
 }
 
 
@@ -80,7 +80,7 @@ async function generarVistaPreviaPDFs(vehiculo) {
     const img = new Image();
     img.src = '../../img/Logo.png';
 
-    img.onload = async function () { 
+    img.onload = async function () {
         const canvas = document.createElement('canvas');
         canvas.width = img.width;
         canvas.height = img.height;
@@ -89,10 +89,10 @@ async function generarVistaPreviaPDFs(vehiculo) {
         const imgData = canvas.toDataURL('image/png');
 
         let pdf1 = generarPDF1(imgData, vehiculo, false);
-        let pdf2 = await generarPDF2(imgData, vehiculo, false); 
+        let pdf2 = await generarPDF2(imgData, vehiculo, false);
 
         document.getElementById("preview1").src = pdf1;
-        document.getElementById("preview2").src = pdf2; 
+        document.getElementById("preview2").src = pdf2;
     };
 }
 
@@ -134,7 +134,7 @@ function generarPDF1(imgData, vehiculo, descargar) {
     doc.setFontSize(12);
     doc.setTextColor(255, 0, 0);
     doc.setFont("helvetica", "bold");
-    doc.text("N°"+ vehiculo.FGJRM, 500, 70);
+    doc.text("N°" + vehiculo.FGJRM, 500, 70);
 
     doc.setTextColor(0, 0, 0);
 
@@ -244,7 +244,7 @@ async function generarPDF2(imgData, vehiculo, descargar) {
     doc.setFontSize(12);
     doc.setTextColor(255, 0, 0);
 
-    doc.text("N°"+vehiculo.FGJRM, 500, 74);
+    doc.text("N°" + vehiculo.FGJRM, 500, 74);
     doc.setTextColor(0, 0, 0);
 
     let y = 100;
@@ -252,14 +252,14 @@ async function generarPDF2(imgData, vehiculo, descargar) {
     function drawCell(x, y, width, height, text, fillColor = [255, 255, 255]) {
         doc.setFillColor(fillColor[0], fillColor[1], fillColor[2]);
         doc.rect(x, y, width, height, 'F');
-        doc.rect(x, y, width, height); 
+        doc.rect(x, y, width, height);
         doc.setFontSize(9);
         doc.setTextColor(0, 0, 0);
         doc.text(text, x + 5, y + 13);
     }
 
     function formatFecha(fecha) {
-        if (!fecha) return "Sin fecha"; 
+        if (!fecha) return "Sin fecha";
         let date = new Date(fecha);
         return date.toLocaleDateString("es-MX", { day: "2-digit", month: "2-digit", year: "numeric" });
     }
@@ -285,8 +285,8 @@ async function generarPDF2(imgData, vehiculo, descargar) {
     ];
 
     fields.forEach(field => {
-        drawCell(40, y, 160, 20, field.label, [220, 220, 220]); 
-        drawCell(200, y, 370, 20, String(field.value || ""));  
+        drawCell(40, y, 160, 20, field.label, [220, 220, 220]);
+        drawCell(200, y, 370, 20, String(field.value || ""));
         y += 20;
     });
     y += 10;
@@ -296,13 +296,13 @@ async function generarPDF2(imgData, vehiculo, descargar) {
         { label: "CARGO:", value: vehiculo.cargo_interno },
         { label: "LICENCIA:", value: vehiculo.licencia_interna },
         { label: "VIGENCIA:", value: vehiculo.vigencia_interna },
-        { label: "NÚMERO EMPLEADO:", value: vehiculo.numero_empleado_interno }, 
+        { label: "NÚMERO EMPLEADO:", value: vehiculo.numero_empleado_interno },
         { label: "CELULAR:", value: vehiculo.celular }
     ];
 
     internalFields.forEach(field => {
         drawCell(40, y, 160, 20, field.label, [220, 220, 220]);
-        drawCell(200, y, 370, 20, String(field.value || "")); 
+        drawCell(200, y, 370, 20, String(field.value || ""));
         y += 20;
     });
     y += 10;
@@ -360,17 +360,17 @@ async function generarPDF2(imgData, vehiculo, descargar) {
 
     opciones.forEach(opcion => {
         let textWidth = doc.getTextWidth(opcion.texto) + 13;
-        let rectHeight = 15; 
+        let rectHeight = 15;
         let padding = 5;
 
         doc.rect(opcion.x, y, textWidth, rectHeight);
         doc.text(opcion.texto, opcion.x + padding, y + 11);
 
         let checkBoxSize = 12;
-        let checkBoxX = opcion.x + textWidth + 5; 
+        let checkBoxX = opcion.x + textWidth + 5;
         doc.rect(checkBoxX, y, checkBoxSize, checkBoxSize);
 
-        
+
         if (vehiculo.estado === opcion.valor) {
             doc.text("X", checkBoxX + 3, y + 10);
         }
@@ -387,8 +387,8 @@ async function generarPDF2(imgData, vehiculo, descargar) {
             fillColor = [255, 255, 255];
         }
         doc.setFillColor(...fillColor);
-        doc.rect(x, y, width, height, 'F'); 
-        doc.rect(x, y, width, height); 
+        doc.rect(x, y, width, height, 'F');
+        doc.rect(x, y, width, height);
         doc.setFontSize(9);
         doc.setTextColor(0, 0, 0);
         doc.text(String(text || ""), x + 5, y + 13);
@@ -426,11 +426,11 @@ async function generarPDF2(imgData, vehiculo, descargar) {
         if (filasDibujadas === filasPorColumnaExterior) {
             columnaActual++;
             filasDibujadas = 0;
-            startY = startYExterior; 
-            xPos = startX + (columnaActual * (95 + (28 * 3))); 
+            startY = startYExterior;
+            xPos = startX + (columnaActual * (95 + (28 * 3)));
         }
 
-        xPos = startX + (columnaActual * (95 + (28 * 3))); 
+        xPos = startX + (columnaActual * (95 + (28 * 3)));
         drawCell(xPos, startY, 95, cellHeight, ext.elemento);
         xPos += 95;
 
@@ -446,18 +446,18 @@ async function generarPDF2(imgData, vehiculo, descargar) {
 
     while (filasDibujadas < filasPorColumnaExterior) {
         xPos = startX + (columnaActual * (95 + (28 * 3)));
-        drawCell(xPos, startY, 95, cellHeight, ""); 
+        drawCell(xPos, startY, 95, cellHeight, "");
         xPos += 95;
 
         for (let j = 0; j < 3; j++) {
-            drawCell(xPos, startY, 28, cellHeight, ""); 
+            drawCell(xPos, startY, 28, cellHeight, "");
             xPos += 28;
         }
 
         startY += cellHeight;
         filasDibujadas++;
     }
- 
+
     let tableHeadersInterior = ["Interior", "B", "R", "M", "Interior", "B", "R", "M", "Observaciones"];
     xPos = startX;
     tableHeadersInterior.forEach((header, index) => {
@@ -472,14 +472,14 @@ async function generarPDF2(imgData, vehiculo, descargar) {
     let columnaActualIN = 0;
     let filasDibujadasIN = 0;
     let maxColumnas = Math.ceil(elementosInterior.length / filasPorColumna);
-    let startYInicial = startY; 
+    let startYInicial = startY;
 
     elementosInterior.forEach((int, index) => {
         if (filasDibujadasIN === filasPorColumna) {
             columnaActualIN++;
             filasDibujadasIN = 0;
-            startY = startYInicial; 
-            xPos += 95 + (28 * 3); 
+            startY = startYInicial;
+            xPos += 95 + (28 * 3);
         }
 
         xPos = startX + (columnaActualIN * (95 + (28 * 3)));
@@ -499,12 +499,13 @@ async function generarPDF2(imgData, vehiculo, descargar) {
     xPos = startX + (maxColumnas * (95 + (28 * 3)));
     let alturaObservaciones = cellHeight * filasPorColumna;
 
-    let observacionTexto = observaciones.map(obs => obs.observaciones).join("\n");
+    let observacionesInterior = observaciones.filter(obs => obs.categoria.toLowerCase() === "interior");
+    let observacionTexto = observacionesInterior.map(obs => obs.observaciones).join("\n");
     drawCell(xPos, startYInicial, 179, alturaObservaciones, observacionTexto);
 
     startY = startYInicial + alturaObservaciones;
     let startYAccesorios = startY;
-    
+
     let tableHeadersAccesorios = ["Accesorio", "Sí", "No", "Accesorio", "Sí", "No", "Tipo de ocupación"];
     const colWidthsAccesorios = [90, 40, 40, 90, 40, 40, 198];
 
@@ -529,13 +530,13 @@ async function generarPDF2(imgData, vehiculo, descargar) {
         if (filasDibujadasAcc === filasPorColumnaAccesorios) {
             columnaActualAcc++;
             filasDibujadasAcc = 0;
-            startYAccesorios = startYAccesoriosInicial; 
-            xPos += 90 + (40 * 2); 
+            startYAccesorios = startYAccesoriosInicial;
+            xPos += 90 + (40 * 2);
         }
 
-        xPos = startX + (columnaActualAcc * (90 + (40 * 2))); 
+        xPos = startX + (columnaActualAcc * (90 + (40 * 2)));
 
-        let verificacion = accesorios[i] || { elemento: "", estado: "" }; 
+        let verificacion = accesorios[i] || { elemento: "", estado: "" };
         drawCell(xPos, startYAccesorios, 90, cellHeight, verificacion.elemento);
         xPos += 90;
 
@@ -550,10 +551,10 @@ async function generarPDF2(imgData, vehiculo, descargar) {
     }
 
     xPos += 0
-    drawCell(xPos, startYAccesoriosInicial, 198, cellHeight * filasPorColumnaAccesorios, vehiculo.ocupacion); 
+    drawCell(xPos, startYAccesoriosInicial, 198, cellHeight * filasPorColumnaAccesorios, vehiculo.ocupacion);
 
-    let startYTexto = Math.max(startY, startYAccesorios); 
-    startYTexto += 20; 
+    let startYTexto = Math.max(startY, startYAccesorios);
+    startYTexto += 20;
 
     doc.setFont('helvetica', 'normal');
     let textoAviso = "AL MOMENTO DE CAMBIO DE RESGUARDANTE DEL VEHÍCULO, DEBERÁ INFORMAR A LA " +

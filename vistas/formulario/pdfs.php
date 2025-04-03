@@ -42,8 +42,7 @@ if (!isset($_SESSION['usuario_id'])) {
 
     <div class="right-section">
         <h1>Verificación de Datos</h1>
-        <button onclick="mostrarContenido()" class="btn">Generar Formatos</button>
-
+        <button id="btnGenerarFormatos" onclick="mostrarContenido()" class="btn">Generar Formatos</button>
         <div id="contenidoOculto" style="display: none;">
             <form id="Pdf">
                 <div class="tabs">
@@ -52,7 +51,7 @@ if (!isset($_SESSION['usuario_id'])) {
                 </div>
 
                 <div id="Reglas" class="tabcontent">
-                    <iframe id="preview1" width="100%" height="400px"></iframe>
+                    <iframe id="preview1" width="100%" height="400px" style="display: block;"></iframe>
                 </div>
 
                 <div id="Resguardo" class="tabcontent">
@@ -60,7 +59,7 @@ if (!isset($_SESSION['usuario_id'])) {
                 </div>
             </form>
 
-            <button onclick="abrirFirma()" class="btn">Firmar</button>
+            <button id="btnFirma" onclick="abrirFirma()" class="btn" style="display: none;">Firma</button>
         </div>
     </div>
 
@@ -80,10 +79,6 @@ if (!isset($_SESSION['usuario_id'])) {
 
     <script src="../../JS/PDF.js"></script>
     <script src="../../JS/extras.js"></script>
-    <script src="../../JS/resguardante.js"></script>
-    <script src="../../JS/unidadVehicular.js"></script>
-    <script src="../../JS/fotografias.js"></script>
-    <script src="../../JS/verificacion.js"></script>
     <script src="../../JS/acciones.js"></script>
 </body>
 

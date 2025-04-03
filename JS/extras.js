@@ -50,13 +50,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-
 function openTab(evt, tabName) {
     document.querySelectorAll(".tabcontent").forEach(tab => tab.style.display = "none");
-    
     document.querySelectorAll(".tablink").forEach(btn => btn.classList.remove("active"));
 
-   
     const selectedTab = document.getElementById(tabName);
     if (selectedTab) {
         selectedTab.style.display = "block";
@@ -65,11 +62,22 @@ function openTab(evt, tabName) {
     if (evt && evt.currentTarget) {
         evt.currentTarget.classList.add("active");
     }
+    showSignatureButton();
+}
+
+function showSignatureButton() {
+    setTimeout(function() {
+        const btnFirma = document.getElementById("btnFirma");
+        if (btnFirma) {
+            btnFirma.style.display = "block";
+        }
+    }, 100);
 }
 
 function mostrarContenido() {
     document.getElementById("contenidoOculto").style.display = "block";
     verPDF();
+    document.getElementById("btnGenerarFormatos").disabled = true;
 }
 
 function abrirFirma() {
@@ -155,7 +163,7 @@ function guardarFirma() {
         setTimeout(() => {
             finalizarFormulario(); 
             window.location.href = "../formulario/resguardante.php"; 
-        }, 1000); 
+        }, 2000); 
     });
 
     cerrarFirma();

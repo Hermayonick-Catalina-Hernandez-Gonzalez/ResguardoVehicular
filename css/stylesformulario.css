@@ -362,6 +362,17 @@ video {
     background-color: rgba(255, 0, 0, 0.459);
 }
 
+#btnGenerarFormatos:disabled {
+    background-color: #797979;
+    border-color: #797979;     
+    cursor: not-allowed;    
+    pointer-events: none;   /
+}
+
+#btnGenerarFormatos:disabled:hover {
+    background-color: #797979;
+}
+
 @media (max-width: 768px) {
     body {
         flex-direction: column;

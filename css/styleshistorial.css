@@ -90,7 +90,7 @@ body {
     padding: 30px; 
     margin: 20px auto;
     background-color: #ffffff; 
-    box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 5px 15px 0px;
     min-height: 200px; 
 }
 
@@ -122,14 +122,14 @@ body {
     padding: 25px;
     background-color: #ffffff; 
     border-radius: 12px;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 10px; 
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 4px 10px; 
     min-height: 150px; 
     transition: transform 0.2s ease, box-shadow 0.2s ease; 
 }
 
 .history-card:hover {
     transform: translateY(-5px);
-    box-shadow: rgba(0, 0, 0, 0.15) 0px 6px 15px; 
+    box-shadow: #01327c 0px 6px 15px; 
 }
 
 .history-card div {

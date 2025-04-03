@@ -55,10 +55,8 @@
         </tr>
         <tr>
             <td>Reflejantes</td>
-            <td><input type="radio" name="accesorios_reflejantes"
-                    value="si"></td>
-            <td><input type="radio" name="accesorios_reflejantes"
-                    value="no"></td>
+            <td><input type="radio" name="accesorios_reflejantes" value="si"></td>
+            <td><input type="radio" name="accesorios_reflejantes" value="no"></td>
         </tr>
         <tr>
             <td>Llanta Refraccion</td>
@@ -88,7 +86,7 @@
 
             radio.addEventListener("change", function () {
                 localStorage.setItem(radio.name, radio.value);
-                this.closest('tr').style.backgroundColor = ''; 
+                this.closest('tr').style.backgroundColor = '';
             });
         });
 
@@ -114,7 +112,7 @@
             if (event.data.type === "getDatos") {
                 let datos = [];
                 document.querySelectorAll('input[type="radio"]:checked').forEach(input => {
-                    let elemento = input.closest('tr').querySelector('td').innerText;  
+                    let elemento = input.closest('tr').querySelector('td').innerText;
                     datos.push({
                         categoria: "Accesorios",
                         elemento: elemento,
@@ -136,16 +134,18 @@
 
             if (event.data.type === "validarCampos") {
                 let allChecked = true;
-
-                document.querySelectorAll('tbody tr').forEach(row => {
-                    let radios = row.querySelectorAll('input[type="radio"]');
-                    let groupName = radios.length > 0 ? radios[0].name : null;
-
-                    if (groupName && document.querySelectorAll(`input[name="${groupName}"]:checked`).length === 0) {
-                        allChecked = false;
-                        row.style.backgroundColor = '#ff8686'; 
-                    } else {
-                        row.style.backgroundColor = '';
+                // Selecciona específicamente las filas de la tabla de accesorios
+                document.querySelectorAll('.verification-table tbody tr').forEach(row => {
+                    const radios = row.querySelectorAll('input[type="radio"]');
+                    if (radios.length > 0) {
+                        // Comprueba si en el grupo de radios hay alguno seleccionado
+                        const checkedRadio = row.querySelector('input[type="radio"]:checked');
+                        if (!checkedRadio) {
+                            allChecked = false;
+                            row.style.backgroundColor = '#ff8686'; // Resalta en rojo la fila faltante
+                        } else {
+                            row.style.backgroundColor = '';
+                        }
                     }
                 });
 
@@ -153,5 +153,5 @@
             }
         });
     });
-    
+
 </script>
