@@ -13,7 +13,7 @@ require_once "php/conexion.php";
     <link rel="stylesheet" href="css/styleslogin.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-<body`>
+<body>
     <div class="container">
         <div class="left-section">
             <img src="img/Logo2.png" alt="Logo FGJ">
