@@ -47,7 +47,7 @@ if (isset($_POST['numeroEconomico'])) {
 
     <div class="container">
         <div class="profile-section">
-            <img  alt="Foto de vehículo" class="profile-picture">
+            <img alt="Foto de vehículo" class="profile-picture">
             <div class="profile-info">
                 <p><strong>Número Económico:</strong> <span id="numeroEconomico"></span></p>
                 <p><strong>Placa:</strong> <span id="placa"></span></p>
@@ -63,7 +63,7 @@ if (isset($_POST['numeroEconomico'])) {
 
         <div class="barra-busqueda">
             <input type="text" id="search" placeholder="Buscar..." oninput="buscarHistorial()">
-            <img src="../img/Buscador.png" alt="Buscar" class="icono-buscar">
+            <i class="fa fa-search"></i>
         </div>
 
         <div class="history-section" id="history-section">

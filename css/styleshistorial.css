@@ -170,30 +170,44 @@ body {
 }
 
 .barra-busqueda {
-    position: relative;
-    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
     max-width: 700px;
     margin: 20px auto;
-    display: flex;
+    padding: 8px 30px;
+    background-color: #fff;
+    border-radius: 30px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease;
+    position: relative;
 }
 
-.barra-busqueda input[type="text"] {
+.barra-busqueda input {
     width: 100%;
-    padding: 10px 20px;
-    border: 2px solid #1A2341;
-    border-radius: 20px;
+    padding: 12px 15px;
+    border: none;
+    outline: none;
     font-size: 16px;
-    background-color: #f7f7f7;
+    border-radius: 30px;
+    background: transparent;
 }
 
-.barra-busqueda .icono-buscar {
+.barra-busqueda i {
     position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 24px;
-    height: 24px;
+    right: 15px;
+    font-size: 18px;
+    color: #1A2341;
     cursor: pointer;
+}
+
+.barra-busqueda:hover {
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.barra-busqueda input:focus {
+    background-color: #f7f7f7;
 }
 
 @media screen and (max-width: 1024px) {

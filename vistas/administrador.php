@@ -40,24 +40,13 @@ if ($_SESSION['rol'] != 'administrador') {
 
     <div class="barra-busqueda">
         <input type="text" id="search" placeholder="Buscar..." oninput="buscador()">
-        <img src="../img/Buscador.png" alt="Buscar" class="icono-buscar">
+        <i class="fa fa-search"></i>
     </div>
 
     <button class="btn-agregar" onclick="abrirModal()"> Agregar Usuario</button>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Rol</th>
-                <th>Correo</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody id="usuarios-lista">
+    <div id="usuarios-container" class="usuarios-grid"></div>
 
-        </tbody>
-    </table>
 
     <div id="modalUsuario" class="modal">
         <div class="modal-content">

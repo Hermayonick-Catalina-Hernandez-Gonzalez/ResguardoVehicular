@@ -18,7 +18,6 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 5vw;
     margin: 0;
     padding: 0;
 }
@@ -76,30 +75,44 @@ body {
 }
 
 .barra-busqueda {
-    position: relative;
-    width: 90%;
-    max-width: 700px;
-    margin: 20px auto; 
     display: flex;
-}
-
-.barra-busqueda input[type="text"] {
+    align-items: center;
+    justify-content: center;
     width: 100%;
-    padding: 10px 20px;
-    border: 2px solid #1A2341;
-    border-radius: 20px;
-    font-size: 16px;
-    background-color: #f7f7f7;
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 8px 15px;
+    background-color: #fff;
+    border-radius: 30px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease;
+    position: relative;
 }
 
-.barra-busqueda .icono-buscar {
+.barra-busqueda input {
+    width: 100%;
+    padding: 12px 15px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    border-radius: 30px;
+    background: transparent;
+}
+
+.barra-busqueda i {
     position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 24px;
-    height: 24px;
+    right: 15px;
+    font-size: 18px;
+    color: #1A2341;
     cursor: pointer;
+}
+
+.barra-busqueda:hover {
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.barra-busqueda input:focus {
+    background-color: #f7f7f7;
 }
 
 .btn-agregar{
@@ -131,6 +144,7 @@ body {
     width: 50%;
     max-width: 700px;
     padding: 20px;
+    border-radius: 10px;
     display: none;
     z-index: 1000;
 }
@@ -142,7 +156,7 @@ body {
     border-radius: 10px;
     width: 350px;
     text-align: center;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4);
     position: relative;
 }
 
@@ -171,7 +185,7 @@ body {
     background: white;
     border-radius: 5px;
     margin: 10px 0;
-    padding: 8px;
+    padding: 10px;
     border: 1px solid #ccc; 
 }
 
@@ -236,6 +250,39 @@ table button {
 
 table button:hover {
     background-color: #014782;
+}
+
+.usuarios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.usuario-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.usuario-card h3 {
+    color: #1A2341;
+}
+
+.usuario-card button {
+    background-color: #1A2341;
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.usuario-card .btn-eliminar {
+    background-color: red;
 }
 
 @media screen and (max-width: 1024px) {

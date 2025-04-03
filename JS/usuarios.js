@@ -8,34 +8,31 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+function cargarTarjetasUsuarios(usuarios) {
+    const contenedor = document.getElementById("usuarios-container");
+    contenedor.innerHTML = "";
+    
+    usuarios.forEach(usuario => {
+        contenedor.innerHTML += `
+            <div class="usuario-card">
+                <h3>${usuario.Nombre}</h3>
+                <p><strong>Rol:</strong> ${usuario.rol}</p>
+                <p><strong>Correo:</strong> ${usuario.correo}</p>
+                <button onclick="editarUsuario(${usuario.id})">Editar</button>
+                <button class="btn-eliminar" onclick="eliminarUsuario(${usuario.id})">Eliminar</button>
+            </div>
+        `;
+    });
+}
 
 function cargarUsuarios() {
     fetch("../php/usuarios_crud.php?action=leer")
         .then(response => response.json())
         .then(data => {
-            let tbody = document.getElementById("usuarios-lista");
-            tbody.innerHTML = "";
-
-            data.forEach(usuario => {
-                if (usuario.id != usuarioActualId) {  
-                    let fila = `
-                        <tr>
-                            <td>${usuario.Nombre}</td>
-                            <td>${usuario.rol}</td>
-                            <td>${usuario.correo}</td>
-                            <td>
-                                <button class="btn-editar" onclick="editarUsuario(${usuario.id}, '${usuario.Nombre}', '${usuario.correo}', '${usuario.rol}')">Editar</button>
-                                <button class="btn-eliminar" onclick="eliminarUsuario(${usuario.id})">Eliminar</button>
-                            </td>
-                        </tr>
-                    `;
-                    tbody.innerHTML += fila;
-                }
-            });
+            cargarTarjetasUsuarios(data); // Aquí llamamos a la función para cargar las tarjetas
         })
         .catch(error => console.error("Error al cargar usuarios:", error));
 }
-
 
 function abrirModal() {
     document.getElementById("titulo-modal").textContent = "Agregar Usuario";

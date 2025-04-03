@@ -86,31 +86,6 @@ function togglePassword() {
     }
 }
 
-function buscarHistorial() {
-    const searchText = normalizarTexto(document.getElementById('search').value.toLowerCase());
-    const historyCards = document.querySelectorAll('#history-section .history-card');
-
-    historyCards.forEach(card => {
-        const fecha = normalizarTexto(card.querySelector('p:nth-child(1)').textContent.toLowerCase());
-        const municipio = normalizarTexto(card.querySelector('p:nth-child(2)').textContent.toLowerCase());
-        const resguardante = normalizarTexto(card.querySelector('p:nth-child(3)').textContent.toLowerCase());
-        const resguardanteInterno = normalizarTexto(card.querySelector('p:nth-child(4)').textContent.toLowerCase());
-        const observaciones= normalizarTexto(card.querySelector('p:nth-child(5)').textContent.toLowerCase());
-
-        if (
-            fecha.includes(searchText) ||
-            municipio.includes(searchText) ||
-            resguardante.includes(searchText) ||
-            resguardanteInterno.includes(searchText) ||
-            observaciones.includes(searchText)
-        ) {
-            card.style.display = '';  
-        } else {
-            card.style.display = 'none';  
-        }
-    });
-}
-
 function final() {
     Swal.fire({
         icon: 'success',

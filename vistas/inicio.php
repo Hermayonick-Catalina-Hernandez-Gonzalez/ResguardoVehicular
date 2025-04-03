@@ -22,6 +22,7 @@ $vehiculos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,6 +31,7 @@ $vehiculos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../css/stylesInicio.css">
 </head>
+
 <body>
     <header class="head">
         <div class="esquina-container">
@@ -49,9 +51,10 @@ $vehiculos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </header>
 
     <div class="barra-busqueda">
-        <input type="text" id="search" placeholder="Buscar..." oninput="buscar()">
-        <img src="../img/Buscador.png" alt="Buscar" class="icono-buscar">
+        <input type="text" id="search" placeholder="Buscar vehículo..." oninput="buscar()">
+        <i class="fa fa-search"></i>
     </div>
+
 
     <table>
         <thead>
@@ -92,4 +95,5 @@ $vehiculos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <script src="../JS/acciones.js"></script>
 </body>
+
 </html>
