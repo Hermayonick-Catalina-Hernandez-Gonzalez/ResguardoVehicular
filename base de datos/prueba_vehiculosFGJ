@@ -58,6 +58,14 @@ CREATE TABLE verificacion(
     FOREIGN KEY (vehiculo_id) REFERENCES vehiculo(id)
 );
 GO
+CREATE TABLE detalle_verificacion( 
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    vehiculo_id INT  NOT NULL,
+    categoria VARCHAR(255) NOT NULL,
+    elemento VARCHAR(255) NOT NULL,
+    estado VARCHAR(20) NOT NULL,
+    FOREIGN KEY (vehiculo_id) REFERENCES vehiculo(id)
+);
 CREATE TABLE Observacionesverificacion(
     id INT IDENTITY(1,1) PRIMARY KEY, 
     categoria VARCHAR(255) NOT NULL,
@@ -100,7 +108,11 @@ SELECT
     r.resguardante_interno, r.cargo_interno, r.licencia_interna, 
     r.vigencia_interna, r.celular,
 
-    -- Datos de verificación
+    -- Datos de verificación (detalles de la verificación)
+    (SELECT STRING_AGG(CONCAT(dv.categoria, ': ', dv.elemento, ' (', dv.estado, ')'), ' | ') 
+     FROM detalle_verificacion dv WHERE dv.vehiculo_id = v.id) AS detalle_verificacion,
+
+    -- Datos generales de verificación
     (SELECT STRING_AGG(CONCAT(vr.categoria, ': ', vr.elemento, ' (', vr.estado, ')'), ' | ') 
      FROM verificacion vr WHERE vr.vehiculo_id = v.id) AS verificacion,
 

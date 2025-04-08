@@ -128,6 +128,26 @@ function guardarVerificacion() {
             datos.push(...event.data.datos);
             pendientes--;
 
+            const cantidadBirlos = document.querySelector('input[name="cantidad_birlos"]')?.value;
+            const medidasLlantas = document.querySelector('input[name="medidas_llantas"]')?.value;
+
+             // Agregar a los datos si no están vacíos
+             if (cantidadBirlos && cantidadBirlos.trim() !== "") {
+                datos.push({
+                    categoria: "Exterior",
+                    elemento: "Cantidad de Birlos",
+                    estado: cantidadBirlos.trim()
+                });
+            }
+
+            if (medidasLlantas && medidasLlantas.trim() !== "") {
+                datos.push({
+                    categoria: "Exterior",
+                    elemento: "Medidas de Llantas",
+                    estado: medidasLlantas.trim()
+                });
+            }
+
             if (pendientes === 0) {
                 window.removeEventListener("message", recibirMensaje);
                 enviarDatos(vehiculoId, datos);
