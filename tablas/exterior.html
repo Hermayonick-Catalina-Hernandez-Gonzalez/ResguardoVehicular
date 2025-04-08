@@ -53,15 +53,22 @@
         </tr>
         <tr>
             <td>Cristales</td>
-            <td><input type="radio" name="exterior_cristales" value="bien" ></td>
+            <td><input type="radio" name="exterior_cristales" value="bien"></td>
             <td><input type="radio" name="exterior_cristales" value="regular"></td>
             <td><input type="radio" name="exterior_cristales" value="mal"></td>
         </tr>
         <tr>
             <td>Llantas</td>
-            <td><input type="radio" name="exterior_llantas" value="bien"></td>
-            <td><input type="radio" name="exterior_llantas" value="regular"></td>
-            <td><input type="radio" name="exterior_llantas" value="mal"></td>
+            <td><input type="radio" name="exterior_llantas" value="bien" onclick="mostrarCampo('campoMedidas')"></td>
+            <td><input type="radio" name="exterior_llantas" value="regular" onclick="mostrarCampo('campoMedidas')"></td>
+            <td><input type="radio" name="exterior_llantas" value="mal" onclick="mostrarCampo('campoMedidas')"></td>
+        </tr>
+        <tr id="campoMedidas" style="display:none;">
+            <td colspan="4">
+                <label>Medidas de Llantas:</label>
+                <input type="text" name="medidas_llantas" placeholder="Ejemplo: 205/55 R16"
+                    style="width: 200px; height: 30px; font-size: 16px; margin-left:10px; text-align: center;">
+            </td>
         </tr>
         <tr>
             <td>Defensa Trasera</td>
@@ -112,16 +119,17 @@
             <td><input type="radio" name="exterior_espejos" value="mal"></td>
         </tr>
         <tr>
-            <td>Medida</td>
-            <td><input type="radio" name="exterior_medida" value="bien"></td>
-            <td><input type="radio" name="exterior_medida" value="regular"></td>
-            <td><input type="radio" name="exterior_medida" value="mal"></td>
-        </tr>
-        <tr>
             <td>Birlos</td>
-            <td><input type="radio" name="exterior_birlos" value="bien"></td>
-            <td><input type="radio" name="exterior_birlos" value="regular"></td>
-            <td><input type="radio" name="exterior_birlos" value="mal"></td>
+            <td><input type="radio" name="exterior_birlos" value="bien" onclick="mostrarCampoBirlos()"></td>
+            <td><input type="radio" name="exterior_birlos" value="regular" onclick="mostrarCampoBirlos()"></td>
+            <td><input type="radio" name="exterior_birlos" value="mal" onclick="mostrarCampoBirlos()"></td>
+        </tr>
+        <tr id="campoCantidad" style="display:none;">
+            <td colspan="4" style="padding-top: 10px; white-space: nowrap;">
+                <label for="cantidad_birlos" style="font-weight: bold; font-size: 16px;">Cantidad de Birlos:</label>
+                <input type="number" name="cantidad_birlos" id="cantidad_birlos" placeholder="Cantidad"
+                    style="width: 200px; height: 30px; font-size: 16px; margin-left:10px; text-align: center;">
+            </td>
         </tr>
     </tbody>
     <thead>
@@ -160,31 +168,31 @@
         <tr>
             <td>Direccion</td>
             <td><input type="radio" name="exterior_direccion" value="bien"></td>
-            <td><input type="radio" name="exterior_direccion"value="regular"></td>
+            <td><input type="radio" name="exterior_direccion" value="regular"></td>
             <td><input type="radio" name="exterior_direccion" value="mal"></td>
         </tr>
         <tr>
             <td>Sistema Electronico</td>
             <td><input type="radio" name="exterior_sistemaE" value="bien"></td>
-            <td><input type="radio" name="exterior_sistemaE"value="regular"></td>
+            <td><input type="radio" name="exterior_sistemaE" value="regular"></td>
             <td><input type="radio" name="exterior_sistemaE" value="mal"></td>
         </tr>
         <tr>
             <td>Bateria</td>
             <td><input type="radio" name="exterior_bateria" value="bien"></td>
-            <td><input type="radio" name="exterior_bateria"value="regular"></td>
+            <td><input type="radio" name="exterior_bateria" value="regular"></td>
             <td><input type="radio" name="exterior_bateria" value="mal"></td>
         </tr>
         <tr>
             <td>pintura</td>
             <td><input type="radio" name="exterior_pintura" value="bien"></td>
-            <td><input type="radio" name="exterior_pintura"value="regular"></td>
+            <td><input type="radio" name="exterior_pintura" value="regular"></td>
             <td><input type="radio" name="exterior_pintura" value="mal"></td>
         </tr>
         <tr>
             <td>Carroceria</td>
-            <td><input type="radio" name="exterior_carroceria"value="bien"></td>
-            <td><input type="radio" name="exterior_carroceria"value="regular"></td>
+            <td><input type="radio" name="exterior_carroceria" value="bien"></td>
+            <td><input type="radio" name="exterior_carroceria" value="regular"></td>
             <td><input type="radio" name="exterior_carroceria" value="mal"></td>
         </tr>
     </tbody>
@@ -201,15 +209,15 @@
             if (savedValue && radio.value === savedValue) {
                 radio.checked = true;
             }
-            
+
             radio.addEventListener("change", function () {
                 localStorage.setItem(radio.name, radio.value);
-                this.closest('tr').style.backgroundColor = ''; 
+                this.closest('tr').style.backgroundColor = '';
             });
         });
 
         let observacionesExterior = document.getElementById("observaciones_exterior");
-        
+
         if (localStorage.getItem("observaciones_exterior")) {
             observacionesExterior.value = localStorage.getItem("observaciones_exterior");
         }
@@ -221,19 +229,35 @@
         window.addEventListener("message", function (event) {
             if (event.data.type === "getDatos") {
                 let datos = [];
-                
+
                 document.querySelectorAll('input[type="radio"]:checked').forEach(input => {
                     let row = input.closest('tr');
                     let elemento = row.querySelector('td').textContent.trim();
-
-                    let categoria = input.name.includes("motor") ? "Motor" : "Exterior"; 
-
+                    let categoria = "Exterior";
                     datos.push({
                         categoria: categoria,
                         elemento: elemento,
                         estado: input.value
                     });
                 });
+
+                const inputMedidas = document.querySelector('input[name="medidas_llantas"]');
+                if (inputMedidas && inputMedidas.value.trim() !== "") {
+                    datos.push({
+                        categoria: "Exterior",
+                        elemento: "Medidas de Llantas",
+                        estado: inputMedidas.value.trim()
+                    });
+                }
+
+                const inputBirlos = document.querySelector('input[name="cantidad_birlos"]');
+                if (inputBirlos && inputBirlos.value.trim() !== "") {
+                    datos.push({
+                        categoria: "Exterior",
+                        elemento: "Cantidad de Birlos",
+                        estado: inputBirlos.value.trim()
+                    });
+                }
 
                 let observaciones = observacionesExterior.value;
                 if (observaciones) {
@@ -255,22 +279,64 @@
 
                     if (groupName && !document.querySelector(`input[name="${groupName}"]:checked`)) {
                         allChecked = false;
-                        row.style.backgroundColor = '#ff8686'; 
+                        row.style.backgroundColor = '#ff8686';
                     } else {
-                        row.style.backgroundColor = '';  
+                        row.style.backgroundColor = '';
                     }
                 });
 
                 event.source.postMessage({ type: "validacionCampos", valido: allChecked }, "*");
             }
+
         });
     });
-    document.addEventListener('contextmenu', function(event) {
+    document.addEventListener('contextmenu', function (event) {
         event.preventDefault();
     });
-    document.addEventListener('keydown', function(event) {
+    document.addEventListener('keydown', function (event) {
         if (event.key === 'F12' || (event.ctrlKey && event.shiftKey && event.key === 'I')) {
             event.preventDefault();
         }
     });
+</script>
+<script>
+    const radios = document.querySelectorAll('input[type="radio"]');
+    radios.forEach(radio => {
+        radio.addEventListener('change', () => {
+            localStorage.setItem(radio.name, radio.value);
+            mostrarCampo('campoMedidas');
+            mostrarCampoBirlos();
+        });
+    });
+    const inputs = document.querySelectorAll('input[type="text"], input[type="number"]');
+    inputs.forEach(input => {
+        input.addEventListener('input', () => {
+            localStorage.setItem(input.name, input.value);
+        });
+    });
+
+    window.addEventListener('load', () => {
+        radios.forEach(radio => {
+            if (localStorage.getItem(radio.name) === radio.value) {
+                radio.checked = true;
+            }
+        });
+
+        inputs.forEach(input => {
+            input.value = localStorage.getItem(input.name) || '';
+        });
+
+        mostrarCampo('campoMedidas');
+        mostrarCampoBirlos();
+    });
+
+    function mostrarCampo(id) {
+        const llantasSeleccionadas = document.querySelector('input[name="exterior_llantas"]:checked');
+        document.getElementById(id).style.display = llantasSeleccionadas ? '' : 'none';
+    }
+
+    function mostrarCampoBirlos() {
+        const birlosSeleccionados = document.querySelector('input[name="exterior_birlos"]:checked');
+        document.getElementById('campoCantidad').style.display = birlosSeleccionados ? '' : 'none';
+    }
 </script>

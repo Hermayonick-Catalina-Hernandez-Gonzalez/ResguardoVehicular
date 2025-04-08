@@ -1,10 +1,13 @@
 <?php
 require_once "../php/conexion.php";
+session_start();
 
 $action = $_REQUEST['action'] ?? '';
+$usuario_id_sesion = $_SESSION['usuario_id']; 
 
 if ($action == "leer") {
-    $stmt = $conn->query("SELECT id, Nombre, correo, rol FROM usuarios");
+    $stmt = $conn->prepare("SELECT id, Nombre, correo, rol FROM usuarios WHERE id != ?");
+    $stmt->execute([$usuario_id_sesion]);
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
 } elseif ($action == "agregar" || $action == "editar") {
     $id = $_POST['id'] ?? '';

@@ -396,6 +396,7 @@ async function generarPDF2(imgData, vehiculo, descargar) {
 
     let verificaciones = Array.isArray(vehiculo.verificaciones) ? vehiculo.verificaciones : [];
     let observaciones = Array.isArray(vehiculo.observaciones) ? vehiculo.observaciones : [];
+    let detalle = Array.isArray(vehiculo.detalle) ? vehiculo.detalle : [];
 
     const colWidthsExterior = [95, 28, 28, 28, 95, 28, 28, 28, 95, 28, 28, 28];
     const colWidthsInterior = [95, 28, 28, 28, 95, 28, 28, 28, 179];
@@ -414,15 +415,20 @@ async function generarPDF2(imgData, vehiculo, descargar) {
     });
     startY += cellHeight;
 
-    const filasPorColumnaExterior = 9;
-    let elementosExterior = verificaciones.filter(v => v.categoria === "Exterior");
+    const filasPorColumnaExterior = 10;
+    let elementosExterior = verificaciones.filter(v => {
+        if (v.categoria !== "Exterior") return false;
+        if (v.hasOwnProperty("vehiculo_id")) {
+            return v.vehiculo_id == vehiculo.id;
+        }
+        return true;
+    });
 
-    let totalColumnas = Math.ceil(elementosExterior.length / filasPorColumnaExterior);
     let filasDibujadas = 0;
     let columnaActual = 0;
     let startYExterior = startY;
 
-    elementosExterior.forEach((ext, index) => {
+    elementosExterior.forEach((ext) => {
         if (filasDibujadas === filasPorColumnaExterior) {
             columnaActual++;
             filasDibujadas = 0;
@@ -444,16 +450,29 @@ async function generarPDF2(imgData, vehiculo, descargar) {
         filasDibujadas++;
     });
 
+    detalle.forEach((dv) => {
+        if (filasDibujadas === filasPorColumnaExterior) {
+            columnaActual++;
+            filasDibujadas = 0;
+            startY = startYExterior;
+            xPos = startX + (columnaActual * (95 + (28 * 3)));
+        }
+
+        xPos = startX + (columnaActual * (95 + (28 * 3)));
+        drawCell(xPos, startY, 95, cellHeight, dv.elemento);
+        xPos += 95;
+
+        drawCell(xPos, startY, 28 * 3, cellHeight, dv.estado);
+        startY += cellHeight;
+        filasDibujadas++;
+    });
+
     while (filasDibujadas < filasPorColumnaExterior) {
         xPos = startX + (columnaActual * (95 + (28 * 3)));
         drawCell(xPos, startY, 95, cellHeight, "");
         xPos += 95;
 
-        for (let j = 0; j < 3; j++) {
-            drawCell(xPos, startY, 28, cellHeight, "");
-            xPos += 28;
-        }
-
+        drawCell(xPos, startY, 28 * 3, cellHeight, "");
         startY += cellHeight;
         filasDibujadas++;
     }

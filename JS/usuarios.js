@@ -18,7 +18,7 @@ function cargarTarjetasUsuarios(usuarios) {
                 <h3>${usuario.Nombre}</h3>
                 <p><strong>Rol:</strong> ${usuario.rol}</p>
                 <p><strong>Correo:</strong> ${usuario.correo}</p>
-                <button onclick="editarUsuario(${usuario.id})">Editar</button>
+                <button onclick="editarUsuario(${usuario.id}, '${usuario.Nombre}', '${usuario.correo}', '${usuario.rol}')">Editar</button>
                 <button class="btn-eliminar" onclick="eliminarUsuario(${usuario.id})">Eliminar</button>
             </div>
         `;
@@ -29,7 +29,7 @@ function cargarUsuarios() {
     fetch("../php/usuarios_crud.php?action=leer")
         .then(response => response.json())
         .then(data => {
-            cargarTarjetasUsuarios(data); // Aquí llamamos a la función para cargar las tarjetas
+            cargarTarjetasUsuarios(data);
         })
         .catch(error => console.error("Error al cargar usuarios:", error));
 }

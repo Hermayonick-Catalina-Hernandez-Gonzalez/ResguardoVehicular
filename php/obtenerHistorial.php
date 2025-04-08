@@ -31,6 +31,12 @@ if (isset($_POST['vehiculo_id']) && !empty($_POST['vehiculo_id'])) {
         $stmt->execute();
         $vehiculo['verificaciones'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+        $sqlDetalleVerificacion = "SELECT categoria, elemento, estado FROM detalle_verificacion WHERE vehiculo_id = :vehiculo_id";
+        $stmt = $conn->prepare($sqlDetalleVerificacion);
+        $stmt->bindParam(':vehiculo_id', $vehiculo_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $vehiculo['detalle'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
         $sqlObservaciones = "SELECT categoria, observaciones FROM Observacionesverificacion WHERE vehiculo_id = :vehiculo_id";
         $stmt = $conn->prepare($sqlObservaciones);
         $stmt->bindParam(':vehiculo_id', $vehiculo_id, PDO::PARAM_INT);
@@ -42,7 +48,6 @@ if (isset($_POST['vehiculo_id']) && !empty($_POST['vehiculo_id'])) {
         $stmt->bindParam(':vehiculo_id', $vehiculo_id, PDO::PARAM_INT);
         $stmt->execute();
         $vehiculo['fotos'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 
         echo json_encode($vehiculo);
     } catch (PDOException $e) {
