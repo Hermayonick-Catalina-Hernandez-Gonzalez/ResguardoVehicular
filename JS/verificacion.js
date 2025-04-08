@@ -131,7 +131,6 @@ function guardarVerificacion() {
             const cantidadBirlos = document.querySelector('input[name="cantidad_birlos"]')?.value;
             const medidasLlantas = document.querySelector('input[name="medidas_llantas"]')?.value;
 
-             // Agregar a los datos si no están vacíos
              if (cantidadBirlos && cantidadBirlos.trim() !== "") {
                 datos.push({
                     categoria: "Exterior",

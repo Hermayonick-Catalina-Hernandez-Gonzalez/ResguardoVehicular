@@ -134,15 +134,13 @@
 
             if (event.data.type === "validarCampos") {
                 let allChecked = true;
-                // Selecciona específicamente las filas de la tabla de accesorios
                 document.querySelectorAll('.verification-table tbody tr').forEach(row => {
                     const radios = row.querySelectorAll('input[type="radio"]');
                     if (radios.length > 0) {
-                        // Comprueba si en el grupo de radios hay alguno seleccionado
                         const checkedRadio = row.querySelector('input[type="radio"]:checked');
                         if (!checkedRadio) {
                             allChecked = false;
-                            row.style.backgroundColor = '#ff8686'; // Resalta en rojo la fila faltante
+                            row.style.backgroundColor = '#ff8686';
                         } else {
                             row.style.backgroundColor = '';
                         }
