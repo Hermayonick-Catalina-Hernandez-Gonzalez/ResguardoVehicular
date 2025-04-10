@@ -518,10 +518,25 @@ async function generarPDF2(imgData, vehiculo, descargar) {
     xPos = startX + (maxColumnas * (95 + (28 * 3)));
     let alturaObservaciones = cellHeight * filasPorColumna;
 
-    let observacionesInterior = observaciones.filter(obs => obs.categoria.toLowerCase() === "interior");
-    let observacionTexto = observacionesInterior.map(obs => obs.observaciones).join("\n");
-    drawCell(xPos, startYInicial, 179, alturaObservaciones, observacionTexto);
+    let categoriasUnicas = [...new Set(observaciones.map(obs => obs.categoria.trim().toLowerCase()))];
 
+    function generarTextoObservaciones() {
+        return categoriasUnicas.map(categoria => {
+            let observacionesFiltradas = observaciones.filter(
+                obs => obs.categoria.trim().toLowerCase() === categoria
+            );
+
+            if (observacionesFiltradas.length === 0) return "";
+
+            let titulo = categoria.toUpperCase() + ":";
+            let texto = observacionesFiltradas.map(obs =>  obs.observaciones).join("\n");
+            return `${titulo}${texto}\n`;
+        }).join("\n");
+    }
+
+    let textoObservaciones = generarTextoObservaciones();
+
+    drawCell(xPos, startYInicial, 180, alturaObservaciones, textoObservaciones);
     startY = startYInicial + alturaObservaciones;
     let startYAccesorios = startY;
 
@@ -625,19 +640,29 @@ async function generarPDF2(imgData, vehiculo, descargar) {
 
     let startYImagenes = startYTexto + 10;
 
+    const textosImagenes = ["FRONTAL", "POSTERIOR", "LADO DERECHO", "LADO IZQUIERDO"];
+
     cargas.forEach((base64Image, index) => {
         if (base64Image) {
             let imgX = margenIzquierdo + (index % 2) * (imgWidth + espacioEntreImagenes);
             let imgY = startYImagenes + Math.floor(index / 2) * (imgHeight + espacioEntreImagenes);
+    
+            // Agregar imagen
             doc.addImage(base64Image, "PNG", imgX, imgY, imgWidth, imgHeight);
+    
+            // Agregar texto debajo de la imagen
+            let texto = textosImagenes[index] || ""; // por si hay menos de 4 fotos
+            doc.setFontSize(10);
+            doc.text(texto, imgX + imgWidth / 2, imgY + imgHeight + 11, { align: "center" });
         }
     });
+    
 
     let startYFirmas = startYImagenes + Math.ceil(cargas.length / 2) * (imgHeight + espacioEntreImagenes) + 40;
 
     const firmas = ["Resguardante Oficial", "Resguardante Interno", "Verificador", "Autorización Depto. REC. MAT"];
     const pageWidth = doc.internal.pageSize.getWidth();
-    const startXFirma = 20;
+    const startXFirma = 18;
     const spacing = (pageWidth - startXFirma * 2) / firmas.length;
 
     firmas.forEach((texto, index) => {
