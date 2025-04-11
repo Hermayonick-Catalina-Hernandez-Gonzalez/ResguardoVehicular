@@ -399,7 +399,6 @@ async function generarPDF2(imgData, vehiculo, descargar) {
     let detalle = Array.isArray(vehiculo.detalle) ? vehiculo.detalle : [];
 
     const colWidthsExterior = [95, 28, 28, 28, 95, 28, 28, 28, 95, 28, 28, 28];
-    const colWidthsInterior = [95, 28, 28, 28, 95, 28, 28, 28, 179];
     const cellHeight = 20;
     const startX = 40;
     let startY = y;
@@ -476,7 +475,7 @@ async function generarPDF2(imgData, vehiculo, descargar) {
         startY += cellHeight;
         filasDibujadas++;
     }
-
+    const colWidthsInterior = [95, 28, 28, 28, 95, 28, 28, 28, 179];
     let tableHeadersInterior = ["Interior", "B", "R", "M", "Interior", "B", "R", "M", "Observaciones"];
     xPos = startX;
     tableHeadersInterior.forEach((header, index) => {
@@ -529,16 +528,25 @@ async function generarPDF2(imgData, vehiculo, descargar) {
             if (observacionesFiltradas.length === 0) return "";
 
             let titulo = categoria.toUpperCase() + ":";
-            let texto = observacionesFiltradas.map(obs =>  obs.observaciones).join("\n");
-            return `${titulo}${texto}\n`;
+            let texto = observacionesFiltradas.map(obs => obs.observaciones).join("\n");
+            return `${titulo}\n${texto}\n`;
         }).join("\n");
     }
 
     let textoObservaciones = generarTextoObservaciones();
 
-    drawCell(xPos, startYInicial, 180, alturaObservaciones, textoObservaciones);
+    doc.setDrawColor(0);
+    doc.setFillColor(255, 255, 255); 
+    doc.rect(xPos, startYInicial, 180, alturaObservaciones, "S"); 
+
+    doc.setFontSize(10); 
+    doc.text(textoObservaciones, xPos + 4, startYInicial + 10, {
+        maxWidth: 176, 
+        align: "left"
+    });
     startY = startYInicial + alturaObservaciones;
     let startYAccesorios = startY;
+
 
     let tableHeadersAccesorios = ["Accesorio", "Sí", "No", "Accesorio", "Sí", "No", "Tipo de ocupación"];
     const colWidthsAccesorios = [90, 40, 40, 90, 40, 40, 198];
@@ -646,17 +654,14 @@ async function generarPDF2(imgData, vehiculo, descargar) {
         if (base64Image) {
             let imgX = margenIzquierdo + (index % 2) * (imgWidth + espacioEntreImagenes);
             let imgY = startYImagenes + Math.floor(index / 2) * (imgHeight + espacioEntreImagenes);
-    
-            // Agregar imagen
+
             doc.addImage(base64Image, "PNG", imgX, imgY, imgWidth, imgHeight);
-    
-            // Agregar texto debajo de la imagen
-            let texto = textosImagenes[index] || ""; // por si hay menos de 4 fotos
+            let texto = textosImagenes[index] || "";
             doc.setFontSize(10);
             doc.text(texto, imgX + imgWidth / 2, imgY + imgHeight + 11, { align: "center" });
         }
     });
-    
+
 
     let startYFirmas = startYImagenes + Math.ceil(cargas.length / 2) * (imgHeight + espacioEntreImagenes) + 40;
 
